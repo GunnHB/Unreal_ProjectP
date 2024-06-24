@@ -3,10 +3,11 @@
 
 #include "PlayerControls.h"
 
+#include "../../InputData/PlayerInputData.h"
+
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-
-#include "../../InputData/PlayerInputData.h"
+#include "PlayerAnimInstance.h"
 
 APlayerControls::APlayerControls()
 {
@@ -23,6 +24,10 @@ APlayerControls::APlayerControls()
 void APlayerControls::BeginPlay()
 {
 	Super::BeginPlay();
+
+	mCamRotator = mArm->GetRelativeRotation();
+
+	mAnimInstance = Cast<UPlayerAnimInstance>(mSkeletalMesh->GetAnimInstance());
 
 	APlayerController* playerController = Cast<APlayerController>(GetController());
 
@@ -70,6 +75,15 @@ void APlayerControls::InitAssets()
 
 		if (asset.Succeeded())
 			mSkeletalMesh->SetSkeletalMesh(asset.Object);
+	}
+
+	// animInstance
+	{
+		static ConstructorHelpers::FClassFinder<UAnimInstance>
+			asset(TEXT("/Script/Engine.AnimBlueprint'/Game/02_Animations/BP_PlayerControls_Crunch.BP_PlayerControls_Crunch_C'"));
+
+		if (asset.Succeeded())
+			mSkeletalMesh->SetAnimInstanceClass(asset.Class);
 	}
 }
 

@@ -25,8 +25,10 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* mCamera = nullptr;
 
+	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
+
 private:
-	FRotator mCamRotator;
+	FRotator mCamRotator = FRotator::ZeroRotator;
 
 protected:
 	// Called when the game starts or when spawned
