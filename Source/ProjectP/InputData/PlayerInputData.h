@@ -26,5 +26,6 @@ public:
 public:
 	UInputAction* mMovementAction;
 	UInputAction* mCameraMovementAction;
+	UInputAction* mAttackAction;
 	UInputAction* mJumpAction;
 };

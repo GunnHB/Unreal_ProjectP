@@ -31,4 +31,22 @@ UPlayerInputData::UPlayerInputData()
 		if (asset.Succeeded())
 			mCameraMovementAction = asset.Object;
 	}
+
+	// jump
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Jump.IA_PlayerControls_Jump'"));
+
+		if (asset.Succeeded())
+			mJumpAction = asset.Object;
+	}
+
+	// attack
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Attack.IA_PlayerControls_Attack'"));
+
+		if (asset.Succeeded())
+			mAttackAction = asset.Object;
+	}
 }

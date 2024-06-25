@@ -2,40 +2,38 @@
 
 #pragma once
 
-#include "GameFramework/CharacterMovementComponent.h"
 #include "InputActionValue.h"
 
-#include "../CharacterControls.h"
+//#include "CoreMinimal.h"
+#include "../../System/GameInfo.h"
+#include "GameFramework/Character.h"
 #include "PlayerControls.generated.h"
 
-/**
- * 
- */
 UCLASS()
-class PROJECTP_API APlayerControls : public ACharacterControls
+class PROJECTP_API APlayerControls : public ACharacter
 {
 	GENERATED_BODY()
-	
+
 public:
+	// Sets default values for this character's properties
 	APlayerControls();
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-	USpringArmComponent* mArm = nullptr;
-	
-	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* mCamera = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* mSpringArm = nullptr;
 
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 
-private:
 	FRotator mCamRotator = FRotator::ZeroRotator;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -43,12 +41,14 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	virtual void InitAssets() override;
-	virtual void InitCompoValues() override;
+	void InitAssets();
+	void InitCompoValues();
 
 protected:
 	void MovementAction(const FInputActionValue& value);
 	void CameraMovementAction(const FInputActionValue& value);
+	void AttackAction(const FInputActionValue& value);
+	void JumpAction(const FInputActionValue& value);
 
 private:
 	void AdjustCamRotator(FRotator& rotator)

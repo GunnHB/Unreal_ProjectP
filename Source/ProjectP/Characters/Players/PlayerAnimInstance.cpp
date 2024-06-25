@@ -19,7 +19,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (IsValid(pControls))
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("%f"), ));
+		
 	}
 }
 

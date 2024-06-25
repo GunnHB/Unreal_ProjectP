@@ -3,12 +3,12 @@
 
 #include "MainGameMode.h"
 
-#include "../Characters/Players/PlayerControls.h"
+#include "../Characters/Players/PlayerControls_Crunch.h"
 
 AMainGameMode::AMainGameMode()
 {
-	static ConstructorHelpers::FClassFinder<APlayerControls>
-		player(TEXT("/Script/CoreUObject.Class'/Script/ProjectP.PlayerControls'"));
+	static ConstructorHelpers::FClassFinder<APlayerControls_Crunch>
+		player(TEXT("/Script/CoreUObject.Class'/Script/ProjectP.PlayerControls_Crunch'"));
 
 	if (player.Succeeded())
 		DefaultPawnClass = player.Class;
