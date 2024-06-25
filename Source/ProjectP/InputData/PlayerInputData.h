@@ -21,11 +21,11 @@ public:
 	UPlayerInputData();
 
 public:
-	UInputMappingContext* mContext;
+	UInputMappingContext* mContext = nullptr;
 
 public:
-	UInputAction* mMovementAction;
-	UInputAction* mCameraMovementAction;
-	UInputAction* mAttackAction;
-	UInputAction* mJumpAction;
+	UInputAction* mMovementAction = nullptr;
+	UInputAction* mCameraMovementAction = nullptr;
+	UInputAction* mAttackAction = nullptr;
+	UInputAction* mJumpAction = nullptr;
 };

@@ -29,6 +29,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	void InitAssets();
-	void InitCompoValues();
+	virtual void InitAssets() override;
+	virtual void InitComponentValues() override;
 };

@@ -41,8 +41,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	void InitAssets();
-	void InitCompoValues();
+	virtual void InitAssets();
+	virtual void InitComponentValues();
 
 protected:
 	void MovementAction(const FInputActionValue& value);

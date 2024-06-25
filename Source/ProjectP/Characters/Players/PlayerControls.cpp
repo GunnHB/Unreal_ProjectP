@@ -26,6 +26,10 @@ void APlayerControls::BeginPlay()
 {
 	Super::BeginPlay();
 
+	mCamRotator = mSpringArm->GetRelativeRotation();
+
+	mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+
 	APlayerController* playerController = Cast<APlayerController>(GetController());
 
 	if (playerController != nullptr)
@@ -67,13 +71,15 @@ void APlayerControls::InitAssets()
 {
 }
 
-void APlayerControls::InitCompoValues()
+void APlayerControls::InitComponentValues()
 {
 }
 
 void APlayerControls::MovementAction(const FInputActionValue& value)
 {
 	FVector axis = value.Get<FVector>();
+
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("%f"), axis.Y));
 
 	AddMovementInput(GetActorForwardVector(), axis.Y);
 	AddMovementInput(GetActorRightVector(), axis.X);
