@@ -64,4 +64,7 @@ void APlayerControls_Crunch::InitComponentValues()
 	mSpringArm->SetRelativeRotation(FRotator(-20.f, 0.f, 0.f));
 
 	mSpringArm->TargetArmLength = 500.f;
+
+	// movement
+	GetCharacterMovement()->MaxWalkSpeed = 450.f;
 }

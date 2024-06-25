@@ -17,10 +17,20 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	// 플레이어 객체 가져오기
 	APlayerControls* pControls = Cast<APlayerControls>(TryGetPawnOwner());
 
-	if (IsValid(pControls))
-	{
-		
-	}
+	if (!IsValid(pControls))
+		return;
+
+	UCharacterMovementComponent* movement = pControls->GetCharacterMovement();
+
+	if (!IsValid(movement))
+		return;
+
+	mVelocity = movement->Velocity.Length();
+	
+	mAcceleration = movement->GetCurrentAcceleration().Length() > .1f;
+	mIsInAir = movement->IsFalling();
+
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("%f"), movement->Velocity.Length()));
 }
 
 void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
