@@ -14,7 +14,18 @@ UCLASS()
 class PROJECTP_API UPlayerAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float mVelocity = 0.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float mMoveDir = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool mAcceleration = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool mIsInAir = false;
+
 public:
 	virtual void NativeInitializeAnimation();
 	virtual void NativeUpdateAnimation(float DeltaSeconds);

@@ -27,7 +27,6 @@ void ACharacterControls::BeginPlay()
 void ACharacterControls::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input

@@ -25,7 +25,9 @@ protected:
 	UCapsuleComponent* mCapsule = nullptr;
 
 private:
-	float _movementSpeed = 0;
+	float mMovementSpeed = 0.f;
+	float mVelocity = 0.f;
+	float mAcceleration = 0.f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -43,6 +45,13 @@ protected:
 	virtual void InitCompoValues();
 
 protected:
-	float GetMovementSpeed() { return _movementSpeed; }
-	void SetMovementSpeed(const float& value) { _movementSpeed = value; }
+	// getter
+	float GetMovementSpeed() { return mMovementSpeed; }
+	float GetUserVelocity() { return mVelocity; }
+	float GetUserAcceleration() { return mAcceleration; }
+
+	// setter
+	void SetMovementSpeed(const float& value) { mMovementSpeed = value; }
+	void SetUserVelocity(const float& value) { mVelocity = value; }
+	void SetUserAcceleration(const float& value) { mAcceleration = value; }
 };

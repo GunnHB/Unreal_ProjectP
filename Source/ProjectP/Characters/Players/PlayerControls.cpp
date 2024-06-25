@@ -14,7 +14,7 @@ APlayerControls::APlayerControls()
 	mArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRING_ARM"));
 	mCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 
-	mArm->SetupAttachment(mCapsule);
+	mArm->SetupAttachment(RootComponent);
 	mCamera->SetupAttachment(mArm);
 
 	InitAssets();
@@ -80,7 +80,7 @@ void APlayerControls::InitAssets()
 	// animInstance
 	{
 		static ConstructorHelpers::FClassFinder<UAnimInstance>
-			asset(TEXT("/Script/Engine.AnimBlueprint'/Game/02_Animations/BP_PlayerControls_Crunch.BP_PlayerControls_Crunch_C'"));
+			asset(TEXT("/Script/Engine.AnimBlueprint'/Game/02_Animations/ABP_PlayerControls_Crunch.ABP_PlayerControls_Crunch_C'"));
 
 		if (asset.Succeeded())
 			mSkeletalMesh->SetAnimInstanceClass(asset.Class);
@@ -101,8 +101,10 @@ void APlayerControls::InitCompoValues()
 	mArm->TargetArmLength = 500.f;
 	mArm->SetRelativeRotation(FRotator(-20.f, 0.f, 0.f));
 
-	// movement speed
+	// movement speed && velocity && acceleration
 	SetMovementSpeed(500.f);
+	SetUserVelocity(0.f);
+	SetUserAcceleration(0.f);
 
 	// camera rotator
 	mCamRotator = mArm->GetRelativeRotation();
@@ -115,11 +117,13 @@ void APlayerControls::MovementAction(const FInputActionValue& value)
 	FVector vertical = GetActorForwardVector() * axis.Y;
 	FVector horizontal = GetActorRightVector() * axis.X;
 
-	// 이동 위치를 정규화
-	FVector normalizedVector = (vertical + horizontal).GetSafeNormal();
+	// 이동 위치 정규화
+	FVector normalized = (vertical + horizontal).GetSafeNormal();
 
-	// 플레이어를 이동
-	SetActorLocation(GetActorLocation() + normalizedVector * GetMovementSpeed() * GetWorld()->GetDeltaSeconds());
+	// 플레이어 이동
+	SetActorLocation(GetActorLocation() + normalized * GetMovementSpeed() * GetWorld()->GetDeltaSeconds());
+
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("%f"), ));
 }
 
 void APlayerControls::CameraMovementAction(const FInputActionValue& value)

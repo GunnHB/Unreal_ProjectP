@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameFramework/CharacterMovementComponent.h"
 #include "InputActionValue.h"
 
 #include "../CharacterControls.h"
