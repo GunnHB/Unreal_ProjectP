@@ -16,6 +16,21 @@ class PROJECTP_API UPlayerAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 protected:
+	// Montages
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UAnimMontage> mAttackMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UAnimMontage> mAttackRecoveryMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FName> mAttackSectionArray;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 mCurrentAttackSection = 0;
+
+protected:
+	// vairables
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float mVelocity = 0.f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -26,6 +41,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool mIsInAir = false;
 
+	bool mAttackCombo = false;
+	bool mAttackState = false;
+
 public:
 	virtual void NativeInitializeAnimation();
 	virtual void NativeUpdateAnimation(float DeltaSeconds);
@@ -34,4 +52,21 @@ public:
 	virtual void NativeUninitializeAnimation();
 
 	virtual void NativeBeginPlay();
+
+public:
+	void PlayAttackMontage();
+
+public:
+	UFUNCTION()
+	void AnimNotify_AttackCombo();
+	UFUNCTION()
+	void AnimNotify_AttackComboEnd();
+	UFUNCTION()
+	void AnimNotify_AttackEnable();
+	UFUNCTION()
+	void AnimNotify_AttackDisable();
+
+private:
+	UFUNCTION()
+	void MontageEnd(UAnimMontage* montage, bool bInterrupted);
 };

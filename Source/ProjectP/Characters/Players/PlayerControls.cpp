@@ -79,8 +79,10 @@ void APlayerControls::MovementAction(const FInputActionValue& value)
 {
 	FVector axis = value.Get<FVector>();
 
-	AddMovementInput(GetActorForwardVector(), axis.Y);
-	AddMovementInput(GetActorRightVector(), axis.X);
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("%f"), TargetAngle(axis)));
+
+	AddMovementInput(GetActorForwardVector(), axis.Y, true);
+	AddMovementInput(GetActorRightVector(), axis.X, true);
 }
 
 void APlayerControls::CameraMovementAction(const FInputActionValue& value)
@@ -100,8 +102,14 @@ void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
 {
+	NormalAttack();
+}
+
+void APlayerControls::NormalAttack()
+{
 }
 
 void APlayerControls::JumpAction(const FInputActionValue& value)
 {
+	
 }

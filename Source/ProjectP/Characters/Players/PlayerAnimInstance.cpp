@@ -29,8 +29,6 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	
 	mAcceleration = movement->GetCurrentAcceleration().Length() > .1f;
 	mIsInAir = movement->IsFalling();
-
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("%f"), movement->Velocity.Length()));
 }
 
 void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
@@ -51,4 +49,47 @@ void UPlayerAnimInstance::NativeUninitializeAnimation()
 void UPlayerAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
+}
+
+void UPlayerAnimInstance::PlayAttackMontage()
+{
+	if (!IsValid(mAttackMontage))
+		return;
+
+	if (mAttackState)
+	{
+		if (!Montage_IsPlaying(mAttackMontage))
+		{
+			Montage_SetPosition(mAttackMontage, 0.f);
+			Montage_Play(mAttackMontage);
+			Montage_JumpToSection(mAttackSectionArray[mCurrentAttackSection]);
+		}
+	}
+	else
+		mAttackCombo = true;
+
+	mAttackState = true;
+}
+
+// Notifies
+void UPlayerAnimInstance::AnimNotify_AttackCombo()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("Combo"));
+}
+
+void UPlayerAnimInstance::AnimNotify_AttackComboEnd()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, TEXT("ComboEnd"));
+}
+
+void UPlayerAnimInstance::AnimNotify_AttackEnable()
+{
+}
+
+void UPlayerAnimInstance::AnimNotify_AttackDisable()
+{
+}
+
+void UPlayerAnimInstance::MontageEnd(UAnimMontage* montage, bool bInterrupted)
+{
 }

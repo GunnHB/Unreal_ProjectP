@@ -50,6 +50,9 @@ protected:
 	void AttackAction(const FInputActionValue& value);
 	void JumpAction(const FInputActionValue& value);
 
+protected:
+	virtual void NormalAttack();
+
 private:
 	void AdjustCamRotator(FRotator& rotator)
 	{
@@ -62,5 +65,12 @@ private:
 			rotator.Pitch = -60.f;
 		else if (rotator.Pitch > 20.f)
 			rotator.Pitch = 20.f;
+	}
+
+	float TargetAngle(const FVector& direction)
+	{
+		FVector targetDirection = (direction - GetActorLocation()).GetSafeNormal();
+
+		return FMath::Atan2(targetDirection.X, targetDirection.Z) * FMathf::RadToDeg + mSpringArm->GetRelativeRotation().Pitch;
 	}
 };

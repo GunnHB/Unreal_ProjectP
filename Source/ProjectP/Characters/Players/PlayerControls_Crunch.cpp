@@ -2,6 +2,7 @@
 
 
 #include "PlayerControls_Crunch.h"
+#include "PlayerAnimInstance.h"
 
 APlayerControls_Crunch::APlayerControls_Crunch()
 {
@@ -67,4 +68,9 @@ void APlayerControls_Crunch::InitComponentValues()
 
 	// movement
 	GetCharacterMovement()->MaxWalkSpeed = 450.f;
+}
+
+void APlayerControls_Crunch::NormalAttack()
+{
+	mAnimInstance->PlayAttackMontage();
 }

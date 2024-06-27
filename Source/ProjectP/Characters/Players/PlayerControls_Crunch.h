@@ -31,4 +31,7 @@ public:
 protected:
 	virtual void InitAssets() override;
 	virtual void InitComponentValues() override;
+
+protected:
+	virtual void NormalAttack() override;
 };
