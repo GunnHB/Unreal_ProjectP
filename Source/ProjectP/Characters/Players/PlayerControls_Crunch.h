@@ -34,4 +34,8 @@ protected:
 
 protected:
 	virtual void NormalAttack() override;
+
+public:
+	virtual void AttackEnable() override;
+	virtual void AttackDisable() override;
 };

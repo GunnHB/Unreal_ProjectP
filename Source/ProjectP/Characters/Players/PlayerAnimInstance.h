@@ -69,4 +69,22 @@ public:
 private:
 	UFUNCTION()
 	void MontageEnd(UAnimMontage* montage, bool bInterrupted);
+
+public:
+	// getter
+	bool GetAttackState() { return mAttackState; }
+	bool GetAttackCombo() { return mAttackCombo; }
+
+	// setter
+	void SetAttackState(const bool& value) { mAttackState = value; }
+	void SetAttackCombo(const bool& value) { mAttackCombo = value; }
+
+public:
+	void ResetDatas()
+	{
+		mAttackState = false;
+		mAttackCombo = false;
+
+		mCurrentAttackSection = 0;
+	}
 };

@@ -46,12 +46,17 @@ protected:
 
 protected:
 	void MovementAction(const FInputActionValue& value);
+	void MovementCancelAction(const FInputActionValue& value);
 	void CameraMovementAction(const FInputActionValue& value);
 	void AttackAction(const FInputActionValue& value);
 	void JumpAction(const FInputActionValue& value);
 
 protected:
 	virtual void NormalAttack();
+
+public:
+	virtual void AttackEnable();
+	virtual void AttackDisable();
 
 private:
 	void AdjustCamRotator(FRotator& rotator)

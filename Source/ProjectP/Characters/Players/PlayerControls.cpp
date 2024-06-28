@@ -79,10 +79,20 @@ void APlayerControls::MovementAction(const FInputActionValue& value)
 {
 	FVector axis = value.Get<FVector>();
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("%f"), TargetAngle(axis)));
+	FVector vertical = GetActorForwardVector() * axis.Y;
+	FVector horizontal = GetActorRightVector() * axis.X;
 
-	AddMovementInput(GetActorForwardVector(), axis.Y, true);
-	AddMovementInput(GetActorRightVector(), axis.X, true);
+	FVector direction = (vertical + horizontal).GetSafeNormal();
+
+	//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("%f"), targetAngle));
+
+	if (direction.Size() >= .1f)
+	{
+		float targetAngle = FMath::Atan2(direction.Y, direction.X) * FMathf::RadToDeg;
+		SetActorRotation(FRotator(0.f, targetAngle, 0.f));
+
+		SetActorLocation(GetActorLocation() + (direction * 500.f * GetWorld()->GetDeltaSeconds()));
+	}
 }
 
 void APlayerControls::CameraMovementAction(const FInputActionValue& value)
@@ -107,6 +117,15 @@ void APlayerControls::AttackAction(const FInputActionValue& value)
 
 void APlayerControls::NormalAttack()
 {
+}
+
+void APlayerControls::AttackEnable()
+{
+}
+
+void APlayerControls::AttackDisable()
+{
+	mAnimInstance->ResetDatas();
 }
 
 void APlayerControls::JumpAction(const FInputActionValue& value)

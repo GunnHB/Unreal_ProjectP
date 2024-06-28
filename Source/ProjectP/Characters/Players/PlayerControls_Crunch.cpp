@@ -74,3 +74,11 @@ void APlayerControls_Crunch::NormalAttack()
 {
 	mAnimInstance->PlayAttackMontage();
 }
+
+void APlayerControls_Crunch::AttackEnable()
+{
+}
+
+void APlayerControls_Crunch::AttackDisable()
+{
+}
