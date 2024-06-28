@@ -14,9 +14,6 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Black, FString::Printf(TEXT("mAttackState %d"), mAttackState));
-	//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("mAttackCombo %d"), mAttackCombo));
-
 	// 플레이어 객체 가져오기
 	APlayerControls* pControls = Cast<APlayerControls>(TryGetPawnOwner());
 
@@ -146,18 +143,18 @@ void UPlayerAnimInstance::AnimNotify_AttackComboEnd()
 
 void UPlayerAnimInstance::AnimNotify_AttackEnable()
 {
-	APlayerControls* playerCharacter = Cast<APlayerControls>(TryGetPawnOwner());
+	//APlayerControls* playerCharacter = Cast<APlayerControls>(TryGetPawnOwner());
 
-	if (IsValid(playerCharacter))
-		playerCharacter->AttackEnable();
+	//if (IsValid(playerCharacter))
+	//	playerCharacter->AttackEnable();
 }
 
 void UPlayerAnimInstance::AnimNotify_AttackDisable()
 {
-	APlayerControls* playerCharacter = Cast<APlayerControls>(TryGetPawnOwner());
+	//APlayerControls* playerCharacter = Cast<APlayerControls>(TryGetPawnOwner());
 
-	if (IsValid(playerCharacter))
-		playerCharacter->AttackDisable();
+	//if (IsValid(playerCharacter))
+		//playerCharacter->AttackDisable();
 }
 
 void UPlayerAnimInstance::MontageEnd(UAnimMontage* montage, bool bInterrupted)

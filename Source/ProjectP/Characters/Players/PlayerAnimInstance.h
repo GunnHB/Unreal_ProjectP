@@ -45,13 +45,13 @@ protected:
 	bool mAttackState = false;
 
 public:
-	virtual void NativeInitializeAnimation();
-	virtual void NativeUpdateAnimation(float DeltaSeconds);
-	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds);
-	virtual void NativePostEvaluateAnimation();
-	virtual void NativeUninitializeAnimation();
+	virtual void NativeInitializeAnimation() override;
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
+	virtual void NativePostEvaluateAnimation() override;
+	virtual void NativeUninitializeAnimation() override;
 
-	virtual void NativeBeginPlay();
+	virtual void NativeBeginPlay() override;
 
 public:
 	void PlayAttackMontage();

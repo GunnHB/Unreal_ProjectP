@@ -12,6 +12,9 @@ UCLASS()
 class PROJECTP_API APlayerControls_SS : public APlayerControls
 {
 	GENERATED_BODY()
+
+private:
+	TObjectPtr<class UPlayerAnimInstance_SS> mAnimInstance = nullptr;
 	
 public:
 	APlayerControls_SS();

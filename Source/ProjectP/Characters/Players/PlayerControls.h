@@ -25,7 +25,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* mSpringArm = nullptr;
 
-	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
+	//TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 
 	FRotator mCamRotator = FRotator::ZeroRotator;
 
@@ -46,7 +46,6 @@ protected:
 
 protected:
 	void MovementAction(const FInputActionValue& value);
-	void MovementCancelAction(const FInputActionValue& value);
 	void CameraMovementAction(const FInputActionValue& value);
 	void AttackAction(const FInputActionValue& value);
 	void JumpAction(const FInputActionValue& value);

@@ -72,7 +72,7 @@ void APlayerControls_Crunch::InitComponentValues()
 
 void APlayerControls_Crunch::NormalAttack()
 {
-	mAnimInstance->PlayAttackMontage();
+	//mAnimInstance->PlayAttackMontage();
 }
 
 void APlayerControls_Crunch::AttackEnable()

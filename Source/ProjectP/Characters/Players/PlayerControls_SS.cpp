@@ -3,6 +3,8 @@
 
 #include "PlayerControls_SS.h"
 
+#include "PlayerAnimInstance_SS.h"
+
 APlayerControls_SS::APlayerControls_SS()
 {
 	InitAssets();
@@ -13,6 +15,8 @@ APlayerControls_SS::APlayerControls_SS()
 void APlayerControls_SS::BeginPlay()
 {
 	Super::BeginPlay();
+
+	mAnimInstance = Cast<UPlayerAnimInstance_SS>(GetMesh()->GetAnimInstance());
 }
 
 void APlayerControls_SS::Tick(float DeltaTime)
@@ -41,7 +45,7 @@ void APlayerControls_SS::InitAssets()
 	// set animinstance
 	{
 		static ConstructorHelpers::FClassFinder<UAnimInstance>
-			asset(TEXT(""));
+			asset(TEXT("/Script/Engine.AnimBlueprint'/Game/02_Animations/ABP_PlayerControls_SS.ABP_PlayerControls_SS_C'"));
 
 		if (asset.Succeeded())
 			GetMesh()->SetAnimInstanceClass(asset.Class);
@@ -59,7 +63,7 @@ void APlayerControls_SS::InitComponentValues()
 	mSpringArm->SetRelativeLocation(FVector(0.f, 0.f, 30.f));
 	mSpringArm->SetRelativeRotation(FRotator(-20.f, 0.f, 0.f));
 
-	mSpringArm->TargetArmLength = 500.f;
+	mSpringArm->TargetArmLength = 300.f;
 
 	mSpringArm->bInheritYaw = false;
 }

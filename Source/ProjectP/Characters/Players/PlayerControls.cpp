@@ -28,7 +28,7 @@ void APlayerControls::BeginPlay()
 
 	mCamRotator = mSpringArm->GetRelativeRotation();
 
-	mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	//mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 
 	APlayerController* playerController = Cast<APlayerController>(GetController());
 
@@ -125,7 +125,7 @@ void APlayerControls::AttackEnable()
 
 void APlayerControls::AttackDisable()
 {
-	mAnimInstance->ResetDatas();
+	//mAnimInstance->ResetDatas();
 }
 
 void APlayerControls::JumpAction(const FInputActionValue& value)
