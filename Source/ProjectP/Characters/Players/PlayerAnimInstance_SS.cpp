@@ -25,10 +25,13 @@ void UPlayerAnimInstance_SS::NativeUpdateAnimation(float DeltaSeconds)
 	if (!IsValid(movement))
 		return;
 
-	mIsMove = pControls->GetThisInputAxis() != FVector::ZeroVector;
 	mVelocity = movement->Velocity.Size();
 	mAcceleration = movement->GetCurrentAcceleration().Size() > .1f;
+
 	mIsInAir = movement->IsFalling();
+	
+	if (!mIsInAir)
+		mJump = false;
 }
 
 void UPlayerAnimInstance_SS::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
@@ -51,6 +54,46 @@ void UPlayerAnimInstance_SS::NativeBeginPlay()
 	Super::NativeBeginPlay();
 }
 
+void UPlayerAnimInstance_SS::PlayAttackMontage()
+{
+	if (!IsValid(mAttackMontage))
+		return;
+	// 
+	//if (!Montage_IsPlaying(mAttackMontage))
+	//{
+	//	Montage_SetPosition(mAttackMontage, 0.f);
+	//	Montage_Play(mAttackMontage);
+	//	Montage_JumpToSection(mAttackSectionArray[mCurrentAttckSection]);
+	//}
+	//// 공중 공격
+	//if (mIsInAir)
+	//{
+	//	if (!Montage_IsPlaying(mAttackMontage))
+	//	{
+	//		Montage_SetPosition(mAttackMontage, 0.f);
+	//		Montage_Play(mAttackMontage);
+	//		Montage_JumpToSection(mAttackSectionArray[mCurrentAttckSection]);
+	//	}
+	//}
+	//// 일반 공격
+	//else
+	//{
+	//	if (!mAttackState)
+	//	{
+	//		if (!Montage_IsPlaying(mAttackMontage))
+	//		{
+	//			Montage_SetPosition(mAttackMontage, 0.f);
+	//			Montage_Play(mAttackMontage);
+	//			Montage_JumpToSection(mAttackSectionArray[mCurrentAttckSection]);
+	//		}
+	//	}
+	//	else
+	//		mAttackCombo = true;
+
+	//	mAttackState = true;
+	//}
+}
+
 void UPlayerAnimInstance_SS::AnimNotify_Combo()
 {
 
@@ -59,4 +102,8 @@ void UPlayerAnimInstance_SS::AnimNotify_Combo()
 void UPlayerAnimInstance_SS::AnimNotify_ResetCombo()
 {
 
+}
+
+void UPlayerAnimInstance_SS::MontageEnd(UAnimMontage* montage, bool bInterrupted)
+{
 }

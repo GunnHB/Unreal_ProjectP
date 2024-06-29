@@ -15,8 +15,6 @@ APlayerControls_SS::APlayerControls_SS()
 void APlayerControls_SS::BeginPlay()
 {
 	Super::BeginPlay();
-
-	mAnimInstance = Cast<UPlayerAnimInstance_SS>(GetMesh()->GetAnimInstance());
 }
 
 void APlayerControls_SS::Tick(float DeltaTime)
@@ -54,7 +52,7 @@ void APlayerControls_SS::InitAssets()
 
 void APlayerControls_SS::InitComponentValues()
 {
-	GetCapsuleComponent()->SetCapsuleHalfHeight(90.f);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(87.f);
 	GetCapsuleComponent()->SetCapsuleRadius(30.f);
 
 	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
@@ -69,5 +67,12 @@ void APlayerControls_SS::InitComponentValues()
 
 	// 액터의 회전 제어 해제
 	bUseControllerRotationYaw = false;
+}
+#pragma endregion
+
+#pragma region Attacks
+void APlayerControls_SS::NormalAttack()
+{
+	mAnimInstance->PlayAttackMontage();
 }
 #pragma endregion

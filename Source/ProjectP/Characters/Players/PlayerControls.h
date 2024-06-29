@@ -23,6 +23,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* mSpringArm = nullptr;
 
+	TObjectPtr<class UPlayerAnimInstance_SS> mAnimInstance = nullptr;
+
 	FRotator mCamRotator = FRotator::ZeroRotator;
 	FVector mInputAxis = FVector::ZeroVector;
 
@@ -42,11 +44,11 @@ protected:
 	virtual void InitComponentValues();
 
 protected:
-	void Movement(const FInputActionValue& value);
-	void MovementStop(const FInputActionValue& value);
-	void CameraMovement(const FInputActionValue& value);
-	void Attack(const FInputActionValue& value);
-	void Jump(const FInputActionValue& value);
+	void MovementAction(const FInputActionValue& value);
+	void MovementStopAction(const FInputActionValue& value);
+	void CameraMovementAction(const FInputActionValue& value);
+	void AttackAction(const FInputActionValue& value);
+	void JumpAction(const FInputActionValue& value);
 
 protected:
 	virtual void NormalAttack();
@@ -60,7 +62,7 @@ public:
 	FVector GetThisInputAxis() { return mInputAxis; }
 
 private:
-	void AdjustCamRotator(FRotator& rotator)
+	void AdjustCamRotation(FRotator& rotator)
 	{
 		if (rotator.Yaw < -180.f)
 			rotator.Yaw = 360.f + rotator.Yaw;
@@ -73,19 +75,24 @@ private:
 			rotator.Pitch = 20.f;
 	}
 
-	void GetTargetAngle()
+	void AdjustActorRotation()
 	{
 		FVector direction = mInputAxis.GetSafeNormal();
 
-		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("x->%f, y->%f"), direction.X, direction.Y));
+		// 입력 방향 + 카메라 방향
+		float targetAngle = FMath::Atan2(direction.X, direction.Y) * FMathf::RadToDeg + mSpringArm->GetRelativeRotation().Yaw;
 
-		float targetAngle = FMath::Atan2(direction.X, direction.Y) * FMathf::RadToDeg;
-
+		// 값 보정
 		if (targetAngle < -180.f)
 			targetAngle = 360 + targetAngle;
 		else if (targetAngle > 180.f)
 			targetAngle = targetAngle - 360.f;
 
-		SetActorRotation(FRotator(0.f, targetAngle, 0.f));
+		FRotator targetRotation = FRotator(0.f, targetAngle, 0.f);
+
+		// 회전 보간 (현재 회전 값, 목표 회전 값, deltatime, 회전 속도)
+		FRotator rotation = FMath::RInterpTo(GetActorRotation(), targetRotation, GetWorld()->GetDeltaSeconds(), 10.f);
+
+		SetActorRotation(rotation);
 	}
 };

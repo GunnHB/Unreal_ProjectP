@@ -6,7 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "../../InputData/PlayerInputData.h"
-#include "PlayerAnimInstance.h"
+#include "PlayerAnimInstance_SS.h"
 
 // Sets default values
 APlayerControls::APlayerControls()
@@ -27,6 +27,8 @@ void APlayerControls::BeginPlay()
 	Super::BeginPlay();
 
 	mCamRotator = mSpringArm->GetRelativeRotation();
+
+	mAnimInstance = Cast<UPlayerAnimInstance_SS>(GetMesh()->GetAnimInstance());
 
 	APlayerController* playerController = Cast<APlayerController>(GetController());
 
@@ -58,11 +60,11 @@ void APlayerControls::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	const UPlayerInputData* inputData = GetDefault<UPlayerInputData>();
 
-	inputCompo->BindAction(inputData->mInputToMovement, ETriggerEvent::Triggered, this, &APlayerControls::Movement);
-	inputCompo->BindAction(inputData->mInputToMovement, ETriggerEvent::Completed, this, &APlayerControls::MovementStop);
-	inputCompo->BindAction(inputData->mInputToCameraMovement, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovement);
-	inputCompo->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::Attack);
-	inputCompo->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::Jump);
+	inputCompo->BindAction(inputData->mInputToMovement, ETriggerEvent::Triggered, this, &APlayerControls::MovementAction);
+	inputCompo->BindAction(inputData->mInputToMovement, ETriggerEvent::Completed, this, &APlayerControls::MovementStopAction);
+	inputCompo->BindAction(inputData->mInputToCameraMovement, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovementAction);
+	inputCompo->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
+	inputCompo->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::JumpAction);
 }
 
 void APlayerControls::InitAssets()
@@ -73,21 +75,21 @@ void APlayerControls::InitComponentValues()
 {
 }
 
-void APlayerControls::Movement(const FInputActionValue& value)
+void APlayerControls::MovementAction(const FInputActionValue& value)
 {
 	mInputAxis = value.Get<FVector>();
 
-	GetTargetAngle();
+	AdjustActorRotation();
 
 	AddMovementInput(GetActorForwardVector());
 }
 
-void APlayerControls::MovementStop(const FInputActionValue& value)
+void APlayerControls::MovementStopAction(const FInputActionValue& value)
 {
 	mInputAxis = FVector::ZeroVector;
 }
 
-void APlayerControls::CameraMovement(const FInputActionValue& value)
+void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 {
 	FVector axis = value.Get<FVector>();
 
@@ -97,12 +99,12 @@ void APlayerControls::CameraMovement(const FInputActionValue& value)
 	mCamRotator.Pitch += pitchDelta;
 	mCamRotator.Yaw += yawDelta;
 
-	AdjustCamRotator(mCamRotator);
+	AdjustCamRotation(mCamRotator);
 
 	mSpringArm->SetRelativeRotation(mCamRotator);
 }
 
-void APlayerControls::Attack(const FInputActionValue& value)
+void APlayerControls::AttackAction(const FInputActionValue& value)
 {
 	NormalAttack();
 }
@@ -120,7 +122,11 @@ void APlayerControls::AttackDisable()
 	//mAnimInstance->ResetDatas();
 }
 
-void APlayerControls::Jump(const FInputActionValue& value)
+void APlayerControls::JumpAction(const FInputActionValue& value)
 {
-	
+	if (CanJump())
+	{
+		Jump();
+		mAnimInstance->OnJump();
+	}
 }

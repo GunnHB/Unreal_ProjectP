@@ -38,4 +38,9 @@ protected:
 	virtual void InitAssets() override;
 	virtual void InitComponentValues() override;
 #pragma endregion
+
+#pragma region Attacks
+protected:
+	virtual void NormalAttack() override;
+#pragma endregion
 };

@@ -2,9 +2,7 @@
 
 #pragma once
 
-//#include "CoreMinimal.h"
 #include "../../System/GameInfo.h"
-#include "Animation/AnimInstance.h"
 #include "PlayerAnimInstance_SS.generated.h"
 
 /**
@@ -24,6 +22,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 mCurrentAttckSection;
 
+protected:
 	// variables
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float mVelocity = 0.f;
@@ -32,7 +31,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool mIsInAir = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool mIsMove = false;
+	bool mJump = false;
+
+	// for attack
+	bool mAttackCombo = false;
+	bool mAttackState = false;
 
 public:
 	virtual void NativeInitializeAnimation() override;
@@ -43,9 +46,21 @@ public:
 
 	virtual void NativeBeginPlay() override;
 
-protected:
+public:
+	// Montages
+	void PlayAttackMontage();
+
 	UFUNCTION()
 	void AnimNotify_Combo();
 	UFUNCTION()
 	void AnimNotify_ResetCombo();
+
+	// Jumps
+	void OnJump()
+	{
+		mJump = true;
+	}
+
+private:
+	void MontageEnd(UAnimMontage* montage, bool bInterrupted);
 };
