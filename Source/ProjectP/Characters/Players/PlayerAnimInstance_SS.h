@@ -28,9 +28,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float mVelocity = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float mAcceleration = 0.f;
+	bool mAcceleration = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool mIsInAir = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool mIsMove = false;
 
 public:
 	virtual void NativeInitializeAnimation() override;

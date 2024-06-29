@@ -24,8 +24,8 @@ public:
 	UInputMappingContext* mContext = nullptr;
 
 public:
-	UInputAction* mMovementAction = nullptr;
-	UInputAction* mCameraMovementAction = nullptr;
-	UInputAction* mAttackAction = nullptr;
-	UInputAction* mJumpAction = nullptr;
+	UInputAction* mInputToMovement = nullptr;
+	UInputAction* mInputToCameraMovement = nullptr;
+	UInputAction* mInputToAttack = nullptr;
+	UInputAction* mInputToJump = nullptr;
 };

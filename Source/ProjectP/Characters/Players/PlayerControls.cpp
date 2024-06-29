@@ -28,8 +28,6 @@ void APlayerControls::BeginPlay()
 
 	mCamRotator = mSpringArm->GetRelativeRotation();
 
-	//mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
-
 	APlayerController* playerController = Cast<APlayerController>(GetController());
 
 	if (playerController != nullptr)
@@ -46,7 +44,6 @@ void APlayerControls::BeginPlay()
 void APlayerControls::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -61,10 +58,11 @@ void APlayerControls::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	const UPlayerInputData* inputData = GetDefault<UPlayerInputData>();
 
-	inputCompo->BindAction(inputData->mMovementAction, ETriggerEvent::Triggered, this, &APlayerControls::MovementAction);
-	inputCompo->BindAction(inputData->mCameraMovementAction, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovementAction);
-	inputCompo->BindAction(inputData->mAttackAction, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
-	inputCompo->BindAction(inputData->mJumpAction, ETriggerEvent::Started, this, &APlayerControls::JumpAction);
+	inputCompo->BindAction(inputData->mInputToMovement, ETriggerEvent::Triggered, this, &APlayerControls::Movement);
+	inputCompo->BindAction(inputData->mInputToMovement, ETriggerEvent::Completed, this, &APlayerControls::MovementStop);
+	inputCompo->BindAction(inputData->mInputToCameraMovement, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovement);
+	inputCompo->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::Attack);
+	inputCompo->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::Jump);
 }
 
 void APlayerControls::InitAssets()
@@ -75,27 +73,21 @@ void APlayerControls::InitComponentValues()
 {
 }
 
-void APlayerControls::MovementAction(const FInputActionValue& value)
+void APlayerControls::Movement(const FInputActionValue& value)
 {
-	FVector axis = value.Get<FVector>();
+	mInputAxis = value.Get<FVector>();
 
-	FVector vertical = GetActorForwardVector() * axis.Y;
-	FVector horizontal = GetActorRightVector() * axis.X;
+	GetTargetAngle();
 
-	FVector direction = (vertical + horizontal).GetSafeNormal();
-
-	//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("%f"), targetAngle));
-
-	if (direction.Size() >= .1f)
-	{
-		float targetAngle = FMath::Atan2(direction.Y, direction.X) * FMathf::RadToDeg;
-		SetActorRotation(FRotator(0.f, targetAngle, 0.f));
-
-		SetActorLocation(GetActorLocation() + (direction * 500.f * GetWorld()->GetDeltaSeconds()));
-	}
+	AddMovementInput(GetActorForwardVector());
 }
 
-void APlayerControls::CameraMovementAction(const FInputActionValue& value)
+void APlayerControls::MovementStop(const FInputActionValue& value)
+{
+	mInputAxis = FVector::ZeroVector;
+}
+
+void APlayerControls::CameraMovement(const FInputActionValue& value)
 {
 	FVector axis = value.Get<FVector>();
 
@@ -110,7 +102,7 @@ void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 	mSpringArm->SetRelativeRotation(mCamRotator);
 }
 
-void APlayerControls::AttackAction(const FInputActionValue& value)
+void APlayerControls::Attack(const FInputActionValue& value)
 {
 	NormalAttack();
 }
@@ -128,7 +120,7 @@ void APlayerControls::AttackDisable()
 	//mAnimInstance->ResetDatas();
 }
 
-void APlayerControls::JumpAction(const FInputActionValue& value)
+void APlayerControls::Jump(const FInputActionValue& value)
 {
 	
 }

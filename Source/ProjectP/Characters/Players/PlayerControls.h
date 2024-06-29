@@ -4,7 +4,6 @@
 
 #include "InputActionValue.h"
 
-//#include "CoreMinimal.h"
 #include "../../System/GameInfo.h"
 #include "GameFramework/Character.h"
 #include "PlayerControls.generated.h"
@@ -21,13 +20,11 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* mCamera = nullptr;
-
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* mSpringArm = nullptr;
 
-	//TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
-
 	FRotator mCamRotator = FRotator::ZeroRotator;
+	FVector mInputAxis = FVector::ZeroVector;
 
 protected:
 	// Called when the game starts or when spawned
@@ -45,10 +42,11 @@ protected:
 	virtual void InitComponentValues();
 
 protected:
-	void MovementAction(const FInputActionValue& value);
-	void CameraMovementAction(const FInputActionValue& value);
-	void AttackAction(const FInputActionValue& value);
-	void JumpAction(const FInputActionValue& value);
+	void Movement(const FInputActionValue& value);
+	void MovementStop(const FInputActionValue& value);
+	void CameraMovement(const FInputActionValue& value);
+	void Attack(const FInputActionValue& value);
+	void Jump(const FInputActionValue& value);
 
 protected:
 	virtual void NormalAttack();
@@ -56,6 +54,10 @@ protected:
 public:
 	virtual void AttackEnable();
 	virtual void AttackDisable();
+
+public:
+	// getter
+	FVector GetThisInputAxis() { return mInputAxis; }
 
 private:
 	void AdjustCamRotator(FRotator& rotator)
@@ -71,10 +73,19 @@ private:
 			rotator.Pitch = 20.f;
 	}
 
-	float TargetAngle(const FVector& direction)
+	void GetTargetAngle()
 	{
-		FVector targetDirection = (direction - GetActorLocation()).GetSafeNormal();
+		FVector direction = mInputAxis.GetSafeNormal();
 
-		return FMath::Atan2(targetDirection.X, targetDirection.Z) * FMathf::RadToDeg + mSpringArm->GetRelativeRotation().Pitch;
+		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("x->%f, y->%f"), direction.X, direction.Y));
+
+		float targetAngle = FMath::Atan2(direction.X, direction.Y) * FMathf::RadToDeg;
+
+		if (targetAngle < -180.f)
+			targetAngle = 360 + targetAngle;
+		else if (targetAngle > 180.f)
+			targetAngle = targetAngle - 360.f;
+
+		SetActorRotation(FRotator(0.f, targetAngle, 0.f));
 	}
 };

@@ -66,5 +66,8 @@ void APlayerControls_SS::InitComponentValues()
 	mSpringArm->TargetArmLength = 300.f;
 
 	mSpringArm->bInheritYaw = false;
+
+	// 액터의 회전 제어 해제
+	bUseControllerRotationYaw = false;
 }
 #pragma endregion

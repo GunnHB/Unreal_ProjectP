@@ -20,7 +20,7 @@ UPlayerInputData::UPlayerInputData()
 			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Movement.IA_PlayerControls_Movement'"));
 
 		if (asset.Succeeded())
-			mMovementAction = asset.Object;
+			mInputToMovement = asset.Object;
 	}
 
 	// camera movement
@@ -29,7 +29,7 @@ UPlayerInputData::UPlayerInputData()
 			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_CameraMovement.IA_PlayerControls_CameraMovement'"));
 
 		if (asset.Succeeded())
-			mCameraMovementAction = asset.Object;
+			mInputToCameraMovement = asset.Object;
 	}
 
 	// jump
@@ -38,7 +38,7 @@ UPlayerInputData::UPlayerInputData()
 			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Jump.IA_PlayerControls_Jump'"));
 
 		if (asset.Succeeded())
-			mJumpAction = asset.Object;
+			mInputToJump = asset.Object;
 	}
 
 	// attack
@@ -47,6 +47,6 @@ UPlayerInputData::UPlayerInputData()
 			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Attack.IA_PlayerControls_Attack'"));
 
 		if (asset.Succeeded())
-			mAttackAction = asset.Object;
+			mInputToAttack = asset.Object;
 	}
 }
