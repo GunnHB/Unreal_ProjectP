@@ -3,13 +3,13 @@
 
 #include "MainGameMode.h"
 
-#include "../Characters/Players/PlayerControls_SS.h"
+#include "../Characters/Player/PlayerControls.h"
 
 AMainGameMode::AMainGameMode()
 {
-	static ConstructorHelpers::FClassFinder<APlayerControls_SS>
-		player(TEXT("/Script/CoreUObject.Class'/Script/ProjectP.PlayerControls_SS'"));
+	static ConstructorHelpers::FClassFinder<APlayerControls>
+		asset(TEXT("/Script/CoreUObject.Class'/Script/ProjectP.PlayerControls'"));
 
-	if (player.Succeeded())
-		DefaultPawnClass = player.Class;
+	if (asset.Succeeded())
+		DefaultPawnClass = asset.Class;
 }
