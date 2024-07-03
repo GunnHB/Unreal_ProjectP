@@ -13,9 +13,9 @@ class PROJECTP_API AAIPawn : public APawn
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-	UCapsuleComponent* mCapsule;
+	TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
 	UPROPERTY(VisibleAnywhere)
-	USkeletalMeshComponent* mSkeletalMesh;
+	TObjectPtr<USkeletalMeshComponent> mSkeletalMesh = nullptr;
 
 public:
 	// Sets default values for this pawn's properties
@@ -29,10 +29,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 protected:
 	virtual void InitAssets();
 	virtual void InitComponentsValue();
+
+public:
+	TObjectPtr<UCapsuleComponent> GetCapsuleComponent() const { return mCapsule; }
 };

@@ -2,7 +2,7 @@
 
 #pragma once
 
-//#include "CoreMinimal.h"
+#include "../../../System/GameInfo.h"
 #include "../AIPawn.h"
 #include "EnemyPawn.generated.h"
 
@@ -14,4 +14,12 @@ class PROJECTP_API AEnemyPawn : public AAIPawn
 {
 	GENERATED_BODY()
 	
+protected:
+	class UEnemyMovement* mMovement = nullptr;
+
+public:
+	AEnemyPawn();
+
+protected:
+	virtual void InitComponentsValue() override;
 };

@@ -19,6 +19,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* mCamera;
 
+	// 클래스의 전방선언
+	// 다른 컴포넌트들도 tobjectptr로 선언할 수 있다.
+	// 잠깐 알아보니 언리얼에서는 이 방식을 권장한다고 함
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 
 private:
