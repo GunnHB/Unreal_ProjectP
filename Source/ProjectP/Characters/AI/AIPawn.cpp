@@ -16,7 +16,15 @@ AAIPawn::AAIPawn()
 void AAIPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+}
+
+void AAIPawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	// 델리게이트에 등록된 함수 있으면
+	if (mDeathDelegate.IsBound())
+		mDeathDelegate.Broadcast();	// 등록된 함수들 호출
 }
 
 // Called every frame
@@ -24,6 +32,13 @@ void AAIPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+float AAIPawn::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	return 0.0f;
 }
 
 void AAIPawn::InitAssets()

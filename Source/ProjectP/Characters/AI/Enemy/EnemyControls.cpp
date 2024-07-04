@@ -72,6 +72,7 @@ void AEnemyControls::OnUnPossess()
 
 void AEnemyControls::OnTargetDetect(AActor* target, FAIStimulus stimulus)
 {
+	// 감지하는 target은 액터가 아닌 컨트롤러
 	if (stimulus.WasSuccessfullySensed())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("enemy!!!"));

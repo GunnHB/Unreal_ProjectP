@@ -24,10 +24,10 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UArrowComponent* mArrow;
 	
-	UPROPERTY(VisibleAnywhere)
-	TSubclassOf<class AAIPawn> mSpawnClass;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AAIPawn> mSpawnClass;		// 스폰할 폰의 클래스
 
-	class AAIPawn* mSpawnActor = nullptr;
+	/*class AAIPawn* */TObjectPtr<class AAIPawn> mSpawnActor = nullptr;		// 스폰할 폰의 포인터
 
 	UPROPERTY(EditAnywhere)
 	float mSpawnTime = 0.f;				// 스폰시킬 시간
@@ -44,4 +44,7 @@ public:
 
 private:
 	void Spawn();
+
+	UFUNCTION()
+	void AIDeathDelegate();
 };

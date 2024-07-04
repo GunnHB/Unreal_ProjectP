@@ -28,7 +28,8 @@ AAISpawnActor::AAISpawnActor()
 void AAISpawnActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Spawn();
 }
 
 // Called every frame
@@ -36,6 +37,17 @@ void AAISpawnActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// 스폰한 폰이 죽으면 제거되어 nullptr
+	if (!mSpawnActor)
+	{
+		mCalculateSpawnTime += DeltaTime;
+
+		if (mSpawnTime <= mCalculateSpawnTime)
+		{
+			mCalculateSpawnTime = 0.f;
+			Spawn();
+		}
+	}
 }
 
 void AAISpawnActor::Spawn()
@@ -48,8 +60,9 @@ void AAISpawnActor::Spawn()
 	FActorSpawnParameters param;
 	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;	// 항상 스폰됨
 
-	// 스폰 시 폰의 위치를 정 가운데로 맞추기 때문에 땅 아래로 빠질 수 있다. 그래서 위치 조정해야됨
-	// 스폰될 위치 가져오기
+	// 스폰 시 spawnactor의 위치를 기준으로 가져오기 때문에
+	// 폰이 땅 아래로 빠질 수 있다. 그래서 위치 조정해야됨
+	// 스폰되는 위치 가져오기
 	FVector spawnLocation = GetActorLocation();
 	FRotator spawnRotator = GetActorRotation();
 
@@ -58,7 +71,24 @@ void AAISpawnActor::Spawn()
 
 	if (IsValid(defaultPawn))
 	{
-		//defaultPawn->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()
+		// 만약 액터의 트랜스폼의 스케일의 Z 값을 수정하게 되면
+		// 캡슐의 절반 길이도 따라 수정돼야 함
+		// 정확한 절반 길이를 얻기 위해 GetScaledCapsuleHalfHeight를 사용
+
+		// 액터 위치 올리기
+		spawnLocation.Z += defaultPawn->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 	}
+
+	// 스폰 (생성)
+	mSpawnActor = GetWorld()->SpawnActor<AAIPawn>(mSpawnClass, spawnLocation, spawnRotator);
+
+	// 생성된 폰의 델리게이트에 함수 등록
+	if (mSpawnActor != nullptr)
+		// ThisClass -> 현재 클래스
+		// 폰이 제거될 때 해당 함수가 호출됨
+		mSpawnActor->AddDeathDelegate<ThisClass>(this, &AAISpawnActor::AIDeathDelegate);
 }
 
+void AAISpawnActor::AIDeathDelegate()
+{
+}
