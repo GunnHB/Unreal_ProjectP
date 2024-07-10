@@ -49,4 +49,13 @@ UPlayerInputData::UPlayerInputData()
 		if (asset.Succeeded())
 			mInputToAttack = asset.Object;
 	}
+
+	// sprint
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Sprint.IA_PlayerControls_Sprint'"));
+
+		if (asset.Succeeded())
+			mInputToSprint = asset.Object;
+	}
 }

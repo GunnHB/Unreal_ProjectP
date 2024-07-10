@@ -44,26 +44,23 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	virtual void InitAssets();
-	virtual void InitComponentsValue();
+	virtual void InitAssets();												// 에셋 초기화
+	virtual void InitComponentsValue();										// 컴포넌트 값 초기화
 
-private:
-	// 액션 바인딩
-	void BindInputActions(class UInputComponent* PlayerInputComponent);
-	// 맵핑
-	void MappingContext();
-
-protected:
+	// 액션
 	void MovementAction(const FInputActionValue& value);
 	void MovementStopAction(const FInputActionValue& value);
 	void CameraMovementAction(const FInputActionValue& value);
 	void JumpAction(const FInputActionValue& value);
 	void AttackAction(const FInputActionValue& value);
+	void SprintAction(const FInputActionValue& value);
+
+	void NormalAttack();													// 공격
 
 private:
-	void AdjustCameraRotation();
-	void AdjustActorRotation();
+	void BindInputActions(class UInputComponent* PlayerInputComponent);		// 액션 바인딩
+	void MappingContext();													// 맵핑
 
-protected:
-	void NormalAttack();
+	void AdjustCameraRotation();											// 카메라 회전 조정
+	void AdjustActorRotation();												// 캐릭터 회전 조정
 };

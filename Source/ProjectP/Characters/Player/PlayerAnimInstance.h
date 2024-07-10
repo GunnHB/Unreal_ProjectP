@@ -22,11 +22,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 mCurrentAttackSection = 0;
 
-protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool mIsMove = false;
+	float mDegreee = 0.f;
 
-	float mVelocity = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float mSpeed = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool mAcceleration = false;
 
 	// variables
 	bool mAttackState = false;

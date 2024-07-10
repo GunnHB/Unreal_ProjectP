@@ -68,10 +68,10 @@ void APlayerControls::InitAssets()
 
 void APlayerControls::InitComponentsValue()
 {
-	GetCapsuleComponent()->SetCapsuleHalfHeight(90.f);
-	GetCapsuleComponent()->SetCapsuleRadius(30.f);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(89.f);
+	GetCapsuleComponent()->SetCapsuleRadius(25.f);
 
-	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
+	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -92.f));
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 
 	mSpringArm->SetRelativeLocation(FVector(0.f, 0.f, 30.f));
@@ -93,7 +93,7 @@ void APlayerControls::InitComponentsValue()
 	UCharacterMovementComponent* movement = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 
 	if (movement != nullptr)
-		movement->MaxWalkSpeed = 350.f;
+		movement->MaxWalkSpeed = 500.f;
 }
 
 void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
@@ -109,6 +109,7 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToCameraMovement, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovementAction);
 	inputComponent->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::JumpAction);
 	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
+	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Started, this, &APlayerControls::SprintAction);
 }
 
 void APlayerControls::MappingContext()
@@ -156,11 +157,16 @@ void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 
 void APlayerControls::JumpAction(const FInputActionValue& value)
 {
+	Jump();
 }
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
 {
 	NormalAttack();
+}
+void APlayerControls::SprintAction(const FInputActionValue& value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("sprint")));
 }
 #pragma endregion
 

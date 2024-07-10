@@ -24,8 +24,8 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (!IsValid(movement))
 		return;
 
-	mVelocity = movement->Velocity.Size();
-	mIsMove = mVelocity > 0.1f;
+	mSpeed = movement->Velocity.Size();
+	mAcceleration = movement->GetCurrentAcceleration().Length() > 0.f;
 }
 
 void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)

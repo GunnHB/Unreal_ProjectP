@@ -28,4 +28,5 @@ public:
 	UInputAction* mInputToCameraMovement = nullptr;
 	UInputAction* mInputToAttack = nullptr;
 	UInputAction* mInputToJump = nullptr;
+	UInputAction* mInputToSprint = nullptr;
 };
