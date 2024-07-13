@@ -29,4 +29,5 @@ public:
 	UInputAction* mInputToAttack = nullptr;
 	UInputAction* mInputToJump = nullptr;
 	UInputAction* mInputToSprint = nullptr;
+	UInputAction* mInputToFocus = nullptr;
 };

@@ -58,4 +58,13 @@ UPlayerInputData::UPlayerInputData()
 		if (asset.Succeeded())
 			mInputToSprint = asset.Object;
 	}
+
+	// focus
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Focus.IA_PlayerControls_Focus'"));
+
+		if (asset.Succeeded())
+			mInputToFocus = asset.Object;
+	}
 }

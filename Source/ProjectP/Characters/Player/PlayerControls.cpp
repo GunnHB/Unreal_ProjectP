@@ -110,6 +110,7 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::JumpAction);
 	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Started, this, &APlayerControls::SprintAction);
+	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Triggered, this, &APlayerControls::FocusAction);
 }
 
 void APlayerControls::MappingContext()
@@ -162,11 +163,19 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
 {
-	NormalAttack();
+	//NormalAttack();
 }
+
 void APlayerControls::SprintAction(const FInputActionValue& value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("sprint")));
+	
+}
+
+void APlayerControls::FocusAction(const FInputActionValue& value)
+{
+	bFocus = !bFocus;
+
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("focus = %d"), bFocus));
 }
 #pragma endregion
 
