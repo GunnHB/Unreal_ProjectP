@@ -26,6 +26,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	mSpeed = movement->Velocity.Size();
 	mAcceleration = movement->GetCurrentAcceleration().Length() > 0.f;
+	mIsInAir = movement->IsFalling();
 }
 
 void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
@@ -80,6 +81,11 @@ void UPlayerAnimInstance::MontageEnded(UAnimMontage* montage, bool bInterrupted)
 	mAttackState = false;
 	mAttackCombo = false;
 	mCurrentAttackSection = 0;
+}
+
+void UPlayerAnimInstance::DoJump()
+{
+	mIsInAir = true;
 }
 
 void UPlayerAnimInstance::AnimNotify_Combo()

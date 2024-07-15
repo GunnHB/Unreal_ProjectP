@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool mAcceleration = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool mIsInAir = false;
+
 	// variables
 	bool mAttackState = false;
 	bool mAttackCombo = false;
@@ -45,9 +48,12 @@ public:
 	virtual void NativeBeginPlay();
 
 public:
+	// montage
 	void PlayAttackMontage();
 	UFUNCTION()
 	void MontageEnded(UAnimMontage* montage, bool bInterrupted);
+
+	void DoJump();
 
 private:
 	UFUNCTION()

@@ -158,7 +158,8 @@ void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 
 void APlayerControls::JumpAction(const FInputActionValue& value)
 {
-	Jump();
+	if(CanJump())
+		Jump();
 }
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
