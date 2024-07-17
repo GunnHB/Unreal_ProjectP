@@ -86,10 +86,10 @@ void APlayerControls::InitComponentsValue()
 	mSpringArm->TargetArmLength = 300.f;
 	mSpringArm->bInheritYaw = false;
 
-	// ÄÁÆ®·Ñ·¯ÀÇ È¸Àü¿¡ ¿µÇâÀ» ¹ŞÁö ¾Êµµ·Ï
+	// ì»¨íŠ¸ë¡¤ëŸ¬ì˜ íšŒì „ì— ì˜í–¥ì„ ë°›ì§€ ì•Šë„ë¡
 	bUseControllerRotationYaw = false;
 
-	// ÀÌµ¿ ¼Óµµ Á¶Á¤
+	// ì´ë™ ì†ë„ ì¡°ì •
 	UCharacterMovementComponent* movement = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 
 	if (movement != nullptr)
@@ -126,9 +126,12 @@ void APlayerControls::MappingContext()
 	subsystem->AddMappingContext(inputData->mContext, 0);
 }
 
-#pragma region Actions
 void APlayerControls::MovementAction(const FInputActionValue& value)
 {
+	// ê³µì¤‘ì—ì„œëŠ” ì´ë™ ë§‰ê¸°
+	if (mAnimInstance->GetIsInAir())
+		return;
+
 	mInputVector = value.Get<FVector>();
 
 	AdjustActorRotation();
@@ -158,8 +161,11 @@ void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 
 void APlayerControls::JumpAction(const FInputActionValue& value)
 {
-	if(CanJump())
+	if (CanJump())
+	{
+		mAnimInstance->PlayJumpAnim();
 		Jump();
+	}
 }
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
@@ -178,7 +184,6 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("focus = %d"), bFocus));
 }
-#pragma endregion
 
 void APlayerControls::AdjustCameraRotation()
 {
@@ -194,23 +199,25 @@ void APlayerControls::AdjustCameraRotation()
 	else if (mCamRotator.Pitch > 60.f)
 		mCamRotator.Pitch = 60.f;
 }
+
 void APlayerControls::AdjustActorRotation()
 {
 	FVector direction = mInputVector.GetSafeNormal();
 
 	float targetAngle = FMath::Atan2(direction.X, direction.Y) * FMathf::RadToDeg + mSpringArm->GetRelativeRotation().Yaw;
 
-	// targetAngle Á¶Á¤
+	// targetAngle ì¡°ì •
 	if (targetAngle < -180.f)
 		targetAngle = 360 + targetAngle;
 	else if (targetAngle > 180.f)
 		targetAngle = targetAngle - 360.f;
 
 	FRotator targetRotation = FRotator(0.f, targetAngle, 0.f);
-	// È¸Àü º¸°£ // interpspeed °ªÀÌ Å¬¼ö·Ï ºü¸£°Ô È¸Àü
+	// íšŒì „ ë³´ê°„
+	// interpspeed ê°’ì´ í´ìˆ˜ë¡ ë¹ ë¥´ê²Œ íšŒì „
 	FRotator rotation = FMath::RInterpTo(GetActorRotation(), targetRotation, GetWorld()->GetDeltaSeconds(), 10.f);
 
-	// ÃÖÁ¾ÀûÀ¸·Î È¸Àü
+	// ìµœì¢…ì ìœ¼ë¡œ íšŒì „
 	SetActorRotation(rotation);
 }
 

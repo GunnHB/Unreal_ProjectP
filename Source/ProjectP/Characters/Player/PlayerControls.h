@@ -16,12 +16,13 @@ class PROJECTP_API APlayerControls : public ACharacter
 protected:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* mSpringArm;
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* mCamera;
 
-	// Å¬·¡½ºÀÇ Àü¹æ¼±¾ğ
-	// ´Ù¸¥ ÄÄÆ÷³ÍÆ®µéµµ tobjectptr·Î ¼±¾ğÇÒ ¼ö ÀÖ´Ù.
-	// ¾ğ¸®¾ó¿¡¼­´Â ÀÌ ¹æ½ÄÀ» ±ÇÀåÇÑ´Ù°í ÇÔ
+	// í´ë˜ìŠ¤ì˜ ì „ë°©ì„ ì–¸
+	// ë‹¤ë¥¸ ì»´í¬ë„ŒíŠ¸ë“¤ë„ tobjectptrë¡œ ì„ ì–¸í•  ìˆ˜ ìˆë‹¤.
+	// ì–¸ë¦¬ì–¼ì—ì„œëŠ” ì´ ë°©ì‹ì„ ê¶Œì¥í•œë‹¤ê³  í•¨
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 
 	bool bFocus = false;
@@ -46,24 +47,24 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	virtual void InitAssets();												// ¿¡¼Â ÃÊ±âÈ­
-	virtual void InitComponentsValue();										// ÄÄÆ÷³ÍÆ® °ª ÃÊ±âÈ­
+	virtual void InitAssets();												// ì—ì…‹ ì´ˆê¸°í™”
+	virtual void InitComponentsValue();										// ì»´í¬ë„ŒíŠ¸ ê°’ ì´ˆê¸°í™”
 
-	// ¾×¼Ç
-	void MovementAction(const FInputActionValue& value);					// ÀÌµ¿
-	void MovementStopAction(const FInputActionValue& value);				// ÀÌµ¿ Ãë¼Ò
-	void CameraMovementAction(const FInputActionValue& value);				// Ä«¸Ş¶ó ÀÌµ¿
-	void JumpAction(const FInputActionValue& value);						// Á¡ÇÁ
-	void AttackAction(const FInputActionValue& value);						// °ø°İ
-	void SprintAction(const FInputActionValue& value);						// ´Ş¸®±â
-	void FocusAction(const FInputActionValue& value);						// Æ÷Ä¿½Ì
+	// ì•¡ì…˜
+	void MovementAction(const FInputActionValue& value);					// ì´ë™
+	void MovementStopAction(const FInputActionValue& value);				// ì´ë™ ì·¨ì†Œ
+	void CameraMovementAction(const FInputActionValue& value);				// ì¹´ë©”ë¼ ì´ë™
+	void JumpAction(const FInputActionValue& value);						// ì í”„
+	void AttackAction(const FInputActionValue& value);						// ê³µê²©
+	void SprintAction(const FInputActionValue& value);						// ë‹¬ë¦¬ê¸°
+	void FocusAction(const FInputActionValue& value);						// í¬ì»¤ì‹±
 
-	void NormalAttack();													// °ø°İ
+	void NormalAttack();													// ê³µê²©
 
 private:
-	void BindInputActions(class UInputComponent* PlayerInputComponent);		// ¾×¼Ç ¹ÙÀÎµù
-	void MappingContext();													// ¸ÊÇÎ
+	void BindInputActions(class UInputComponent* PlayerInputComponent);		// ì•¡ì…˜ ë°”ì¸ë”©
+	void MappingContext();													// ë§µí•‘
 
-	void AdjustCameraRotation();											// Ä«¸Ş¶ó È¸Àü Á¶Á¤
-	void AdjustActorRotation();												// Ä³¸¯ÅÍ È¸Àü Á¶Á¤
+	void AdjustCameraRotation();											// ì¹´ë©”ë¼ íšŒì „ ì¡°ì •
+	void AdjustActorRotation();												// ìºë¦­í„° íšŒì „ ì¡°ì •
 };

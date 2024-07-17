@@ -27,6 +27,9 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mSpeed = movement->Velocity.Size();
 	mAcceleration = movement->GetCurrentAcceleration().Length() > 0.f;
 	mIsInAir = movement->IsFalling();
+	
+	if (!mIsInAir)
+		mPlayJumpAnim = false;
 }
 
 void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
@@ -50,7 +53,7 @@ void UPlayerAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
-	// µ¨¸®°ÔÀÌÆ® µî·Ï
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½
 	OnMontageEnded.AddDynamic(this, &UPlayerAnimInstance::MontageEnded);
 }
 
@@ -63,9 +66,9 @@ void UPlayerAnimInstance::PlayAttackMontage()
 	{
 		if (!Montage_IsPlaying(mAttackMontage))
 		{
-			Montage_SetPosition(mAttackMontage, 0.1f);							// Ã³À½À¸·Î ¼¼ÆÃ
-			Montage_Play(mAttackMontage);										// ¸ùÅ¸ÁÖ Àç»ý
-			Montage_JumpToSection(mAttackSectionArray[mCurrentAttackSection]);	// Ã¹ ¼½¼Ç Àç»ýµÊ
+			Montage_SetPosition(mAttackMontage, 0.1f);
+			Montage_Play(mAttackMontage);	
+			Montage_JumpToSection(mAttackSectionArray[mCurrentAttackSection]);
 		}
 
 		mAttackState = true;
@@ -83,9 +86,9 @@ void UPlayerAnimInstance::MontageEnded(UAnimMontage* montage, bool bInterrupted)
 	mCurrentAttackSection = 0;
 }
 
-void UPlayerAnimInstance::DoJump()
+void UPlayerAnimInstance::PlayJumpAnim()
 {
-	mIsInAir = true;
+	mPlayJumpAnim = true;
 }
 
 void UPlayerAnimInstance::AnimNotify_Combo()

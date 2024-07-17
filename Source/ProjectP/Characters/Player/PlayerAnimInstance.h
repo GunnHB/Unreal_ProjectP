@@ -32,7 +32,13 @@ protected:
 	bool mAcceleration = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool mIsInAir = false;
+	bool mIsInAir = false;							// ���� ����
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool mPlayJumpAnim = false;						// ���� �ִ� ����
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FVector mAimVector;
 
 	// variables
 	bool mAttackState = false;
@@ -50,10 +56,18 @@ public:
 public:
 	// montage
 	void PlayAttackMontage();
+	
 	UFUNCTION()
 	void MontageEnded(UAnimMontage* montage, bool bInterrupted);
 
-	void DoJump();
+	void PlayJumpAnim();
+
+	// getter
+	bool GetIsInAir() const { return mIsInAir; }
+	FVector GetAimVector() const { return mAimVector; }
+
+	// setter
+	void SetAimVector(FVector value) {mAimVector = value;}
 
 private:
 	UFUNCTION()
