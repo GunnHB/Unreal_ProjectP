@@ -22,15 +22,16 @@ protected:
 
 	// 클래스의 전방선언
 	// 다른 컴포넌트들도 tobjectptr로 선언할 수 있다.
-	// 언리얼에서는 이 방식을 권장한다고 함
+	// UE5에서는 이 방식을 권장한다고 함
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
-
-	bool bFocus = false;
-
-	int32 mPlayerMoney = 0;
-
+	
+	// for inventory
 	TObjectPtr<class UInventoryWidget> mInventoryWidget;
 	TSubclassOf<UInventoryWidget> mInventoryWidgetClass;
+	bool mInventoryOpen = false;								// ui 종료되고 바로 실행되는 현상 방지위한 플래그
+
+	// playerData
+	TObjectPtr<class UPlayerData> mPlayerData = nullptr;
 
 private:
 	FVector mInputVector;
@@ -52,7 +53,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	// getter
-	FVector GetCameraFowradVector() const { return mCamera->GetForwardVector(); }
+	FVector GetCameraFowradVector() const {return mCamera->GetForwardVector();}
+	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
 	
 	void AddMoney(const FMoney* moneyData);
 

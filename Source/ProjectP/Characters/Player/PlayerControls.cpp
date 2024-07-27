@@ -7,6 +7,8 @@
 #include "EnhancedInputComponent.h"
 #include "PlayerAnimInstance.h"
 
+#include "../../Data/Player/PlayerData.h"
+
 #include "../../Inventory/Widget/InventoryWidget.h"
 
 // Sets default values
@@ -63,11 +65,15 @@ void APlayerControls::InitAssets()
 	if (animAsset.Succeeded())
 		GetMesh()->SetAnimInstanceClass(animAsset.Class);
 
+	// inventory
 	static ConstructorHelpers::FClassFinder<UUserWidget>
 		invenAsset(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/04_Inventory/Widget/UI_Inventory.UI_Inventory_C'"));
 
 	if(invenAsset.Succeeded())
 		mInventoryWidgetClass = invenAsset.Class;
+
+	// playerdata
+	mPlayerData = NewObject<UPlayerData>();
 }
 
 void APlayerControls::InitComponentsValue()
@@ -189,41 +195,25 @@ void APlayerControls::SprintAction(const FInputActionValue& value)
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
-	bFocus = !bFocus;
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("focus = %d"), bFocus));
 }
 
 void APlayerControls::InventoryAction(const FInputActionValue& value)
 {
+	mInventoryOpen = !mInventoryOpen;
+
+	if(!mInventoryOpen)
+		return;
+
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Black, TEXT("I on our keyboard has been pressed"));
 
 	if(IsValid(mInventoryWidgetClass))
 	{
-		mInventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), mInventoryWidgetClass);
+		if(!IsValid(mInventoryWidget))
+			mInventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), mInventoryWidgetClass);
+
 		mInventoryWidget->AddToViewport();
-		mInventoryWidget->SetKeyboardFocus();
-
-		FInputModeUIOnly mode;
-
-		GetController<APlayerController>()->SetInputMode(mode);
-		GetController<APlayerController>()->SetShowMouseCursor(true);
 	}
-	
-	//
-	// if(IsValid(mInventoryWidgetClass))
-	// {
-	// 	if(!IsValid(mInventoryWidget))
-	// 		mInventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), mInventoryWidgetClass);
-	// 	
-	// 	mInventoryWidget->AddToViewport();
-	// 	mInventoryWidget->SetKeyboardFocus();
-	// 	
-	// 	FInputModeUIOnly mode;
-	//
-	// 	GetController<APlayerController>()->SetInputMode(mode);
-	// 	GetController<APlayerController>()->SetShowMouseCursor(true);
-	// }
 }
 
 void APlayerControls::AdjustCameraRotation()
@@ -272,9 +262,12 @@ void APlayerControls::DrawArrow()
 
 void APlayerControls::AddMoney(const FMoney* moneyData)
 {
-	mPlayerMoney += moneyData->Amount;
+	if (!IsValid(mPlayerData))
+		return;
+	
+	mPlayerData->mPlayerMoney += moneyData->Amount;
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("%d"), mPlayerMoney));
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("%d"), mPlayerData->mPlayerMoney));
 }
 
 void APlayerControls::NormalAttack()
