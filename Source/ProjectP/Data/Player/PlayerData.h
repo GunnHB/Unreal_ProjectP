@@ -19,5 +19,7 @@ class PROJECTP_API UPlayerData : public UObject
 	friend class UInventoryWidget;
 
 private:
+	int32 mPlayerHealth = 100;
+	int32 mPlayerStamina = 100;
 	int32 mPlayerMoney = 0;
 };
