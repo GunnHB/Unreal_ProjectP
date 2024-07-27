@@ -7,9 +7,11 @@
 
 AMainGameMode::AMainGameMode()
 {
-	static ConstructorHelpers::FClassFinder<APlayerControls>
-		asset(TEXT("/Script/CoreUObject.Class'/Script/ProjectP.PlayerControls'"));
-
-	if (asset.Succeeded())
-		DefaultPawnClass = asset.Class;
+	DefaultPawnClass = APlayerControls::StaticClass();
+	
+	// static ConstructorHelpers::FClassFinder<APlayerControls>
+	// 	asset(TEXT("/Script/CoreUObject.Class'/Script/ProjectP.PlayerControls'"));
+	//
+	// if (asset.Succeeded())
+	// 	DefaultPawnClass = asset.Class;
 }

@@ -30,6 +30,8 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	
 	if (!mIsInAir)
 		mPlayJumpAnim = false;
+
+	SetAimOffset(pControl);
 }
 
 void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
@@ -40,50 +42,16 @@ void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 void UPlayerAnimInstance::NativePostEvaluateAnimation()
 {
 	Super::NativePostEvaluateAnimation();
-
 }
 
 void UPlayerAnimInstance::NativeUninitializeAnimation()
 {
 	Super::NativeUninitializeAnimation();
-
 }
 
 void UPlayerAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
-
-	// ��������Ʈ ���
-	OnMontageEnded.AddDynamic(this, &UPlayerAnimInstance::MontageEnded);
-}
-
-void UPlayerAnimInstance::PlayAttackMontage()
-{
-	if (!IsValid(mAttackMontage) || mAttackSectionArray.IsEmpty())
-		return;
-
-	if (!mAttackState)
-	{
-		if (!Montage_IsPlaying(mAttackMontage))
-		{
-			Montage_SetPosition(mAttackMontage, 0.1f);
-			Montage_Play(mAttackMontage);	
-			Montage_JumpToSection(mAttackSectionArray[mCurrentAttackSection]);
-		}
-
-		mAttackState = true;
-	}
-	else
-		mAttackCombo = true;
-}
-
-void UPlayerAnimInstance::MontageEnded(UAnimMontage* montage, bool bInterrupted)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Montage end"));
-
-	mAttackState = false;
-	mAttackCombo = false;
-	mCurrentAttackSection = 0;
 }
 
 void UPlayerAnimInstance::PlayJumpAnim()
@@ -91,27 +59,10 @@ void UPlayerAnimInstance::PlayJumpAnim()
 	mPlayJumpAnim = true;
 }
 
-void UPlayerAnimInstance::AnimNotify_Combo()
+void UPlayerAnimInstance::SetAimOffset(APlayerControls* pControl)
 {
-	if (!mAttackCombo)
-		return;
+	FVector camVector = pControl->GetCameraFowradVector();
+	camVector.Normalize();
 
-	mCurrentAttackSection = (mCurrentAttackSection + 1) % mAttackSectionArray.Num();
-
-	Montage_SetPosition(mAttackMontage, 0.1f);
-	Montage_Play(mAttackMontage);
-	Montage_JumpToSection(mAttackSectionArray[mCurrentAttackSection]);
-
-	mAttackCombo = false;
-}
-
-void UPlayerAnimInstance::AnimNotify_ResetCombo()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("Combo End"));
-
-	if (!mAttackCombo)
-	{
-		mAttackState = false;
-		mCurrentAttackSection = 0;
-	}
+	// GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("x->%f y->%f"), camVector.X, camVector.Y));
 }

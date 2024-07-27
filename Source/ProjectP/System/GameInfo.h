@@ -1,10 +1,30 @@
 #pragma once
 
 #include "EngineMinimal.h"
+#include "Engine.h"
 
-#include "Perception/AIPerceptionComponent.h"
-#include "Perception/AIPerceptionTypes.h"
-#include "Perception/AISenseConfig_Sight.h"
-#include "Perception/AISenseConfig_Hearing.h"
-#include "Perception/AISenseConfig_Damage.h"
-#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "GameInfo.generated.h"
+
+UENUM()
+enum class MoneyType : uint8
+{
+	Green,
+	Blue,
+	Red,
+	Silver,
+	Gold,
+};
+
+USTRUCT(BlueprintType)
+struct FMoney : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	MoneyType Type;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 Amount;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UStaticMesh* Mesh;
+};

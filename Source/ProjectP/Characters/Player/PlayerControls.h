@@ -27,6 +27,11 @@ protected:
 
 	bool bFocus = false;
 
+	int32 mPlayerMoney = 0;
+
+	TObjectPtr<class UInventoryWidget> mInventoryWidget;
+	TSubclassOf<UInventoryWidget> mInventoryWidgetClass;
+
 private:
 	FVector mInputVector;
 	FRotator mCamRotator;
@@ -39,12 +44,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	// getter
+	FVector GetCameraFowradVector() const { return mCamera->GetForwardVector(); }
+	
+	void AddMoney(const FMoney* moneyData);
 
 protected:
 	virtual void InitAssets();												// 에셋 초기화
@@ -59,6 +69,8 @@ protected:
 	void SprintAction(const FInputActionValue& value);						// 달리기
 	void FocusAction(const FInputActionValue& value);						// 포커싱
 
+	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
+
 	void NormalAttack();													// 공격
 
 private:
@@ -67,4 +79,6 @@ private:
 
 	void AdjustCameraRotation();											// 카메라 회전 조정
 	void AdjustActorRotation();												// 캐릭터 회전 조정
+	
+	void DrawArrow();
 };

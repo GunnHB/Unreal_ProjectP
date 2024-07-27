@@ -7,6 +7,8 @@
 #include "EnhancedInputComponent.h"
 #include "PlayerAnimInstance.h"
 
+#include "../../Inventory/Widget/InventoryWidget.h"
+
 // Sets default values
 APlayerControls::APlayerControls()
 {
@@ -34,6 +36,7 @@ void APlayerControls::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	DrawArrow();
 }
 
 // Called to bind functionality to input
@@ -47,23 +50,24 @@ void APlayerControls::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void APlayerControls::InitAssets()
 {
 	// mesh
-	{
-		static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-			asset(TEXT("/Script/Engine.SkeletalMesh'/Game/ControlRig/Characters/Mannequins/Meshes/SKM_Quinn_Weapon.SKM_Quinn_Weapon'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
+		meshAsset(TEXT("/Script/Engine.SkeletalMesh'/Game/ControlRig/Characters/Mannequins/Meshes/SKM_Quinn_Weapon.SKM_Quinn_Weapon'"));
 
-		if (asset.Succeeded())
-			GetMesh()->SetSkeletalMesh(asset.Object);
-	}
+	if (meshAsset.Succeeded())
+		GetMesh()->SetSkeletalMesh(meshAsset.Object);
 
 	// animinstance
-	{
-		// animation blueprint
-		static ConstructorHelpers::FClassFinder<UAnimInstance>
-			asset(TEXT("/Script/Engine.AnimBlueprint'/Game/02_Animations/ABP_PlayerControls.ABP_PlayerControls_C'"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance>
+		animAsset(TEXT("/Script/Engine.AnimBlueprint'/Game/02_Animations/ABP_PlayerControls.ABP_PlayerControls_C'"));
 
-		if (asset.Succeeded())
-			GetMesh()->SetAnimInstanceClass(asset.Class);
-	}
+	if (animAsset.Succeeded())
+		GetMesh()->SetAnimInstanceClass(animAsset.Class);
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>
+		invenAsset(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/04_Inventory/Widget/UI_Inventory.UI_Inventory_C'"));
+
+	if(invenAsset.Succeeded())
+		mInventoryWidgetClass = invenAsset.Class;
 }
 
 void APlayerControls::InitComponentsValue()
@@ -94,6 +98,9 @@ void APlayerControls::InitComponentsValue()
 
 	if (movement != nullptr)
 		movement->MaxWalkSpeed = 500.f;
+
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
 }
 
 void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
@@ -111,6 +118,8 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Started, this, &APlayerControls::SprintAction);
 	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Triggered, this, &APlayerControls::FocusAction);
+
+	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
 }
 
 void APlayerControls::MappingContext()
@@ -170,7 +179,7 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
 {
-	//NormalAttack();
+
 }
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
@@ -183,6 +192,38 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 	bFocus = !bFocus;
 
 	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("focus = %d"), bFocus));
+}
+
+void APlayerControls::InventoryAction(const FInputActionValue& value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Black, TEXT("I on our keyboard has been pressed"));
+
+	if(IsValid(mInventoryWidgetClass))
+	{
+		mInventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), mInventoryWidgetClass);
+		mInventoryWidget->AddToViewport();
+		mInventoryWidget->SetKeyboardFocus();
+
+		FInputModeUIOnly mode;
+
+		GetController<APlayerController>()->SetInputMode(mode);
+		GetController<APlayerController>()->SetShowMouseCursor(true);
+	}
+	
+	//
+	// if(IsValid(mInventoryWidgetClass))
+	// {
+	// 	if(!IsValid(mInventoryWidget))
+	// 		mInventoryWidget = CreateWidget<UInventoryWidget>(GetWorld(), mInventoryWidgetClass);
+	// 	
+	// 	mInventoryWidget->AddToViewport();
+	// 	mInventoryWidget->SetKeyboardFocus();
+	// 	
+	// 	FInputModeUIOnly mode;
+	//
+	// 	GetController<APlayerController>()->SetInputMode(mode);
+	// 	GetController<APlayerController>()->SetShowMouseCursor(true);
+	// }
 }
 
 void APlayerControls::AdjustCameraRotation()
@@ -221,7 +262,22 @@ void APlayerControls::AdjustActorRotation()
 	SetActorRotation(rotation);
 }
 
+void APlayerControls::DrawArrow()
+{
+	FVector startLocation = GetActorLocation();
+	FVector endLocation = startLocation + GetActorForwardVector() * 100.f;
+	
+	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
+}
+
+void APlayerControls::AddMoney(const FMoney* moneyData)
+{
+	mPlayerMoney += moneyData->Amount;
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("%d"), mPlayerMoney));
+}
+
 void APlayerControls::NormalAttack()
 {
-	mAnimInstance->PlayAttackMontage();
+	
 }

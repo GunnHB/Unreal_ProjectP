@@ -67,4 +67,13 @@ UPlayerInputData::UPlayerInputData()
 		if (asset.Succeeded())
 			mInputToFocus = asset.Object;
 	}
+
+	// inventory
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_UI_Inventory.IA_UI_Inventory'"));
+
+		if (asset.Succeeded())
+			mInputToInventory = asset.Object;
+	}
 }

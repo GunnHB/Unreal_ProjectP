@@ -30,4 +30,6 @@ public:
 	UInputAction* mInputToJump = nullptr;
 	UInputAction* mInputToSprint = nullptr;
 	UInputAction* mInputToFocus = nullptr;
+
+	UInputAction* mInputToInventory = nullptr;
 };

@@ -14,14 +14,6 @@ class PROJECTP_API UPlayerAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 protected:
-	// montages
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UAnimMontage> mAttackMontage;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<FName> mAttackSectionArray;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 mCurrentAttackSection = 0;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float mDegreee = 0.f;
 
@@ -32,10 +24,10 @@ protected:
 	bool mAcceleration = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool mIsInAir = false;							// ���� ����
+	bool mIsInAir = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool mPlayJumpAnim = false;						// ���� �ִ� ����
+	bool mPlayJumpAnim = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FVector mAimVector;
@@ -54,24 +46,11 @@ public:
 	virtual void NativeBeginPlay();
 
 public:
-	// montage
-	void PlayAttackMontage();
-	
-	UFUNCTION()
-	void MontageEnded(UAnimMontage* montage, bool bInterrupted);
-
 	void PlayJumpAnim();
 
 	// getter
 	bool GetIsInAir() const { return mIsInAir; }
-	FVector GetAimVector() const { return mAimVector; }
-
-	// setter
-	void SetAimVector(FVector value) {mAimVector = value;}
 
 private:
-	UFUNCTION()
-	void AnimNotify_Combo();
-	UFUNCTION()
-	void AnimNotify_ResetCombo();
+	void SetAimOffset(class APlayerControls* pControl);
 };
