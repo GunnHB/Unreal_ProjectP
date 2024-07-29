@@ -273,14 +273,6 @@ bool APlayerControls::AddMoney(const FMoney* moneyData)
 	if(mPlayerData->GetPlayerMoney() >= GameValue::GetMaxMoney())
 		mPlayerData->SetPlayerMoney(GameValue::GetMaxMoney());
 
-	// if(mPlayerData->mPlayerMoney == GameValue::GetMaxMoney())
-	// 	return false;
-	//
-	// mPlayerData->mPlayerMoney += moneyData->Amount;
-	//
-	// if(mPlayerData->mPlayerMoney >= GameValue::GetMaxMoney())
-	// 	mPlayerData->mPlayerMoney = GameValue::GetMaxMoney();
-
 	return true;
 }
 

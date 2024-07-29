@@ -15,7 +15,7 @@ public:
 };
 
 UENUM()
-enum class MoneyType : uint8
+enum class EMoneyType : uint8
 {
 	Green,
 	Blue,
@@ -31,7 +31,7 @@ struct FMoney : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	MoneyType Type;
+	EMoneyType Type;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 Amount;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
