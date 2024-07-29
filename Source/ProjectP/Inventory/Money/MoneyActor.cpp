@@ -51,11 +51,9 @@ void AMoneyActor::CollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent
 
 	FMoney* data = mMoney.GetRow<FMoney>("");
 
-	if(data != nullptr)
-	{
-		if(IsValid(pControl))
-			pControl->AddMoney(data);
+	if(data == nullptr || !IsValid(pControl))
+		return;
 
+	if(pControl->AddMoney(data))
 		Destroy();
-	}
 }

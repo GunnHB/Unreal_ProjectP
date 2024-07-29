@@ -5,6 +5,15 @@
 
 #include "GameInfo.generated.h"
 
+class GameValue
+{
+private:
+	static int32 MaxMoney;
+
+public:
+	static int32 GetMaxMoney() { return MaxMoney; }
+};
+
 UENUM()
 enum class MoneyType : uint8
 {

@@ -260,14 +260,20 @@ void APlayerControls::DrawArrow()
 	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
 }
 
-void APlayerControls::AddMoney(const FMoney* moneyData)
+bool APlayerControls::AddMoney(const FMoney* moneyData)
 {
 	if (!IsValid(mPlayerData))
-		return;
-	
+		return false;
+
+	if(mPlayerData->mPlayerMoney == GameValue::GetMaxMoney())
+		return false;
+
 	mPlayerData->mPlayerMoney += moneyData->Amount;
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, FString::Printf(TEXT("%d"), mPlayerData->mPlayerMoney));
+	if(mPlayerData->mPlayerMoney >= GameValue::GetMaxMoney())
+		mPlayerData->mPlayerMoney = GameValue::GetMaxMoney();
+
+	return true;
 }
 
 void APlayerControls::NormalAttack()

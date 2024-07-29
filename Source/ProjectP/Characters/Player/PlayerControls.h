@@ -56,7 +56,7 @@ public:
 	FVector GetCameraFowradVector() const {return mCamera->GetForwardVector();}
 	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
 	
-	void AddMoney(const FMoney* moneyData);
+	bool AddMoney(const FMoney* moneyData);
 
 protected:
 	virtual void InitAssets();												// 에셋 초기화
