@@ -56,7 +56,7 @@ void UInventoryWidget::SetMoneyText()
 	if(!IsValid(player))
 		return;
 
-	mMoneyText->SetText(FText::FromString(FString::Printf(TEXT("%d"), player->GetThisPlayerData()->mPlayerMoney)));
+	mMoneyText->SetText(FText::FromString(FString::Printf(TEXT("%d"), player->GetThisPlayerData()->GetPlayerMoney())));
 }
 
 void UInventoryWidget::SetMode(const FInputModeDataBase& mode, bool showCursor)

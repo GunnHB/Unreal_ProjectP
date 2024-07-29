@@ -17,9 +17,11 @@ protected:
 	TObjectPtr<UCapsuleComponent> mCapsule;
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> mMesh;
+	UPROPERTY(EditAnywhere)
+	MoneyType mMoneyType;
 
-	UPROPERTY(EditAnywhere, Category="Default")
-	FDataTableRowHandle mMoney;
+	TObjectPtr<UDataTable> mMoneyTable;
+	FMoney* mData;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -33,8 +35,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetStaticMesh(const MoneyType& moneyType);
+
 private:
 	UFUNCTION()
 	void CollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	FName GetRowNameByMoneyType();
 };

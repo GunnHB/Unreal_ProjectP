@@ -21,7 +21,7 @@ AMoneyActor::AMoneyActor()
 	tableAsset(TEXT("/Script/Engine.DataTable'/Game/04_Inventory/DataTable/DT_Money.DT_Money'"));
 
 	if(tableAsset.Succeeded())
-		mMoney.DataTable = tableAsset.Object;
+		mMoneyTable = tableAsset.Object;
 
 	mMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	mCapsule->SetCollisionProfileName(TEXT("Money"));
@@ -41,19 +41,47 @@ void AMoneyActor::BeginPlay()
 void AMoneyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void AMoneyActor::SetStaticMesh(const MoneyType& moneyType)
+{
+	
 }
 
 void AMoneyActor::CollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	APlayerControls* pControl = Cast<APlayerControls>(OtherActor);
 
-	FMoney* data = mMoney.GetRow<FMoney>("");
-
-	if(data == nullptr || !IsValid(pControl))
+	if(mData == nullptr || !IsValid(pControl))
 		return;
-
-	if(pControl->AddMoney(data))
+	
+	if(pControl->AddMoney(mData))
 		Destroy();
+}
+
+FName AMoneyActor::GetRowNameByMoneyType()
+{
+	FString tempString = "";
+	
+	switch (mMoneyType)
+	{
+	case MoneyType::Green:
+		tempString = "Green";
+		break;
+	case MoneyType::Blue:
+		tempString = "Blue";
+		break;
+	case MoneyType::Red:
+		tempString = "Red";
+		break;
+	case MoneyType::Silver:
+		tempString = "Silver";
+		break;
+	case MoneyType::Gold:
+		tempString = "Gold";
+		break;
+	}
+
+	return FName(*tempString);
 }
