@@ -11,6 +11,8 @@
 
 #include "../../Inventory/Widget/InventoryWidget.h"
 
+#include "../../Inventory/Item/Equipment/Weapon/OneHandSword.h"
+
 // Sets default values
 APlayerControls::APlayerControls()
 {
@@ -31,6 +33,8 @@ void APlayerControls::BeginPlay()
 	
 	mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	MappingContext();
+
+	SpawnWeapon();
 }
 
 // Called every frame
@@ -258,6 +262,17 @@ void APlayerControls::DrawArrow()
 	FVector endLocation = startLocation + GetActorForwardVector() * 100.f;
 	
 	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
+}
+
+void APlayerControls::SpawnWeapon()
+{
+	AOneHandSword* sword = GetWorld()->SpawnActor<AOneHandSword>(FVector::ZeroVector, FRotator::ZeroRotator);
+
+	if(IsValid(sword))
+	{
+		sword->SetSkeletalMesh(GetMesh());
+		sword->OnEquipped();
+	}
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)

@@ -5,7 +5,7 @@
 
 AEquipmentItem::AEquipmentItem()
 {
-	
+	mStaticMesh->SetRelativeRotation(FRotator::ZeroRotator);
 }
 
 void AEquipmentItem::OnEquipped()
@@ -22,7 +22,5 @@ void AEquipmentItem::UnEquipped()
 
 void AEquipmentItem::AttachActor(const FName& socketName)
 {
-	UMeshComponent* parent = Cast<ACharacter>(GetOwner())->GetMesh();
-	
-	AttachToComponent(parent, FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
+	AttachToComponent(mSkeletalMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, socketName);
 }

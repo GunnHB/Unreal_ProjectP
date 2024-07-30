@@ -15,7 +15,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UStaticMeshComponent> mMesh = nullptr;
+	TObjectPtr<UStaticMeshComponent> mStaticMesh = nullptr;
 	
 public:	
 	// Sets default values for this actor's properties

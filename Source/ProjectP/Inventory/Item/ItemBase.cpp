@@ -10,13 +10,13 @@ AItemBase::AItemBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	mCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CAPSULE"));
-	mMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
+	mStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("STATIC_MESH"));
 
 	SetRootComponent(mCapsule);
-	mMesh->SetupAttachment(mCapsule);
+	mStaticMesh->SetupAttachment(mCapsule);
 	
-	mMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	mMesh->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));		// 정면
+	mStaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	mStaticMesh->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));		// 정면
 }
 
 // Called when the game starts or when spawned

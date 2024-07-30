@@ -16,7 +16,7 @@ AMoneyItem::AMoneyItem()
 		moneyAsset(TEXT("/Script/Engine.StaticMesh'/Game/04_Inventory/Model/02_Money/Green/3DModel/SM_RupeeGreen.SM_RupeeGreen'"));
 	
 	if(moneyAsset.Succeeded())
-		mMesh->SetStaticMesh(moneyAsset.Object);
+		mStaticMesh->SetStaticMesh(moneyAsset.Object);
 
 	static ConstructorHelpers::FObjectFinder<UDataTable>
 		tableAsset(TEXT("/Script/Engine.DataTable'/Game/04_Inventory/DataTable/DT_Money.DT_Money'"));

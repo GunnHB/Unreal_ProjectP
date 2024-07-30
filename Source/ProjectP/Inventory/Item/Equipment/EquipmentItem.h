@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "../../../System/GameInfo.h"
 #include "../ItemBase.h"
 #include "EquipmentItem.generated.h"
 
@@ -15,14 +14,27 @@ class PROJECTP_API AEquipmentItem : public AItemBase
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(EditAnywhere)
 	FName mAttachSocketName;
+	
+	TObjectPtr<USkeletalMeshComponent> mSkeletalMesh = nullptr;
+	
+private:
 	bool bIsEquipped = false;
 
 public:
 	AEquipmentItem();
+	
+	// getter
+	bool GetIsEquipped() const {return bIsEquipped;}
 
-protected:
+	// setter
+	void SetIsEquipped(const bool value) {bIsEquipped = value;}
+	void SetSkeletalMesh(USkeletalMeshComponent* value) {mSkeletalMesh = value;}
+
 	void OnEquipped();
 	void UnEquipped();
+
+protected:
 	void AttachActor(const FName& socketName);
 };
