@@ -29,28 +29,25 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool mPlayJumpAnim = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FVector mAimVector;
-
 	// variables
 	bool mAttackState = false;
 	bool mAttackCombo = false;
 
-public:
-	virtual void NativeInitializeAnimation();
-	virtual void NativeUpdateAnimation(float DeltaSeconds);
-	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds);
-	virtual void NativePostEvaluateAnimation();
-	virtual void NativeUninitializeAnimation();
+	TObjectPtr<class APlayerControls> mPlayer = nullptr;
+	TObjectPtr<UCharacterMovementComponent> mPlayerMovement = nullptr;
 
-	virtual void NativeBeginPlay();
+public:
+	virtual void NativeInitializeAnimation() override;
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
+	virtual void NativePostEvaluateAnimation() override;
+	virtual void NativeUninitializeAnimation() override;
+
+	virtual void NativeBeginPlay() override;
 
 public:
 	void PlayJumpAnim();
 
 	// getter
 	bool GetIsInAir() const { return mIsInAir; }
-
-private:
-	void SetAimOffset(class APlayerControls* pControl);
 };

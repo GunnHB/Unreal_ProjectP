@@ -76,4 +76,13 @@ UPlayerInputData::UPlayerInputData()
 		if (asset.Succeeded())
 			mInputToInventory = asset.Object;
 	}
+	
+	// draw weapon
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_DrawWeapon.IA_PlayerControls_DrawWeapon'"));
+
+		if (asset.Succeeded())
+			mInputToDrawWeapon = asset.Object;
+	}
 }

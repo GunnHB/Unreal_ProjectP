@@ -33,6 +33,9 @@ protected:
 	// playerData
 	TObjectPtr<class UPlayerData> mPlayerData = nullptr;
 
+	// weapon
+	TObjectPtr<class AWeaponItem> mMainWeapon = nullptr;
+
 private:
 	FVector mInputVector;
 	FRotator mCamRotator;
@@ -59,8 +62,8 @@ public:
 	bool AddMoney(const FMoney* moneyData);
 
 protected:
-	virtual void InitAssets();												// 에셋 초기화
-	virtual void InitComponentsValue();										// 컴포넌트 값 초기화
+	void InitAssets();												// 에셋 초기화
+	void InitComponentsValue();										// 컴포넌트 값 초기화
 
 	// 액션
 	void MovementAction(const FInputActionValue& value);					// 이동
@@ -70,6 +73,7 @@ protected:
 	void AttackAction(const FInputActionValue& value);						// 공격
 	void SprintAction(const FInputActionValue& value);						// 달리기
 	void FocusAction(const FInputActionValue& value);						// 포커싱
+	void DrawWeaponAction(const FInputActionValue& value);					// 무기 장비
 
 	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
 
@@ -77,7 +81,7 @@ protected:
 
 private:
 	void BindInputActions(class UInputComponent* PlayerInputComponent);		// 액션 바인딩
-	void MappingContext();													// 맵핑
+	void MappingContext() const;											// 맵핑
 
 	void AdjustCameraRotation();											// 카메라 회전 조정
 	void AdjustActorRotation();												// 캐릭터 회전 조정

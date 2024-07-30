@@ -8,30 +8,28 @@
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
+
+	mPlayer = Cast<APlayerControls>(TryGetPawnOwner());
+
+	if(!IsValid(mPlayer))
+		return;
+
+	mPlayerMovement = Cast<UCharacterMovementComponent>(mPlayer->GetMovementComponent());
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-
-	APlayerControls* pControl = Cast<APlayerControls>(TryGetPawnOwner());
-
-	if (!IsValid(pControl))
+	
+	if(!IsValid(mPlayerMovement))
 		return;
-
-	UCharacterMovementComponent* movement = Cast<UCharacterMovementComponent>(pControl->GetMovementComponent());
-
-	if (!IsValid(movement))
-		return;
-
-	mSpeed = movement->Velocity.Size();
-	mAcceleration = movement->GetCurrentAcceleration().Length() > 0.f;
-	mIsInAir = movement->IsFalling();
+	
+	mSpeed = mPlayerMovement->Velocity.Size();
+	mAcceleration = mPlayerMovement->GetCurrentAcceleration().Length() > 0.f;
+	mIsInAir = mPlayerMovement->IsFalling();
 	
 	if (!mIsInAir)
 		mPlayJumpAnim = false;
-
-	SetAimOffset(pControl);
 }
 
 void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
@@ -57,12 +55,4 @@ void UPlayerAnimInstance::NativeBeginPlay()
 void UPlayerAnimInstance::PlayJumpAnim()
 {
 	mPlayJumpAnim = true;
-}
-
-void UPlayerAnimInstance::SetAimOffset(APlayerControls* pControl)
-{
-	FVector camVector = pControl->GetCameraFowradVector();
-	camVector.Normalize();
-
-	// GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("x->%f y->%f"), camVector.X, camVector.Y));
 }

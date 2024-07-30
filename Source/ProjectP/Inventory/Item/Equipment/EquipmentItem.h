@@ -32,9 +32,9 @@ public:
 	void SetIsEquipped(const bool value) {bIsEquipped = value;}
 	void SetSkeletalMesh(USkeletalMeshComponent* value) {mSkeletalMesh = value;}
 
-	void OnEquipped();
-	void UnEquipped();
+	void OnEquipped(const FName& socketName);
+	void OnUnequipped(const FName& socketName);
 
 protected:
-	void AttachActor(const FName& socketName);
+	void AttachActor();
 };

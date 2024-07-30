@@ -8,19 +8,23 @@ AEquipmentItem::AEquipmentItem()
 	mStaticMesh->SetRelativeRotation(FRotator::ZeroRotator);
 }
 
-void AEquipmentItem::OnEquipped()
+void AEquipmentItem::OnEquipped(const FName& socketName)
 {
 	bIsEquipped = true;
+	mAttachSocketName = socketName;
 
-	AttachActor(mAttachSocketName);
+	AttachActor();
 }
 
-void AEquipmentItem::UnEquipped()
+void AEquipmentItem::OnUnequipped(const FName& socketName)
 {
 	bIsEquipped = false;
+	mAttachSocketName = socketName;
+
+	AttachActor();
 }
 
-void AEquipmentItem::AttachActor(const FName& socketName)
+void AEquipmentItem::AttachActor()
 {
-	AttachToComponent(mSkeletalMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, socketName);
+	AttachToComponent(mSkeletalMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, mAttachSocketName);
 }

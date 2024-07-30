@@ -128,11 +128,12 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Started, this, &APlayerControls::SprintAction);
 	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Triggered, this, &APlayerControls::FocusAction);
+	inputComponent->BindAction(inputData->mInputToDrawWeapon, ETriggerEvent::Triggered, this, &APlayerControls::DrawWeaponAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
 }
 
-void APlayerControls::MappingContext()
+void APlayerControls::MappingContext() const
 {
 	APlayerController* player = Cast<APlayerController>(GetController());
 
@@ -202,6 +203,14 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 
 }
 
+void APlayerControls::DrawWeaponAction(const FInputActionValue& value)
+{
+	if(!IsValid(mMainWeapon))
+		return;
+
+	mMainWeapon->GetIsEquipped() ? mMainWeapon->OnUnequipped("SwordHipAttachSocket") : mMainWeapon->OnEquipped("WeaponSocket");
+}
+
 void APlayerControls::InventoryAction(const FInputActionValue& value)
 {
 	mInventoryOpen = !mInventoryOpen;
@@ -268,11 +277,14 @@ void APlayerControls::SpawnWeapon()
 {
 	AOneHandSword* sword = GetWorld()->SpawnActor<AOneHandSword>(FVector::ZeroVector, FRotator::ZeroRotator);
 
-	if(IsValid(sword))
-	{
-		sword->SetSkeletalMesh(GetMesh());
-		sword->OnEquipped();
-	}
+	if(!IsValid(sword))
+		return;
+
+	// 메인 무기로 세팅
+	mMainWeapon = sword;
+	
+	sword->SetSkeletalMesh(GetMesh());
+	sword->OnUnequipped("SwordHipAttachSocket");
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
