@@ -58,6 +58,7 @@ public:
 	// getter
 	FVector GetCameraFowradVector() const {return mCamera->GetForwardVector();}
 	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
+	AWeaponItem* GetMainWeaponItem() const {return mMainWeapon;}
 	
 	bool AddMoney(const FMoney* moneyData);
 

@@ -183,7 +183,7 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 {
 	if (CanJump())
 	{
-		mAnimInstance->PlayJumpAnim();
+		mAnimInstance->SetPlayJumpAnim(true);
 		Jump();
 	}
 }
@@ -208,7 +208,7 @@ void APlayerControls::DrawWeaponAction(const FInputActionValue& value)
 	if(!IsValid(mMainWeapon))
 		return;
 
-	mMainWeapon->GetIsEquipped() ? mMainWeapon->OnUnequipped("SwordHipAttachSocket") : mMainWeapon->OnEquipped("WeaponSocket");
+	mMainWeapon->GetIsEquipped() ? mAnimInstance->SetPlaySheathWeaponAnim(true) : mAnimInstance->SetPlayDrawWeaponAnim(true);
 }
 
 void APlayerControls::InventoryAction(const FInputActionValue& value)

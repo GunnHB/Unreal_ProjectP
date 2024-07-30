@@ -14,20 +14,15 @@ class PROJECTP_API UPlayerAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float mDegreee = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mDegreee = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mSpeed = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mAcceleration = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mIsInAir = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float mSpeed = 0.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool mAcceleration = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool mIsInAir = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool mPlayJumpAnim = false;
+	// anim flag
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mPlayJumpAnim = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mPlayDrawWeaponAnim = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mPlaySheathWeaponAnim = false;
 
 	// variables
 	bool mAttackState = false;
@@ -45,9 +40,15 @@ public:
 
 	virtual void NativeBeginPlay() override;
 
-public:
-	void PlayJumpAnim();
-
 	// getter
 	bool GetIsInAir() const { return mIsInAir; }
+
+	// setter
+	void SetPlayJumpAnim(const bool value) {mPlayJumpAnim = value;}
+	void SetPlayDrawWeaponAnim(const bool value) {mPlayDrawWeaponAnim = value;}
+	void SetPlaySheathWeaponAnim(const bool value) {mPlaySheathWeaponAnim = value;}
+
+private:
+	UFUNCTION() void AnimNotify_DrawWeapon();
+	UFUNCTION() void AnimNotify_SheathWeapon();
 };
