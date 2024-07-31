@@ -208,7 +208,9 @@ void APlayerControls::DrawWeaponAction(const FInputActionValue& value)
 	if(!IsValid(mMainWeapon))
 		return;
 
-	mMainWeapon->GetIsEquipped() ? mAnimInstance->SetPlaySheathWeaponAnim(true) : mAnimInstance->SetPlayDrawWeaponAnim(true);
+	mMainWeapon->GetIsEquipped() ? mAnimInstance->PlaySheathWeaponMontage() : mAnimInstance->PlayDrawWeaponMontage();
+
+	// mMainWeapon->GetIsEquipped() ? mAnimInstance->SetPlaySheathWeaponAnim(true) : mAnimInstance->SetPlayDrawWeaponAnim(true);
 }
 
 void APlayerControls::InventoryAction(const FInputActionValue& value)
@@ -295,7 +297,7 @@ bool APlayerControls::AddMoney(const FMoney* moneyData)
 	if(mPlayerData->GetPlayerMoney() == GameValue::GetMaxMoney())
 		return false;
 
-	mPlayerData->SetPlayerMoney(mPlayerData->GetPlayerMoney() + moneyData->Amount);
+	mPlayerData->SetPlayerMoney(mPlayerData->GetPlayerMoney() + moneyData->amount);
 
 	if(mPlayerData->GetPlayerMoney() >= GameValue::GetMaxMoney())
 		mPlayerData->SetPlayerMoney(GameValue::GetMaxMoney());

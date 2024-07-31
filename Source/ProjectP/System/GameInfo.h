@@ -15,13 +15,30 @@ public:
 };
 
 UENUM()
-enum class EMoneyType : uint8
+enum class EMoneyType : int8
 {
+	None = -1,
 	Green,
 	Blue,
 	Red,
 	Silver,
 	Gold,
+};
+
+UENUM()
+enum class EWeaponType : int8
+{
+	None = -1,
+	Sword,
+	Spear,
+};
+
+UENUM()
+enum class ESwordType : int8
+{
+	None = -1,
+	OneHand,
+	TwoHand,
 };
 
 USTRUCT(BlueprintType)
@@ -31,9 +48,20 @@ struct FMoney : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	EMoneyType Type;
+	EMoneyType type;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 Amount;
+	int32 amount;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UStaticMesh* Mesh;
+	UStaticMesh* mesh;
+};
+
+USTRUCT()
+struct FWeapon : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) EWeaponType type;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 red_id;
 };

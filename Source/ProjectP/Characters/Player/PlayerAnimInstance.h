@@ -20,9 +20,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mIsInAir = false;
 
 	// anim flag
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mPlayJumpAnim = false;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mPlayDrawWeaponAnim = false;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mPlaySheathWeaponAnim = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlayJumpAnim = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlayDrawWeaponAnim = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlaySheathWeaponAnim = false;
+
+	// montage
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Montage") TObjectPtr<UAnimMontage> mDrawWeaponMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Montage") TObjectPtr<UAnimMontage> mSheathWeaponMontage = nullptr;
 
 	// variables
 	bool mAttackState = false;
@@ -45,10 +49,15 @@ public:
 
 	// setter
 	void SetPlayJumpAnim(const bool value) {mPlayJumpAnim = value;}
-	void SetPlayDrawWeaponAnim(const bool value) {mPlayDrawWeaponAnim = value;}
-	void SetPlaySheathWeaponAnim(const bool value) {mPlaySheathWeaponAnim = value;}
+	// void SetPlayDrawWeaponAnim(const bool value) {mPlayDrawWeaponAnim = value;}
+	// void SetPlaySheathWeaponAnim(const bool value) {mPlaySheathWeaponAnim = value;}
+	
+	void PlayDrawWeaponMontage();
+	void PlaySheathWeaponMontage();
 
 private:
+
+	// anim notify
 	UFUNCTION() void AnimNotify_DrawWeapon();
 	UFUNCTION() void AnimNotify_SheathWeapon();
 };
