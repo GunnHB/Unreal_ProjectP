@@ -31,6 +31,7 @@ public:
 	UInputAction* mInputToSprint = nullptr;
 	UInputAction* mInputToFocus = nullptr;
 	UInputAction* mInputToDrawWeapon = nullptr;
+	UInputAction* mInputToInteract = nullptr;
 
 	UInputAction* mInputToInventory = nullptr;
 };

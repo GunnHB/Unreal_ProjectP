@@ -3,15 +3,8 @@
 
 #include "MoneyItem.h"
 
-#include "../../../Characters/Player/PlayerControls.h"
-
 AMoneyItem::AMoneyItem()
 {
-	mCapsule->SetCapsuleHalfHeight(30.f);
-	mCapsule->SetCollisionProfileName(TEXT("Money"));
-
-	mCapsule->SetRelativeLocation(FVector(0.f, 0.f, 30.f));
-
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
 		moneyAsset(TEXT("/Script/Engine.StaticMesh'/Game/04_Inventory/Model/02_Money/Green/3DModel/SM_RupeeGreen.SM_RupeeGreen'"));
 	
@@ -28,17 +21,4 @@ AMoneyItem::AMoneyItem()
 void AMoneyItem::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-void AMoneyItem::CollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	Super::CollisionBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-	
-	APlayerControls* pControl = Cast<APlayerControls>(OtherActor);
-	
-	if(!IsValid(pControl) || mMoneyData == nullptr)
-		return;
-	
-	if(pControl->AddMoney(mMoneyData))
-		Destroy();
 }

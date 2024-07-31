@@ -3,6 +3,8 @@
 
 #include "EquipmentItem.h"
 
+#include "../../../Characters/Player/PlayerControls.h"
+
 AEquipmentItem::AEquipmentItem()
 {
 	mStaticMesh->SetRelativeRotation(FRotator::ZeroRotator);

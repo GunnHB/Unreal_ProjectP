@@ -49,8 +49,6 @@ public:
 
 	// setter
 	void SetPlayJumpAnim(const bool value) {mPlayJumpAnim = value;}
-	// void SetPlayDrawWeaponAnim(const bool value) {mPlayDrawWeaponAnim = value;}
-	// void SetPlaySheathWeaponAnim(const bool value) {mPlaySheathWeaponAnim = value;}
 	
 	void PlayDrawWeaponMontage();
 	void PlaySheathWeaponMontage();

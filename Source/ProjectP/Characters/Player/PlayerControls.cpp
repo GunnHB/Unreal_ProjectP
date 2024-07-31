@@ -34,7 +34,7 @@ void APlayerControls::BeginPlay()
 	mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	MappingContext();
 
-	SpawnWeapon();
+	// SpawnWeapon();
 }
 
 // Called every frame
@@ -42,7 +42,8 @@ void APlayerControls::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawArrow();
+	// DrawArrow();
+	TraceForInteractable(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -111,6 +112,9 @@ void APlayerControls::InitComponentsValue()
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
+
+	// 나는 무시
+	mQueryParam.AddIgnoredActor(this);
 }
 
 void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
@@ -129,6 +133,7 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Started, this, &APlayerControls::SprintAction);
 	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Triggered, this, &APlayerControls::FocusAction);
 	inputComponent->BindAction(inputData->mInputToDrawWeapon, ETriggerEvent::Triggered, this, &APlayerControls::DrawWeaponAction);
+	inputComponent->BindAction(inputData->mInputToInteract, ETriggerEvent::Triggered, this, &APlayerControls::InteractAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
 }
@@ -209,8 +214,14 @@ void APlayerControls::DrawWeaponAction(const FInputActionValue& value)
 		return;
 
 	mMainWeapon->GetIsEquipped() ? mAnimInstance->PlaySheathWeaponMontage() : mAnimInstance->PlayDrawWeaponMontage();
+}
 
-	// mMainWeapon->GetIsEquipped() ? mAnimInstance->SetPlaySheathWeaponAnim(true) : mAnimInstance->SetPlayDrawWeaponAnim(true);
+void APlayerControls::InteractAction(const FInputActionValue& value)
+{
+	if(!bEnableToInteract)
+		return;
+
+	Interact();
 }
 
 void APlayerControls::InventoryAction(const FInputActionValue& value)
@@ -219,9 +230,7 @@ void APlayerControls::InventoryAction(const FInputActionValue& value)
 
 	if(!mInventoryOpen)
 		return;
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Black, TEXT("I on our keyboard has been pressed"));
-
+	
 	if(IsValid(mInventoryWidgetClass))
 	{
 		if(!IsValid(mInventoryWidget))
@@ -275,6 +284,20 @@ void APlayerControls::DrawArrow()
 	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
 }
 
+void APlayerControls::TraceForInteractable(float deltaTime)
+{
+	mTraceStartPoint = GetActorLocation() - FVector(0.f, 0.f, GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+	mTraceEndPoint = mTraceStartPoint + GetActorForwardVector() * 120.f;
+	
+	bEnableToInteract = GetWorld()->SweepSingleByChannel(mHitResult, mTraceStartPoint, mTraceEndPoint, FQuat::Identity, ECC_GameTraceChannel3, FCollisionShape::MakeSphere(20.f), mQueryParam);
+
+#if ENABLE_DRAW_DEBUG
+	FColor drawColor = bEnableToInteract ? FColor::Red : FColor::Green;		// 감지되면 red 아니면 green
+
+	DrawDebugCapsule(GetWorld(), (mTraceStartPoint + mTraceEndPoint) * .5f, 60.f, 20.f, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), drawColor, false, .02f);
+#endif
+}
+
 void APlayerControls::SpawnWeapon()
 {
 	AOneHandSword* sword = GetWorld()->SpawnActor<AOneHandSword>(FVector::ZeroVector, FRotator::ZeroRotator);
@@ -303,6 +326,11 @@ bool APlayerControls::AddMoney(const FMoney* moneyData)
 		mPlayerData->SetPlayerMoney(GameValue::GetMaxMoney());
 
 	return true;
+}
+
+void APlayerControls::Interact()
+{
+	SpawnWeapon();
 }
 
 void APlayerControls::NormalAttack()

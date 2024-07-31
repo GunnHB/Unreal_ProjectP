@@ -14,8 +14,7 @@ class PROJECTP_API AEquipmentItem : public AItemBase
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere)
-	FName mAttachSocketName;
+	UPROPERTY(EditAnywhere) FName mAttachSocketName;
 	
 	TObjectPtr<USkeletalMeshComponent> mSkeletalMesh = nullptr;
 	

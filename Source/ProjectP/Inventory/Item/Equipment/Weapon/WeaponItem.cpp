@@ -5,5 +5,5 @@
 
 AWeaponItem::AWeaponItem()
 {
-	mCapsule->SetCollisionProfileName(TEXT("Weapon"));
+	
 }

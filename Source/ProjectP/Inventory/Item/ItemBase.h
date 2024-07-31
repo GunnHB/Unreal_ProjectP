@@ -13,9 +13,9 @@ class PROJECTP_API AItemBase : public AActor
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
-	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> mStaticMesh = nullptr;
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -24,9 +24,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UFUNCTION()
-	virtual void CollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 public:	
 	// Called every frame

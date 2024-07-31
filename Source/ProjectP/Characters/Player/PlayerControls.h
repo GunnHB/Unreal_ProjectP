@@ -3,13 +3,14 @@
 #pragma once
 
 #include "InputActionValue.h"
+#include "../../Interface/Interactable.h"
 
 #include "../../System/GameInfo.h"
 #include "GameFramework/Character.h"
 #include "PlayerControls.generated.h"
 
 UCLASS()
-class PROJECTP_API APlayerControls : public ACharacter
+class PROJECTP_API APlayerControls : public ACharacter, public IInteractable
 {
 	GENERATED_BODY()
 
@@ -35,10 +36,18 @@ protected:
 
 	// weapon
 	TObjectPtr<class AWeaponItem> mMainWeapon = nullptr;
+	
 
 private:
 	FVector mInputVector;
 	FRotator mCamRotator;
+
+	// for trace
+	FVector mTraceStartPoint;
+	FVector mTraceEndPoint;
+	FHitResult mHitResult;
+	FCollisionQueryParams mQueryParam;
+	bool bEnableToInteract;
 
 public:
 	// Sets default values for this character's properties
@@ -62,9 +71,11 @@ public:
 	
 	bool AddMoney(const FMoney* moneyData);
 
+	virtual void Interact() override;
+
 protected:
-	void InitAssets();												// 에셋 초기화
-	void InitComponentsValue();										// 컴포넌트 값 초기화
+	void InitAssets();														// 에셋 초기화
+	void InitComponentsValue();												// 컴포넌트 값 초기화
 
 	// 액션
 	void MovementAction(const FInputActionValue& value);					// 이동
@@ -75,6 +86,7 @@ protected:
 	void SprintAction(const FInputActionValue& value);						// 달리기
 	void FocusAction(const FInputActionValue& value);						// 포커싱
 	void DrawWeaponAction(const FInputActionValue& value);					// 무기 장비
+	void InteractAction(const FInputActionValue& value);					// 상호작용
 
 	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
 
@@ -88,6 +100,8 @@ private:
 	void AdjustActorRotation();												// 캐릭터 회전 조정
 	
 	void DrawArrow();
+
+	void TraceForInteractable(float deltaTime);
 
 	void SpawnWeapon();
 };
