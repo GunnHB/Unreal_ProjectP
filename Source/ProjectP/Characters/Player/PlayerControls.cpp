@@ -310,6 +310,7 @@ void APlayerControls::SpawnWeapon()
 	
 	sword->SetSkeletalMesh(GetMesh());
 	sword->OnUnequipped("SwordHipAttachSocket");
+	sword->SetNoCollision();
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)

@@ -30,6 +30,7 @@ public:
 	// setter
 	void SetIsEquipped(const bool value) {bIsEquipped = value;}
 	void SetSkeletalMesh(USkeletalMeshComponent* value) {mSkeletalMesh = value;}
+	void SetNoCollision() const {mCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);}
 
 	void OnEquipped(const FName& socketName);
 	void OnUnequipped(const FName& socketName);
