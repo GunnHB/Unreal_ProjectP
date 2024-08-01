@@ -4,26 +4,20 @@
 
 #include "../GameInfo.h"
 
-/**
- * 
- */
-
+template <typename T>
 class PROJECTP_API CBaseManager
 {
-public:
+protected:
 	CBaseManager();
 	~CBaseManager();
-
-private:
-	static CBaseManager* mInstance;
+	
+	static T* mInstance;
 
 public:
-	bool Init() {return true;}
-	
-	static CBaseManager* GetInstance()
+	static T* GetInstance()
 	{
 		if(mInstance == nullptr)
-			mInstance = new CBaseManager;
+			mInstance = new T;
 
 		return mInstance;
 	}
@@ -36,4 +30,20 @@ public:
 			mInstance = nullptr;
 		}
 	}
+
+	bool Init() {return true;}
 };
+
+template <typename T>
+CBaseManager<T>::CBaseManager()
+{
+}
+
+template <typename T>
+CBaseManager<T>::~CBaseManager()
+{
+	
+}
+
+template <typename T>
+T* CBaseManager<T>::mInstance = nullptr;

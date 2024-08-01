@@ -13,3 +13,8 @@ AMainGameMode::AMainGameMode()
 
 	CItemManager::GetInstance()->Init();
 }
+
+AMainGameMode::~AMainGameMode()
+{
+	CItemManager::DestroyInstance();
+}

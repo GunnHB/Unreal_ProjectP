@@ -2,14 +2,3 @@
 
 
 #include "BaseManager.h"
-
-CBaseManager* CBaseManager::mInstance = nullptr;
-
-CBaseManager::CBaseManager()
-{
-}
-
-CBaseManager::~CBaseManager()
-{
-}
-

@@ -5,6 +5,8 @@
 
 #include "GameInfo.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(ProjectP, Warning, All);
+
 class GameValue
 {
 private:

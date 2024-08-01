@@ -13,6 +13,8 @@
 
 #include "../../Inventory/Item/Equipment/Weapon/OneHandSword.h"
 
+#include "../../System/Manager/ItemManager.h"
+
 // Sets default values
 APlayerControls::APlayerControls()
 {
@@ -238,6 +240,8 @@ void APlayerControls::InventoryAction(const FInputActionValue& value)
 
 		mInventoryWidget->AddToViewport();
 	}
+
+	// Cast<CItemManager>(CItemManager::GetInstance());
 }
 
 void APlayerControls::AdjustCameraRotation()

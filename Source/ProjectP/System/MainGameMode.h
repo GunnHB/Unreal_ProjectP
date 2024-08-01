@@ -17,4 +17,5 @@ class PROJECTP_API AMainGameMode : public AGameModeBase
 
 public:
 	AMainGameMode();
+	~AMainGameMode();
 };
