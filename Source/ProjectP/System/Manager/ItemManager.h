@@ -3,6 +3,7 @@
 #pragma once
 
 #include "BaseManager.h"
+#include "ProjectP/System/GameInfo.h"
 
 class PROJECTP_API CItemManager : public CBaseManager<CItemManager>
 {
@@ -20,11 +21,16 @@ public:
 	TArray<FSword*> mSwordDataArray;
 
 	template <typename T>
-	T* GetData(const FName& rowName);
+	T* GetData()
+	{
+		for (int32 index = 0; index < mTableArray.Num(); ++index)
+			UDataTable* temp = mTableArray[index];
+	
+		return nullptr;
+	}
 
 private:
 	void Initialize();
-	void GetTargetTable();
 	
 	template <typename T>
 	void InitTable(UDataTable* table, TArray<T*>& array);

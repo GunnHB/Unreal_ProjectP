@@ -24,10 +24,23 @@ CItemManager::~CItemManager()
 {
 }
 
-template <typename T>
-T* CItemManager::GetData(const FName& rowName)
+// template <typename T>
+// T* CItemManager::GetData()
+// {
+// 	for (int32 index = 0; index < mTableArray.Num(); ++index)
+// 	{
+// 		UDataTable* temp = mTableArray[index];
+//
+// 		if(temp->GetRowStruct() == typeid(T))
+// 			UE_LOG(ProjectP, Warning, TEXT("sdfasdfsadfsdaf"));
+// 	}
+// 	
+// 	return nullptr;
+// }
+
+void CItemManager::Initialize()
 {
-	return nullptr;
+	InitTable(mWeaponTable, mWeaponDataArray);
 }
 
 template <typename T>
@@ -38,15 +51,4 @@ void CItemManager::InitTable(UDataTable* table, TArray<T*>& array)
 	
 	table->GetAllRows<T>(TEXT(""), array);
 	mTableArray.Add(table);
-}
-
-void CItemManager::Initialize()
-{
-	InitTable(mWeaponTable, mWeaponDataArray);
-	// InitTable(mSwordTable, mSwordDataArray);
-}
-
-void CItemManager::GetTargetTable()
-{
-	
 }
