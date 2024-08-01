@@ -12,10 +12,9 @@ class PROJECTP_API AItemBase : public AActor
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UStaticMeshComponent> mStaticMesh = nullptr;
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UStaticMeshComponent> mStaticMesh = nullptr;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
+	UPROPERTY(EditAnywhere) FName mRowName;
 	
 public:	
 	// Sets default values for this actor's properties

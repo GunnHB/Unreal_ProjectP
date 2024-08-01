@@ -14,12 +14,11 @@ class PROJECTP_API AEquipmentItem : public AItemBase
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere) FName mAttachSocketName;
-	
-	TObjectPtr<USkeletalMeshComponent> mSkeletalMesh = nullptr;
-	
+	UPROPERTY(EditAnywhere) FName mAttachSocketName;			// 후에 삭제하기
+
 private:
 	bool bIsEquipped = false;
+	TObjectPtr<USkeletalMeshComponent> mSkeletalMesh = nullptr;
 
 public:
 	AEquipmentItem();

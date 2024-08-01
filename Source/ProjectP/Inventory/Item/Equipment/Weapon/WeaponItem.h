@@ -13,6 +13,9 @@ class PROJECTP_API AWeaponItem : public AEquipmentItem
 {
 	GENERATED_BODY()
 
+protected:
+	FWeapon* mWeaponData;
+
 public:
 	AWeaponItem();
 };
