@@ -65,6 +65,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	// getter
+	FVector GetInputVector() const {return mInputVector;}
 	FVector GetCameraFowradVector() const {return mCamera->GetForwardVector();}
 	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
 	AWeaponItem* GetMainWeaponItem() const {return mMainWeapon;}

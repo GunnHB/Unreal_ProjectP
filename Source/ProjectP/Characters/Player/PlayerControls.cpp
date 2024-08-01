@@ -153,11 +153,11 @@ void APlayerControls::MappingContext() const
 
 void APlayerControls::MovementAction(const FInputActionValue& value)
 {
-	// 공중에서는 이동 막기
-	if (mAnimInstance->GetIsInAir())
-		return;
-
 	mInputVector = value.Get<FVector>();
+
+	// 공중일 때 || 착지했을 때 회전 막기
+	if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
+		return;
 
 	AdjustActorRotation();
 

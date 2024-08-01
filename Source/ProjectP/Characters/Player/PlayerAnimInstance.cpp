@@ -28,9 +28,12 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mSpeed = mPlayerMovement->Velocity.Size();
 	mAcceleration = mPlayerMovement->GetCurrentAcceleration().Length() > 0.f;
 	mIsInAir = mPlayerMovement->IsFalling();
+	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
 	
 	if (!mIsInAir)
 		mPlayJumpAnim = false;
+	else
+		bIsLandingAnimEnd = false;
 }
 
 void UPlayerAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
@@ -95,4 +98,10 @@ void UPlayerAnimInstance::AnimNotify_SheathWeapon()
 
 	// 플래그 변환
 	mPlaySheathWeaponAnim = false;
+}
+
+void UPlayerAnimInstance::AnimNotify_LandEnd()
+{
+	// 플래그 변환
+	bIsLandingAnimEnd = true;
 }

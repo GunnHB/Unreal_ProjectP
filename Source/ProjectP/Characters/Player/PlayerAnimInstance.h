@@ -18,11 +18,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mSpeed = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mAcceleration = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mIsInAir = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bInputForMovement = false;
 
 	// anim flag
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlayJumpAnim = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlayDrawWeaponAnim = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlaySheathWeaponAnim = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool bIsLandingAnimEnd = true;
 
 	// montage
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Montage") TObjectPtr<UAnimMontage> mDrawWeaponMontage = nullptr;
@@ -46,6 +48,7 @@ public:
 
 	// getter
 	bool GetIsInAir() const { return mIsInAir; }
+	bool GetIsLandingAnimEnd() const {return bIsLandingAnimEnd;}
 
 	// setter
 	void SetPlayJumpAnim(const bool value) {mPlayJumpAnim = value;}
@@ -58,4 +61,5 @@ private:
 	// anim notify
 	UFUNCTION() void AnimNotify_DrawWeapon();
 	UFUNCTION() void AnimNotify_SheathWeapon();
+	UFUNCTION() void AnimNotify_LandEnd();
 };
