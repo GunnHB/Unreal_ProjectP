@@ -30,7 +30,7 @@ enum class EWeaponType : int8
 {
 	None = -1,
 	Sword,
-	Spear,
+	Shield,
 };
 
 UENUM()
@@ -47,12 +47,9 @@ struct FMoney : public FTableRowBase
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	EMoneyType type;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 amount;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UStaticMesh* mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) EMoneyType type;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 amount;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) UStaticMesh* mesh;
 };
 
 USTRUCT()
@@ -61,7 +58,22 @@ struct FWeapon : public FTableRowBase
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 id;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) EWeaponType type;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 red_id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) UStaticMesh* mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 ability_value;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 duration;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName sheath_socket_name;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName hand_socket_name;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 red_id;
+};
+
+USTRUCT()
+struct FSword : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) ESwordType type;
 };
