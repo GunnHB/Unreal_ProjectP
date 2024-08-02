@@ -240,8 +240,6 @@ void APlayerControls::InventoryAction(const FInputActionValue& value)
 
 		mInventoryWidget->AddToViewport();
 	}
-
-	auto temp = CItemManager::GetInstance()->GetData<FWeapon>();
 }
 
 void APlayerControls::AdjustCameraRotation()

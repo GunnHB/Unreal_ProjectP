@@ -21,11 +21,19 @@ public:
 	TArray<FSword*> mSwordDataArray;
 
 	template <typename T>
-	T* GetData()
+	T* GetData(const FName& name)
 	{
 		for (int32 index = 0; index < mTableArray.Num(); ++index)
-			UDataTable* temp = mTableArray[index];
-	
+		{
+			UDataTable* tempTable = mTableArray[index];
+			T* tempData = tempTable->FindRow<T>(name, "");
+			
+			if(tempData == nullptr)
+				continue;
+			else
+				return tempData;
+		}
+
 		return nullptr;
 	}
 
