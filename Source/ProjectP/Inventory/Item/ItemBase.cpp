@@ -16,9 +16,10 @@ AItemBase::AItemBase()
 	mCapsule->SetupAttachment(mStaticMesh);
 	
 	mStaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	mStaticMesh->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));		// 정면
+	// mStaticMesh->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));		// 정면
 
 	mCapsule->SetCollisionProfileName(TEXT("Item"));
+	mCapsule->bVisualizeComponent = true;
 }
 
 // Called when the game starts or when spawned

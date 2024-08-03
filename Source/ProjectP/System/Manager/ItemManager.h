@@ -13,10 +13,12 @@ public:
 
 protected:
 	TArray<UDataTable*> mTableArray;
+	TObjectPtr<UDataTable> mItemTable = nullptr;
 	TObjectPtr<UDataTable> mWeaponTable = nullptr;
 	TObjectPtr<UDataTable> mSwordTable = nullptr;
 
 public:
+	TArray<FItem*> mItemDataArray;
 	TArray<FWeapon*> mWeaponDataArray;
 	TArray<FSword*> mSwordDataArray;
 

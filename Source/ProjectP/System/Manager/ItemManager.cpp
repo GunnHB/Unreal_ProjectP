@@ -5,17 +5,23 @@
 
 CItemManager::CItemManager()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable>
-		weaponTableAsset(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Weapon.DT_Weapon'"));
+	// static ConstructorHelpers::FObjectFinder<UDataTable>
+	// 	weaponTableAsset(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Weapon.DT_Weapon'"));
+	//
+	// if(weaponTableAsset.Succeeded())
+	// 	mWeaponTable = weaponTableAsset.Object;
+	//
+	// static ConstructorHelpers::FObjectFinder<UDataTable>
+	// 	swordTableAsset(TEXT(""));
+	//
+	// if(swordTableAsset.Succeeded())
+	// 	mSwordTable = swordTableAsset.Object;
 
-	if(weaponTableAsset.Succeeded())
-		mWeaponTable = weaponTableAsset.Object;
-	
 	static ConstructorHelpers::FObjectFinder<UDataTable>
-		swordTableAsset(TEXT(""));
+		itemTable(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Item.DT_Item'"));
 
-	if(swordTableAsset.Succeeded())
-		mSwordTable = swordTableAsset.Object;
+	if(itemTable.Succeeded())
+		mItemTable = itemTable.Object;
 
 	Initialize();
 }
@@ -26,7 +32,8 @@ CItemManager::~CItemManager()
 
 void CItemManager::Initialize()
 {
-	InitTable(mWeaponTable, mWeaponDataArray);
+	// InitTable(mWeaponTable, mWeaponDataArray);
+	InitTable(mItemTable, mItemDataArray);
 }
 
 template <typename T>

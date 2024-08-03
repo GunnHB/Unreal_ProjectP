@@ -18,7 +18,6 @@ protected:
 
 public:
 	ASwordItem();
-	ASwordItem(FSword* sword);
 
 protected:
 	virtual void BeginPlay() override;

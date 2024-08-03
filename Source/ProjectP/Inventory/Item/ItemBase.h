@@ -27,4 +27,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	// getter
+	UCapsuleComponent* GetCapsule() const {return mCapsule;}
+	UStaticMeshComponent* GetStaticMesh() const {return mStaticMesh;}
+	
 };
