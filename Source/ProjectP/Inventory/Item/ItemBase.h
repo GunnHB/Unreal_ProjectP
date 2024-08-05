@@ -2,12 +2,11 @@
 
 #pragma once
 
+#include "../../System/GameInfo.h"
 #include "../../System/Manager/ItemManager.h"
 
-#include "../../System/GameInfo.h"
 #include "GameFramework/Actor.h"
 #include "ItemBase.generated.h"
-
 
 UCLASS()
 class PROJECTP_API AItemBase : public AActor
@@ -15,14 +14,18 @@ class PROJECTP_API AItemBase : public AActor
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleAnywhere) TObjectPtr<UStaticMeshComponent> mStaticMesh = nullptr;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UStaticMeshComponent> mStaticMesh = nullptr;
 
-	FItem* mItem = nullptr;
+	FItem* mItemData = nullptr;
 	
 public:	
 	// Sets default values for this actor's properties
 	AItemBase();
+
+	// getter
+	UCapsuleComponent* GetCapsule() const {return mCapsule;}
+	UStaticMeshComponent* GetStaticMesh() const {return mStaticMesh;}
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,8 +36,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// getter
-	UCapsuleComponent* GetCapsule() const {return mCapsule;}
-	UStaticMeshComponent* GetStaticMesh() const {return mStaticMesh;}
+	FItem* GetThisItemData() const {return mItemData;}
 
-	void Initialize(FItem* item);
+	// setter
+	virtual void SetData(FItem* itemData, bool relocate);
+
+private:
+	void SetItem(const bool relocate) const;
 };

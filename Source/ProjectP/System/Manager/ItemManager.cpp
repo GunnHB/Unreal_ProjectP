@@ -11,6 +11,18 @@ CItemManager::CItemManager()
 	if(itemTable.Succeeded())
 		mItemTable = itemTable.Object;
 
+	static ConstructorHelpers::FObjectFinder<UDataTable>
+		weaponTable(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Weapon.DT_Weapon'"));
+
+	if(weaponTable.Succeeded())
+		mWeaponTable = weaponTable.Object;
+	
+	static ConstructorHelpers::FObjectFinder<UDataTable>
+		swordTable(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Sword.DT_Sword'"));
+
+	if(swordTable.Succeeded())
+		mSwordTable = swordTable.Object;
+
 	Initialize();
 }
 

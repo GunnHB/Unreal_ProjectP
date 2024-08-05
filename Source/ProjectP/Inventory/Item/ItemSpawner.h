@@ -13,10 +13,9 @@ class PROJECTP_API AItemSpawner : public AActor
 
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<USceneComponent> mRoot = nullptr;
-	UPROPERTY(EditAnywhere) FDataTableRowHandle mItemTableHandler;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UArrowComponent> mArrow = nullptr;
 
-	TSubclassOf<class AitemBase> mItemClass;
-	TObjectPtr<class AItemBase> mItemActor;
+	UPROPERTY(EditAnywhere) FDataTableRowHandle mTableHandle;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -30,5 +29,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SpawnItem();
+private:
+	void SpawnItem() const;
 };

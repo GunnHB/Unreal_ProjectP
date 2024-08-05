@@ -79,7 +79,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString item_desc;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float capsule_half_height;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float capsule_radius;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) FTransform capsule_transform;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FTransform mesh_transform;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 ref_id;
 };

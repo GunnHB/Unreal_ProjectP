@@ -9,7 +9,8 @@
 
 #include "../../Data/Player/PlayerData.h"
 #include "../../Inventory/Widget/InventoryWidget.h"
-#include "../../Inventory/Item/Weapon/SwordItem.h"
+
+#include "../../Inventory/Item/Weapon/WeaponSword.h"
 
 // Sets default values
 APlayerControls::APlayerControls()
@@ -208,8 +209,8 @@ void APlayerControls::DrawWeaponAction(const FInputActionValue& value)
 {
 	if(!IsValid(mMainWeapon))
 		return;
-
-	// mMainWeapon->GetIsEquipped() ? mAnimInstance->PlaySheathWeaponMontage() : mAnimInstance->PlayDrawWeaponMontage();
+	
+	mMainWeapon->IsEquipped() ? mAnimInstance->PlaySheathWeaponMontage() : mAnimInstance->PlayDrawWeaponMontage();
 }
 
 void APlayerControls::InteractAction(const FInputActionValue& value)
@@ -294,29 +295,23 @@ void APlayerControls::TraceForInteractable(float deltaTime)
 #endif
 }
 
-void APlayerControls::SpawnSword()
+void APlayerControls::PickUpItem(const AItemBase* itemBase)
 {
-	// AOneHandSword* sword = GetWorld()->SpawnActor<AOneHandSword>(FVector::ZeroVector, FRotator::ZeroRotator);
-	//
-	// if(!IsValid(sword))
-	// 	return;
-	//
-	// // 메인 무기로 세팅
-	// mMainWeapon = sword;
-	//
-	// sword->SetSkeletalMesh(GetMesh());
-	// sword->OnUnequipped("SwordHipAttachSocket");
-	// sword->SetNoCollision();
+	if(itemBase->GetThisItemData()->item_class == AWeaponSword::StaticClass())
+	{
+		AWeaponSword* sword = GetWorld()->SpawnActor<AWeaponSword>();
 
-	ASwordItem* sword = GetWorld()->SpawnActor<ASwordItem>();
+		if(!IsValid(sword))
+			return;
+		
+		sword->SetData(itemBase->GetThisItemData(), false);
+		sword->SetSkeletalMesh(GetMesh());
+		sword->OnUnequip();
 
-	if(!IsValid(sword))
-		return;
-
-	mMainWeapon = sword;
-
-	// sword->SetSkeletalMesh(GetMesh());
-	// sword->OnUnequipped();
+		// sword->ResetTransform();
+		
+		mMainWeapon = sword;
+	}
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
@@ -337,8 +332,8 @@ bool APlayerControls::AddMoney(const FMoney* moneyData)
 
 void APlayerControls::Interact()
 {
-	if(mHitResult.GetActor()->IsA(ASwordItem::StaticClass()))
-		SpawnSword();
+	if(mHitResult.GetActor()->IsA(AItemBase::StaticClass()))
+		PickUpItem(Cast<AItemBase>(mHitResult.GetActor()));
 }
 
 void APlayerControls::NormalAttack()

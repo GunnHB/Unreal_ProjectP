@@ -35,7 +35,7 @@ protected:
 	TObjectPtr<class UPlayerData> mPlayerData = nullptr;
 
 	// weapon
-	TObjectPtr<class AWeaponItem> mMainWeapon = nullptr;
+	TObjectPtr<class AWeaponBase> mMainWeapon = nullptr;
 	
 
 private:
@@ -68,7 +68,7 @@ public:
 	FVector GetInputVector() const {return mInputVector;}
 	FVector GetCameraFowradVector() const {return mCamera->GetForwardVector();}
 	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
-	AWeaponItem* GetMainWeaponItem() const {return mMainWeapon;}
+	AWeaponBase* GetMainWeapon() const {return mMainWeapon;}
 	
 	bool AddMoney(const FMoney* moneyData);
 
@@ -102,5 +102,6 @@ private:
 	
 	void DrawArrow();
 	void TraceForInteractable(float deltaTime);
-	void SpawnSword();
+
+	void PickUpItem(const class AItemBase* itemBase);
 };

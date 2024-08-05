@@ -24,5 +24,7 @@ class PROJECTP_API IEquippable
 public:
 	virtual void OnEquip() = 0;
 	virtual void OnUnequip() = 0;
+
+protected:
 	virtual void AttachActor(FName& socketName) = 0;
 };

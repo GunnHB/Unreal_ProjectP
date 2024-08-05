@@ -4,7 +4,8 @@
 #include "PlayerAnimInstance.h"
 
 #include "PlayerControls.h"
-#include "../../Inventory/Item/Weapon/WeaponItem.h"
+#include "ProjectP/Inventory/Item/Weapon/WeaponBase.h"
+#include "ProjectP/Inventory/Item/Weapon/WeaponSword.h"
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {
@@ -58,9 +59,20 @@ void UPlayerAnimInstance::NativeBeginPlay()
 
 void UPlayerAnimInstance::PlayDrawWeaponMontage()
 {
-	if(!IsValid(mDrawWeaponMontage))
+	if(mPlayer->GetMainWeapon() == nullptr)
 		return;
 
+	if(mPlayer->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+	{
+		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetMainWeapon());
+
+		if(sword != nullptr)
+			mDrawWeaponMontage = sword->GetSwordData()->montage_draw;
+	}
+	
+	if(!IsValid(mDrawWeaponMontage))
+		return;
+	
 	if(!Montage_IsPlaying(mDrawWeaponMontage) && !mPlayDrawWeaponAnim)
 	{
 		mPlayDrawWeaponAnim = true;
@@ -72,6 +84,17 @@ void UPlayerAnimInstance::PlayDrawWeaponMontage()
 
 void UPlayerAnimInstance::PlaySheathWeaponMontage()
 {
+	if(mPlayer->GetMainWeapon() == nullptr)
+		return;
+
+	if(mPlayer->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+	{
+		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetMainWeapon());
+
+		if(sword != nullptr)
+			mSheathWeaponMontage = sword->GetSwordData()->montage_sheath;
+	}
+
 	if(!IsValid(mSheathWeaponMontage))
 		return;
 	
@@ -86,7 +109,7 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 
 void UPlayerAnimInstance::AnimNotify_DrawWeapon()
 {
-	// mPlayer->GetMainWeaponItem()->OnEquipped("WeaponSocket");
+	mPlayer->GetMainWeapon()->OnEquip();
 	
 	// 플래그 변환
 	mPlayDrawWeaponAnim = false;
@@ -94,7 +117,7 @@ void UPlayerAnimInstance::AnimNotify_DrawWeapon()
 
 void UPlayerAnimInstance::AnimNotify_SheathWeapon()
 {
-	// mPlayer->GetMainWeaponItem()->OnUnequipped("SwordHipAttachSocket");
+	mPlayer->GetMainWeapon()->OnUnequip();
 
 	// 플래그 변환
 	mPlaySheathWeaponAnim = false;

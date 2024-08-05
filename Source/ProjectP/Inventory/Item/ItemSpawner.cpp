@@ -4,7 +4,7 @@
 #include "ItemSpawner.h"
 
 #include "ItemBase.h"
-#include "../../System/Manager/ItemManager.h"
+#include "Weapon/WeaponSword.h"
 
 // Sets default values
 AItemSpawner::AItemSpawner()
@@ -13,19 +13,31 @@ AItemSpawner::AItemSpawner()
 	PrimaryActorTick.bCanEverTick = true;
 
 	mRoot = CreateDefaultSubobject<USceneComponent>(TEXT("ROOT"));
+	mArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("ARROW"));
+
 	SetRootComponent(mRoot);
+	mArrow->SetupAttachment(mRoot);
+
+	mArrow->ArrowColor = FColor(150, 200, 255);
+	mArrow->bTreatAsASprite = true;
+	mArrow->SetupAttachment(mRoot);
+	mArrow->bIsScreenSizeScaled = true;
+	mArrow->SetSimulatePhysics(false);
 
 	static ConstructorHelpers::FObjectFinder<UDataTable>
-	tableAsset(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Item.DT_Item'"));
+		tableAsset(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Item.DT_Item'"));
 
 	if(tableAsset.Succeeded())
-		mItemTableHandler.DataTable = tableAsset.Object;
+		mTableHandle.DataTable = tableAsset.Object;
 }
 
 // Called when the game starts or when spawned
 void AItemSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(mTableHandle.DataTable == nullptr)
+		return;
 
 	SpawnItem();
 }
@@ -37,34 +49,22 @@ void AItemSpawner::Tick(float DeltaTime)
 
 }
 
-void AItemSpawner::SpawnItem()
+void AItemSpawner::SpawnItem() const
 {
-	if (mItemTableHandler.DataTable == nullptr)
-		return;
-
 	FActorSpawnParameters param;
-	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::Undefined;
 
-	FItem* item = CItemManager::GetInstance()->GetData<FItem>(mItemTableHandler.RowName);
-	
-	if(item == nullptr)
+	FItem* itemData = CItemManager::GetInstance()->GetData<FItem>(mTableHandle.RowName);
+
+	if(itemData == nullptr)
 		return;
-	
+
 	FVector spawnLocation = GetActorLocation();
 	FRotator spawnRotation = GetActorRotation();
 
-	mItemActor = GetWorld()->SpawnActor<AItemBase>(item->item_class, spawnLocation, spawnRotation, param);
-	
-	mItemActor->GetStaticMesh()->SetStaticMesh(item->mesh);
-	
-	mItemActor->GetCapsule()->SetCapsuleHalfHeight(item->capsule_half_height);
-	mItemActor->GetCapsule()->SetCapsuleRadius(item->capsule_radius);
-	
-	mItemActor->GetCapsule()->SetRelativeTransform(item->capsule_transform);
-	mItemActor->GetStaticMesh()->SetRelativeRotation(item->mesh_transform.Rotator());
+	AItemBase* spawnItem = GetWorld()->SpawnActor<AItemBase>(itemData->item_class, spawnLocation, spawnRotation, param);
 
-	mItemActor->Initialize(mItemTableHandler.GetRow<FItem>(""));
-
-	// if(item->item_class == ASwordItem::StaticClass())
-	// 	Cast<ASwordItem>(mItemActor)->SetData();
+	if(itemData->item_class == AWeaponSword::StaticClass())
+		Cast<AWeaponSword>(spawnItem)->SetData(itemData, true);
 }
+
