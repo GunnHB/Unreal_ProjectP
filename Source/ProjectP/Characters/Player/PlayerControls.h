@@ -94,4 +94,6 @@ private:
 	void TraceForInteractable(float deltaTime);
 
 	void PickUpItem(const class AItemBase* itemBase);
+
+	void PerformAttack(int32 attackIndex, bool randomIndex);
 };

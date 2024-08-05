@@ -76,7 +76,7 @@ void UPlayerAnimInstance::PlayDrawWeaponMontage()
 	{
 		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon());
 
-		if(sword != nullptr)
+		if(IsValid(sword))
 			mDrawWeaponMontage = sword->GetSwordData()->montage_draw;
 	}
 	
@@ -101,7 +101,7 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 	{
 		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon());
 
-		if(sword != nullptr)
+		if(IsValid(sword))
 			mSheathWeaponMontage = sword->GetSwordData()->montage_sheath;
 	}
 
@@ -114,6 +114,30 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 		
 		Montage_SetPosition(mSheathWeaponMontage, 0.f);
 		Montage_Play(mSheathWeaponMontage);
+	}
+}
+
+void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
+{
+	if(mPlayer->GetCombat()->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+	{
+		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon());
+
+		if(IsValid(sword))
+		{
+			TArray<UAnimMontage*> montageArray = sword->GetSwordData()->montage_attack_array;
+
+			mAttackMontage = randomIndex ? montageArray[FMath::RandRange(0, montageArray.Num() - 1)] : montageArray[attackIndex];
+		}
+	}
+
+	if(!IsValid(mAttackMontage))
+		return;
+
+	if(!Montage_IsPlaying(mAttackMontage))
+	{
+		Montage_SetPosition(mAttackMontage, 0.f);
+		Montage_Play(mAttackMontage);
 	}
 }
 
@@ -137,4 +161,12 @@ void UPlayerAnimInstance::AnimNotify_LandEnd()
 {
 	// 플래그 변환
 	bIsLandingAnimEnd = true;
+}
+
+void UPlayerAnimInstance::AnimNotify_ContinueAttack()
+{
+	mPlayer->GetCombat()->SetIsAttacking(false);
+
+	if(mPlayer->GetCombat()->GetIsAttackSaved())
+		mPlayer->GetCombat()->SetIsAttackSaved(false);
 }

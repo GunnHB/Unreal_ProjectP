@@ -18,6 +18,7 @@ protected:
 
 	int32 mAttackCount = 0;
 	bool bIsAttackSaved = false;
+	bool bIsAttacking = false;
 
 public:	
 	// Sets default values for this component's properties
@@ -26,10 +27,14 @@ public:
 	// getter
 	AWeaponBase* GetMainWeapon() const {return mMainWeapon;}
 	bool GetCombatEnable() const {return bIsCombatEnable;}
+	bool GetIsAttacking() const {return bIsAttacking;}
+	bool GetIsAttackSaved() const {return bIsAttackSaved;}
 	
 	// setter
 	void SetMainWeapon(AWeaponBase* value) {mMainWeapon = value;}
 	void SetCombatEnable(bool value) {bIsCombatEnable = value;}
+	void SetIsAttacking(bool value) {bIsAttacking = value;}
+	void SetIsAttackSaved(bool value) {bIsAttackSaved = value;}
 
 protected:
 	// Called when the game starts
@@ -38,6 +43,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
 };

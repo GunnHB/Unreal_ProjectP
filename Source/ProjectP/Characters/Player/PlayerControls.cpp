@@ -193,7 +193,16 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
 {
+	if(!mCombat->GetCombatEnable())
+		return;
 
+	if(mCombat->GetIsAttacking())
+		mCombat->SetIsAttackSaved(true);
+	else
+	{
+		mCombat->SetIsAttacking(true);	
+		PerformAttack(-1, true);
+	}
 }
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
@@ -325,6 +334,11 @@ void APlayerControls::PickUpItem(const AItemBase* itemBase)
 		mCombat->SetMainWeapon(sword);
 		mCombat->SetCombatEnable(false);
 	}
+}
+
+void APlayerControls::PerformAttack(int32 attackIndex, bool randomIndex)
+{
+	mAnimInstance->PlayAttackMontage(attackIndex, randomIndex);
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)

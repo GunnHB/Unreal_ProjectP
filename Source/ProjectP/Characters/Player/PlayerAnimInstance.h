@@ -31,6 +31,7 @@ protected:
 	// montage
 	TObjectPtr<UAnimMontage> mDrawWeaponMontage = nullptr;
 	TObjectPtr<UAnimMontage> mSheathWeaponMontage = nullptr;
+	TObjectPtr<UAnimMontage> mAttackMontage = nullptr;
 
 	// variables
 	bool mAttackState = false;
@@ -58,10 +59,12 @@ public:
 	void PlayDrawWeaponMontage();
 	void PlaySheathWeaponMontage();
 
-private:
+	void PlayAttackMontage(int32 attackIndex, bool randomIndex);
 
+private:
 	// anim notify
 	UFUNCTION() void AnimNotify_DrawWeapon();
 	UFUNCTION() void AnimNotify_SheathWeapon();
 	UFUNCTION() void AnimNotify_LandEnd();
+	UFUNCTION() void AnimNotify_ContinueAttack();
 };
