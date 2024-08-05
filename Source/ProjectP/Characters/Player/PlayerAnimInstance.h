@@ -19,6 +19,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mAcceleration = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mIsInAir = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bInputForMovement = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsOneHandWeapon = true;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsEquipped = false;
 
 	// anim flag
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlayJumpAnim = false;
@@ -27,8 +29,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool bIsLandingAnimEnd = true;
 
 	// montage
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Montage") TObjectPtr<UAnimMontage> mDrawWeaponMontage = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Montage") TObjectPtr<UAnimMontage> mSheathWeaponMontage = nullptr;
+	TObjectPtr<UAnimMontage> mDrawWeaponMontage = nullptr;
+	TObjectPtr<UAnimMontage> mSheathWeaponMontage = nullptr;
 
 	// variables
 	bool mAttackState = false;

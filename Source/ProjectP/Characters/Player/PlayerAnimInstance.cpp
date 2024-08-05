@@ -4,7 +4,6 @@
 #include "PlayerAnimInstance.h"
 
 #include "PlayerControls.h"
-#include "ProjectP/Inventory/Item/Weapon/WeaponBase.h"
 #include "ProjectP/Inventory/Item/Weapon/WeaponSword.h"
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
@@ -30,6 +29,17 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mAcceleration = mPlayerMovement->GetCurrentAcceleration().Length() > 0.f;
 	mIsInAir = mPlayerMovement->IsFalling();
 	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
+
+	if(mPlayer->GetMainWeapon() != nullptr)
+	{
+		bIsOneHandWeapon = Cast<AWeaponSword>(mPlayer->GetMainWeapon())->GetSwordData()->type == ESwordType::OneHand;
+		bIsEquipped = mPlayer->GetMainWeapon()->IsEquipped();
+	}
+	else
+	{
+		bIsOneHandWeapon = true;
+		bIsEquipped = false;
+	}
 	
 	if (!mIsInAir)
 		mPlayJumpAnim = false;

@@ -299,6 +299,10 @@ void APlayerControls::PickUpItem(const AItemBase* itemBase)
 {
 	if(itemBase->GetThisItemData()->item_class == AWeaponSword::StaticClass())
 	{
+		// 기존의 mMainWeapon은 파괴
+		if(IsValid(mMainWeapon))
+			GetMainWeapon()->Destroy();
+		
 		AWeaponSword* sword = GetWorld()->SpawnActor<AWeaponSword>();
 
 		if(!IsValid(sword))
@@ -307,8 +311,6 @@ void APlayerControls::PickUpItem(const AItemBase* itemBase)
 		sword->SetData(itemBase->GetThisItemData(), false);
 		sword->SetSkeletalMesh(GetMesh());
 		sword->OnUnequip();
-
-		// sword->ResetTransform();
 		
 		mMainWeapon = sword;
 	}
