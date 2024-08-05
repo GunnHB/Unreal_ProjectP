@@ -20,6 +20,7 @@ APlayerControls::APlayerControls()
 
 	mSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRING_ARM"));
 	mCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
+	mCombat = CreateDefaultSubobject<UCombatComponent>(TEXT("COMBAT"));
 
 	InitAssets();
 	InitComponentsValue();
@@ -207,10 +208,19 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 
 void APlayerControls::DrawWeaponAction(const FInputActionValue& value)
 {
-	if(!IsValid(mMainWeapon))
+	if(!IsValid(mCombat->GetMainWeapon()))
 		return;
-	
-	mMainWeapon->IsEquipped() ? mAnimInstance->PlaySheathWeaponMontage() : mAnimInstance->PlayDrawWeaponMontage();
+
+	if (mCombat->GetMainWeapon()->IsEquipped())
+	{
+		mAnimInstance->PlaySheathWeaponMontage();
+		mCombat->SetCombatEnable(false);
+	}
+	else
+	{
+		mAnimInstance->PlayDrawWeaponMontage();
+		mCombat->SetCombatEnable(true);
+	}
 }
 
 void APlayerControls::InteractAction(const FInputActionValue& value)
@@ -300,8 +310,8 @@ void APlayerControls::PickUpItem(const AItemBase* itemBase)
 	if(itemBase->GetThisItemData()->item_class == AWeaponSword::StaticClass())
 	{
 		// 기존의 mMainWeapon은 파괴
-		if(IsValid(mMainWeapon))
-			GetMainWeapon()->Destroy();
+		if(IsValid(mCombat->GetMainWeapon()))
+			mCombat->GetMainWeapon()->Destroy();
 		
 		AWeaponSword* sword = GetWorld()->SpawnActor<AWeaponSword>();
 
@@ -311,8 +321,9 @@ void APlayerControls::PickUpItem(const AItemBase* itemBase)
 		sword->SetData(itemBase->GetThisItemData(), false);
 		sword->SetSkeletalMesh(GetMesh());
 		sword->OnUnequip();
-		
-		mMainWeapon = sword;
+
+		mCombat->SetMainWeapon(sword);
+		mCombat->SetCombatEnable(false);
 	}
 }
 
@@ -336,9 +347,4 @@ void APlayerControls::Interact()
 {
 	if(mHitResult.GetActor()->IsA(AItemBase::StaticClass()))
 		PickUpItem(Cast<AItemBase>(mHitResult.GetActor()));
-}
-
-void APlayerControls::NormalAttack()
-{
-	
 }

@@ -30,10 +30,10 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mIsInAir = mPlayerMovement->IsFalling();
 	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
 
-	if(mPlayer->GetMainWeapon() != nullptr)
+	if(mPlayer->GetCombat()->GetMainWeapon() != nullptr)
 	{
-		bIsOneHandWeapon = Cast<AWeaponSword>(mPlayer->GetMainWeapon())->GetSwordData()->type == ESwordType::OneHand;
-		bIsEquipped = mPlayer->GetMainWeapon()->IsEquipped();
+		bIsOneHandWeapon = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon())->GetSwordData()->type == ESwordType::OneHand;
+		bIsEquipped = mPlayer->GetCombat()->GetMainWeapon()->IsEquipped();
 	}
 	else
 	{
@@ -69,12 +69,12 @@ void UPlayerAnimInstance::NativeBeginPlay()
 
 void UPlayerAnimInstance::PlayDrawWeaponMontage()
 {
-	if(mPlayer->GetMainWeapon() == nullptr)
+	if(mPlayer->GetCombat()->GetMainWeapon() == nullptr)
 		return;
 
-	if(mPlayer->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+	if(mPlayer->GetCombat()->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
 	{
-		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetMainWeapon());
+		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon());
 
 		if(sword != nullptr)
 			mDrawWeaponMontage = sword->GetSwordData()->montage_draw;
@@ -94,12 +94,12 @@ void UPlayerAnimInstance::PlayDrawWeaponMontage()
 
 void UPlayerAnimInstance::PlaySheathWeaponMontage()
 {
-	if(mPlayer->GetMainWeapon() == nullptr)
+	if(mPlayer->GetCombat()->GetMainWeapon() == nullptr)
 		return;
 
-	if(mPlayer->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+	if(mPlayer->GetCombat()->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
 	{
-		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetMainWeapon());
+		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon());
 
 		if(sword != nullptr)
 			mSheathWeaponMontage = sword->GetSwordData()->montage_sheath;
@@ -119,7 +119,7 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 
 void UPlayerAnimInstance::AnimNotify_DrawWeapon()
 {
-	mPlayer->GetMainWeapon()->OnEquip();
+	mPlayer->GetCombat()->GetMainWeapon()->OnEquip();
 	
 	// 플래그 변환
 	mPlayDrawWeaponAnim = false;
@@ -127,7 +127,7 @@ void UPlayerAnimInstance::AnimNotify_DrawWeapon()
 
 void UPlayerAnimInstance::AnimNotify_SheathWeapon()
 {
-	mPlayer->GetMainWeapon()->OnUnequip();
+	mPlayer->GetCombat()->GetMainWeapon()->OnUnequip();
 
 	// 플래그 변환
 	mPlaySheathWeaponAnim = false;

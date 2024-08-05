@@ -4,8 +4,9 @@
 
 #include "InputActionValue.h"
 #include "../../Interface/Interactable.h"
-
 #include "../../System/GameInfo.h"
+#include "../../System/CombatInfo.h"
+
 #include "GameFramework/Character.h"
 #include "PlayerControls.generated.h"
 
@@ -15,15 +16,10 @@ class PROJECTP_API APlayerControls : public ACharacter, public IInteractable
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleAnywhere)
-	USpringArmComponent* mSpringArm;
-
-	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* mCamera;
-
-	// 클래스의 전방선언
-	// 다른 컴포넌트들도 tobjectptr로 선언할 수 있다.
-	// UE5에서는 이 방식을 권장한다고 함
+	UPROPERTY(VisibleAnywhere) TObjectPtr<USpringArmComponent> mSpringArm;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UCameraComponent> mCamera;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UCombatComponent> mCombat;
+	
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 	
 	// for inventory
@@ -33,10 +29,6 @@ protected:
 
 	// playerData
 	TObjectPtr<class UPlayerData> mPlayerData = nullptr;
-
-	// weapon
-	TObjectPtr<class AWeaponBase> mMainWeapon = nullptr;
-	
 
 private:
 	FVector mInputVector;
@@ -68,7 +60,7 @@ public:
 	FVector GetInputVector() const {return mInputVector;}
 	FVector GetCameraFowradVector() const {return mCamera->GetForwardVector();}
 	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
-	AWeaponBase* GetMainWeapon() const {return mMainWeapon;}
+	UCombatComponent* GetCombat() const {return mCombat;}
 	
 	bool AddMoney(const FMoney* moneyData);
 
@@ -90,8 +82,6 @@ protected:
 	void InteractAction(const FInputActionValue& value);					// 상호작용
 
 	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
-
-	void NormalAttack();													// 공격
 
 private:
 	void BindInputActions(class UInputComponent* PlayerInputComponent);		// 액션 바인딩
