@@ -11,3 +11,13 @@ void ASwordItem::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+void ASwordItem::SetData(FSword* data)
+{
+	if(data == nullptr)
+		return;
+
+	mSwordData = data;
+
+	SetWeaponData(CItemManager::GetInstance()->GetWeaponDataByRefId(data->id));
+}

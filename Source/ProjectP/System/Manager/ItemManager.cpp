@@ -5,18 +5,6 @@
 
 CItemManager::CItemManager()
 {
-	// static ConstructorHelpers::FObjectFinder<UDataTable>
-	// 	weaponTableAsset(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Weapon.DT_Weapon'"));
-	//
-	// if(weaponTableAsset.Succeeded())
-	// 	mWeaponTable = weaponTableAsset.Object;
-	//
-	// static ConstructorHelpers::FObjectFinder<UDataTable>
-	// 	swordTableAsset(TEXT(""));
-	//
-	// if(swordTableAsset.Succeeded())
-	// 	mSwordTable = swordTableAsset.Object;
-
 	static ConstructorHelpers::FObjectFinder<UDataTable>
 		itemTable(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Item.DT_Item'"));
 
@@ -32,8 +20,24 @@ CItemManager::~CItemManager()
 
 void CItemManager::Initialize()
 {
-	// InitTable(mWeaponTable, mWeaponDataArray);
 	InitTable(mItemTable, mItemDataArray);
+	InitTable(mWeaponTable, mWeaponDataArray);
+	InitTable(mSwordTable, mSwordDataArray);
+
+	SetWeaponMap();
+	SetSwordMap();
+}
+
+void CItemManager::SetWeaponMap()
+{
+	for (int index = 0; index < mWeaponDataArray.Num(); ++index)
+		mWeaponMap.Add(mWeaponDataArray[index]->id, mWeaponDataArray[index]);
+}
+
+void CItemManager::SetSwordMap()
+{
+	for (int index = 0; index < mSwordDataArray.Num(); ++index)
+		mSwordMap.Add(mSwordDataArray[index]->id, mSwordDataArray[index]);
 }
 
 template <typename T>

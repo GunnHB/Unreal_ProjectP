@@ -2,9 +2,12 @@
 
 #pragma once
 
+#include "../../System/Manager/ItemManager.h"
+
 #include "../../System/GameInfo.h"
 #include "GameFramework/Actor.h"
 #include "ItemBase.generated.h"
+
 
 UCLASS()
 class PROJECTP_API AItemBase : public AActor
@@ -14,7 +17,8 @@ class PROJECTP_API AItemBase : public AActor
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UStaticMeshComponent> mStaticMesh = nullptr;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
-	UPROPERTY(EditAnywhere) FName mRowName;
+
+	FItem* mItem = nullptr;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -31,5 +35,6 @@ public:
 	// getter
 	UCapsuleComponent* GetCapsule() const {return mCapsule;}
 	UStaticMeshComponent* GetStaticMesh() const {return mStaticMesh;}
-	
+
+	void Initialize(FItem* item);
 };

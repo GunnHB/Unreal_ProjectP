@@ -22,6 +22,9 @@ public:
 	TArray<FWeapon*> mWeaponDataArray;
 	TArray<FSword*> mSwordDataArray;
 
+	TMap<int32, FWeapon*> mWeaponMap;
+	TMap<int32, FSword*> mSwordMap;
+	
 	template <typename T>
 	T* GetData(const FName& name)
 	{
@@ -39,9 +42,27 @@ public:
 		return nullptr;
 	}
 
+	FWeapon* GetWeaponDataByRefId(int32 refId)
+	{
+		for (int index = 0; index < mWeaponDataArray.Num(); ++index)
+		{
+			FWeapon* tempData = mWeaponDataArray[index];
+			
+			if(tempData->ref_id == refId)
+				return tempData;
+			else
+				continue;
+		}
+
+		return nullptr;
+	}
+
 private:
 	void Initialize();
-	
+
 	template <typename T>
 	void InitTable(UDataTable* table, TArray<T*>& array);
+
+	void SetWeaponMap();
+	void SetSwordMap();
 };

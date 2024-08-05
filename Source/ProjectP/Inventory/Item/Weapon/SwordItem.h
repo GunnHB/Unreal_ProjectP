@@ -18,6 +18,8 @@ protected:
 
 public:
 	ASwordItem();
+	
+	void SetData(FSword* data);
 
 protected:
 	virtual void BeginPlay() override;

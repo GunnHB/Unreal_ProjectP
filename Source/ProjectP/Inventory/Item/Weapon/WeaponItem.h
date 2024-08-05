@@ -2,14 +2,14 @@
 
 #pragma once
 
-#include "../EquipmentItem.h"
+#include "../ItemBase.h"
 #include "WeaponItem.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTP_API AWeaponItem : public AEquipmentItem
+class PROJECTP_API AWeaponItem : public AItemBase
 {
 	GENERATED_BODY()
 
@@ -18,4 +18,12 @@ protected:
 
 public:
 	AWeaponItem();
+
+protected:
+	// setter
+	void SetWeaponData(FWeapon* data)
+	{
+		if(data != nullptr)
+			mWeaponData = data;
+	}
 };

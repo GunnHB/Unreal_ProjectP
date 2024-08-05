@@ -101,8 +101,6 @@ private:
 	void AdjustActorRotation();												// 캐릭터 회전 조정
 	
 	void DrawArrow();
-
 	void TraceForInteractable(float deltaTime);
-
-	void SpawnWeapon();
+	void SpawnSword();
 };

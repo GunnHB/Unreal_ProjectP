@@ -8,12 +8,8 @@
 #include "PlayerAnimInstance.h"
 
 #include "../../Data/Player/PlayerData.h"
-
 #include "../../Inventory/Widget/InventoryWidget.h"
-
-#include "../../Inventory/Item/Equipment/Weapon/OneHandSword.h"
-
-#include "../../System/Manager/ItemManager.h"
+#include "../../Inventory/Item/Weapon/SwordItem.h"
 
 // Sets default values
 APlayerControls::APlayerControls()
@@ -35,8 +31,6 @@ void APlayerControls::BeginPlay()
 	
 	mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	MappingContext();
-
-	// SpawnWeapon();
 }
 
 // Called every frame
@@ -215,7 +209,7 @@ void APlayerControls::DrawWeaponAction(const FInputActionValue& value)
 	if(!IsValid(mMainWeapon))
 		return;
 
-	mMainWeapon->GetIsEquipped() ? mAnimInstance->PlaySheathWeaponMontage() : mAnimInstance->PlayDrawWeaponMontage();
+	// mMainWeapon->GetIsEquipped() ? mAnimInstance->PlaySheathWeaponMontage() : mAnimInstance->PlayDrawWeaponMontage();
 }
 
 void APlayerControls::InteractAction(const FInputActionValue& value)
@@ -300,19 +294,29 @@ void APlayerControls::TraceForInteractable(float deltaTime)
 #endif
 }
 
-void APlayerControls::SpawnWeapon()
+void APlayerControls::SpawnSword()
 {
-	AOneHandSword* sword = GetWorld()->SpawnActor<AOneHandSword>(FVector::ZeroVector, FRotator::ZeroRotator);
+	// AOneHandSword* sword = GetWorld()->SpawnActor<AOneHandSword>(FVector::ZeroVector, FRotator::ZeroRotator);
+	//
+	// if(!IsValid(sword))
+	// 	return;
+	//
+	// // 메인 무기로 세팅
+	// mMainWeapon = sword;
+	//
+	// sword->SetSkeletalMesh(GetMesh());
+	// sword->OnUnequipped("SwordHipAttachSocket");
+	// sword->SetNoCollision();
+
+	ASwordItem* sword = GetWorld()->SpawnActor<ASwordItem>();
 
 	if(!IsValid(sword))
 		return;
 
-	// 메인 무기로 세팅
 	mMainWeapon = sword;
-	
-	sword->SetSkeletalMesh(GetMesh());
-	sword->OnUnequipped("SwordHipAttachSocket");
-	sword->SetNoCollision();
+
+	// sword->SetSkeletalMesh(GetMesh());
+	// sword->OnUnequipped();
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
@@ -333,7 +337,8 @@ bool APlayerControls::AddMoney(const FMoney* moneyData)
 
 void APlayerControls::Interact()
 {
-	SpawnWeapon();
+	if(mHitResult.GetActor()->IsA(ASwordItem::StaticClass()))
+		SpawnSword();
 }
 
 void APlayerControls::NormalAttack()

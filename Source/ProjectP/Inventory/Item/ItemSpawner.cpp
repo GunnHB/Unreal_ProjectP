@@ -5,7 +5,6 @@
 
 #include "ItemBase.h"
 #include "../../System/Manager/ItemManager.h"
-#include "Equipment/Weapon/SwordItem.h"
 
 // Sets default values
 AItemSpawner::AItemSpawner()
@@ -53,7 +52,7 @@ void AItemSpawner::SpawnItem()
 	
 	FVector spawnLocation = GetActorLocation();
 	FRotator spawnRotation = GetActorRotation();
-	
+
 	mItemActor = GetWorld()->SpawnActor<AItemBase>(item->item_class, spawnLocation, spawnRotation, param);
 	
 	mItemActor->GetStaticMesh()->SetStaticMesh(item->mesh);
@@ -63,4 +62,9 @@ void AItemSpawner::SpawnItem()
 	
 	mItemActor->GetCapsule()->SetRelativeTransform(item->capsule_transform);
 	mItemActor->GetStaticMesh()->SetRelativeRotation(item->mesh_transform.Rotator());
+
+	mItemActor->Initialize(mItemTableHandler.GetRow<FItem>(""));
+
+	// if(item->item_class == ASwordItem::StaticClass())
+	// 	Cast<ASwordItem>(mItemActor)->SetData();
 }

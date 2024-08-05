@@ -4,7 +4,7 @@
 #include "PlayerAnimInstance.h"
 
 #include "PlayerControls.h"
-#include "ProjectP/Inventory/Item/Equipment/Weapon/WeaponItem.h"
+#include "../../Inventory/Item/Weapon/WeaponItem.h"
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {
@@ -86,7 +86,7 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 
 void UPlayerAnimInstance::AnimNotify_DrawWeapon()
 {
-	mPlayer->GetMainWeaponItem()->OnEquipped("WeaponSocket");
+	// mPlayer->GetMainWeaponItem()->OnEquipped("WeaponSocket");
 	
 	// 플래그 변환
 	mPlayDrawWeaponAnim = false;
@@ -94,7 +94,7 @@ void UPlayerAnimInstance::AnimNotify_DrawWeapon()
 
 void UPlayerAnimInstance::AnimNotify_SheathWeapon()
 {
-	mPlayer->GetMainWeaponItem()->OnUnequipped("SwordHipAttachSocket");
+	// mPlayer->GetMainWeaponItem()->OnUnequipped("SwordHipAttachSocket");
 
 	// 플래그 변환
 	mPlaySheathWeaponAnim = false;

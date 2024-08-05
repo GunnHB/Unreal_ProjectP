@@ -96,7 +96,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 duration;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName sheath_socket_name;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName hand_socket_name;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 red_id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 ref_id;
 };
 
 USTRUCT()
