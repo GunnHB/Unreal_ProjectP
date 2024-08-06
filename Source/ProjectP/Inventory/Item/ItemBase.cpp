@@ -49,8 +49,10 @@ void AItemBase::SetItem(const bool relocate) const
 	{
 		mStaticMesh->SetRelativeLocation(mItemData->mesh_transform.GetLocation());
 		mStaticMesh->SetRelativeRotation(mItemData->mesh_transform.GetRotation());
-	}
 
-	mCapsule->SetCollisionProfileName(TEXT("Item"));
+		mCapsule->SetCollisionProfileName(TEXT("Item"));
+	}
+	else
+		mCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

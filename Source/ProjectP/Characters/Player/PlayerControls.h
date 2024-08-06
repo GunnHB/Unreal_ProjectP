@@ -42,6 +42,8 @@ private:
 	FCollisionQueryParams mQueryParam;
 	bool bEnableToInteract;
 
+	bool bIsToggling = false;				// 전투 <-> 비전투 전환 시의 플래그
+
 public:
 	// Sets default values for this character's properties
 	APlayerControls();
@@ -78,14 +80,17 @@ protected:
 
 	// 액션
 	void MovementAction(const FInputActionValue& value);					// 이동
-	void MovementStopAction(const FInputActionValue& value);				// 이동 취소
+	void CancelMovementAction(const FInputActionValue& value);				// 이동 취소
 	void CameraMovementAction(const FInputActionValue& value);				// 카메라 이동
 	void JumpAction(const FInputActionValue& value);						// 점프
 	void AttackAction(const FInputActionValue& value);						// 공격
-	void SprintAction(const FInputActionValue& value);						// 달리기
 	void FocusAction(const FInputActionValue& value);						// 포커싱
 	void DrawSheathAction(const FInputActionValue& value);					// 무기 장비
 	void InteractAction(const FInputActionValue& value);					// 상호작용
+	void DodgeAction(const FInputActionValue& value);						// 회피
+	void RollAction(const FInputActionValue& value);						// 구르기
+	void SprintAction(const FInputActionValue& value);						// 달리기
+	void CancelSprintAction(const FInputActionValue& value);				// 달리기 취소
 
 	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
 
@@ -100,10 +105,18 @@ private:
 
 	void PickUpItem(const class AItemBase* itemBase);
 
+	bool CanPerformToggling();
+
 	void TryDrawSheath();
 
 	void TryAttack();
-	void PerformAttack(int32 attackIndex, bool randomIndex);
+	void PerformAttack(int32 montageIndex, bool randomIndex);
+
+	void TryDodge();
+	void PerformDodge(int32 montageIndex, bool randomIndex);
+	
+	void TryRoll();
+	void TrySprint();
 
 	// 디버깅용
 	void DrawArrow();

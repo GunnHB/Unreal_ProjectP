@@ -124,14 +124,16 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 		return;
 
 	inputComponent->BindAction(inputData->mInputToMovement, ETriggerEvent::Triggered, this, &APlayerControls::MovementAction);
-	inputComponent->BindAction(inputData->mInputToMovement, ETriggerEvent::Completed, this, &APlayerControls::MovementStopAction);
+	inputComponent->BindAction(inputData->mInputToMovement, ETriggerEvent::Completed, this, &APlayerControls::CancelMovementAction);
 	inputComponent->BindAction(inputData->mInputToCameraMovement, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovementAction);
 	inputComponent->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::JumpAction);
 	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
-	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Started, this, &APlayerControls::SprintAction);
 	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Triggered, this, &APlayerControls::FocusAction);
 	inputComponent->BindAction(inputData->mInputToDrawSheath, ETriggerEvent::Triggered, this, &APlayerControls::DrawSheathAction);
 	inputComponent->BindAction(inputData->mInputToInteract, ETriggerEvent::Triggered, this, &APlayerControls::InteractAction);
+	inputComponent->BindAction(inputData->mInputToDodge, ETriggerEvent::Triggered, this, &APlayerControls::DodgeAction);
+	inputComponent->BindAction(inputData->mInputToRoll, ETriggerEvent::Triggered, this, &APlayerControls::RollAction);
+	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Triggered, this, &APlayerControls::SprintAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
 }
@@ -162,7 +164,7 @@ void APlayerControls::MovementAction(const FInputActionValue& value)
 	AddMovementInput(GetActorForwardVector());
 }
 
-void APlayerControls::MovementStopAction(const FInputActionValue& value)
+void APlayerControls::CancelMovementAction(const FInputActionValue& value)
 {
 	mInputVector = FVector::ZeroVector;
 }
@@ -202,11 +204,6 @@ void APlayerControls::AttackAction(const FInputActionValue& value)
 		TryAttack();
 }
 
-void APlayerControls::SprintAction(const FInputActionValue& value)
-{
-	
-}
-
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
 
@@ -214,6 +211,11 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 
 void APlayerControls::DrawSheathAction(const FInputActionValue& value)
 {
+	if(!CanPerformToggling())
+		return;
+
+	bIsToggling =	true;
+	
 	if(!IsValid(mCombat) || !IsValid(mCombat->GetMainWeapon()))
 		return;
 
@@ -226,6 +228,32 @@ void APlayerControls::InteractAction(const FInputActionValue& value)
 		return;
 
 	Interact();
+}
+
+void APlayerControls::DodgeAction(const FInputActionValue& value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("i am dodge"));
+
+	TryDodge();
+}
+
+void APlayerControls::RollAction(const FInputActionValue& value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("i am roll"));
+
+	TryRoll();
+}
+
+void APlayerControls::SprintAction(const FInputActionValue& value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("i am sprint"));
+
+	TrySprint();
+}
+
+void APlayerControls::CancelSprintAction(const FInputActionValue& value)
+{
+	
 }
 
 void APlayerControls::InventoryAction(const FInputActionValue& value)
@@ -316,6 +344,15 @@ void APlayerControls::PickUpItem(const AItemBase* itemBase)
 	}
 }
 
+bool APlayerControls::CanPerformToggling()
+{
+	if(!IsValid(mCombat))
+		return false;
+
+	// 공격 중이 아니거나 전환 중이 아님
+	return !mCombat->GetIsAttacking() && !bIsToggling;
+}
+
 void APlayerControls::TryDrawSheath()
 {
 	if (mCombat->GetMainWeapon()->GetIsEquipped())
@@ -326,13 +363,16 @@ void APlayerControls::TryDrawSheath()
 
 void APlayerControls::TryAttack()
 {
+	if(!CanPerformToggling())
+		return;
+	
 	if(!IsValid(mCombat) || !IsValid(mCombat->GetMainWeapon()))
 		return;
 	
 	PerformAttack(mCombat->GetAttackCount(), false);
 }
 
-void APlayerControls::PerformAttack(int32 attackIndex, bool randomIndex)
+void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
 {
 	if(!IsValid(mCombat))
 		return;
@@ -343,11 +383,43 @@ void APlayerControls::PerformAttack(int32 attackIndex, bool randomIndex)
 		return;	
 	}
 	
-	mAnimInstance->PlayAttackMontage(attackIndex, randomIndex);
+	mAnimInstance->PlayAttackMontage(montageIndex, randomIndex);
 
 	mCombat->SetIsAttacking(true);	
 	mCombat->IncreaseAttackCount();
 
+}
+
+void APlayerControls::TryDodge()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("dodge!!!!"));
+
+	if (IsValid(mCombat))
+	{
+		if(!mCombat->GetIsAttacking())
+			PerformDodge(0,true);
+	}
+}
+
+void APlayerControls::PerformDodge(int32 montageIndex, bool randomIndex)
+{
+	
+}
+
+void APlayerControls::TryRoll()
+{
+	if(mInputVector == FVector::ZeroVector)
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("roll!!!!"));
+}
+
+void APlayerControls::TrySprint()
+{
+	if(mInputVector == FVector::ZeroVector)
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("sprint!!!!"));
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
@@ -417,6 +489,8 @@ void APlayerControls::DrawSheath()
 		mCombat->GetMainWeapon()->OnUnequip();
 	else
 		mCombat->GetMainWeapon()->OnEquip();
+
+	bIsToggling = false;
 }
 
 void APlayerControls::DrawArrow()

@@ -50,15 +50,6 @@ UPlayerInputData::UPlayerInputData()
 			mInputToAttack = asset.Object;
 	}
 
-	// sprint
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Sprint.IA_PlayerControls_Sprint'"));
-
-		if (asset.Succeeded())
-			mInputToSprint = asset.Object;
-	}
-
 	// focus
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
@@ -84,6 +75,33 @@ UPlayerInputData::UPlayerInputData()
 
 		if (asset.Succeeded())
 			mInputToInteract = asset.Object;
+	}
+
+	// dodge
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Dodge.IA_PlayerControls_Dodge'"));
+
+		if (asset.Succeeded())
+			mInputToDodge = asset.Object;
+	}
+
+	// roll
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT(""));
+
+		if (asset.Succeeded())
+			mInputToRoll = asset.Object;
+	}
+
+	// sprint
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Sprint.IA_PlayerControls_Sprint'"));
+
+		if (asset.Succeeded())
+			mInputToSprint = asset.Object;
 	}
 
 	// inventory
