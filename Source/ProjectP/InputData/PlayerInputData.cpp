@@ -17,7 +17,7 @@ UPlayerInputData::UPlayerInputData()
 	// movement
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Movement.IA_PlayerControls_Movement'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Movement.IA_PlayerControls_Movement'"));
 
 		if (asset.Succeeded())
 			mInputToMovement = asset.Object;
@@ -26,7 +26,7 @@ UPlayerInputData::UPlayerInputData()
 	// camera movement
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_CameraMovement.IA_PlayerControls_CameraMovement'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_CameraMovement.IA_PlayerControls_CameraMovement'"));
 
 		if (asset.Succeeded())
 			mInputToCameraMovement = asset.Object;
@@ -35,7 +35,7 @@ UPlayerInputData::UPlayerInputData()
 	// jump
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Jump.IA_PlayerControls_Jump'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Jump.IA_PlayerControls_Jump'"));
 
 		if (asset.Succeeded())
 			mInputToJump = asset.Object;
@@ -44,7 +44,7 @@ UPlayerInputData::UPlayerInputData()
 	// attack
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Attack.IA_PlayerControls_Attack'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Attack.IA_PlayerControls_Attack'"));
 
 		if (asset.Succeeded())
 			mInputToAttack = asset.Object;
@@ -53,7 +53,7 @@ UPlayerInputData::UPlayerInputData()
 	// sprint
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Sprint.IA_PlayerControls_Sprint'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Sprint.IA_PlayerControls_Sprint'"));
 
 		if (asset.Succeeded())
 			mInputToSprint = asset.Object;
@@ -62,25 +62,16 @@ UPlayerInputData::UPlayerInputData()
 	// focus
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Focus.IA_PlayerControls_Focus'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Focus.IA_PlayerControls_Focus'"));
 
 		if (asset.Succeeded())
 			mInputToFocus = asset.Object;
 	}
-
-	// inventory
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_UI_Inventory.IA_UI_Inventory'"));
-
-		if (asset.Succeeded())
-			mInputToInventory = asset.Object;
-	}
 	
-	// draw weapon
+	// draw sheath
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_DrawWeapon.IA_PlayerControls_DrawWeapon'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_DrawSheath.IA_PlayerControls_DrawSheath'"));
 
 		if (asset.Succeeded())
 			mInputToDrawSheath = asset.Object;
@@ -89,9 +80,18 @@ UPlayerInputData::UPlayerInputData()
 	// interact
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/IA_PlayerControls_Interact.IA_PlayerControls_Interact'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Interact.IA_PlayerControls_Interact'"));
 
 		if (asset.Succeeded())
 			mInputToInteract = asset.Object;
+	}
+
+	// inventory
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_UI/IA_UI_Inventory.IA_UI_Inventory'"));
+
+		if (asset.Succeeded())
+			mInputToInventory = asset.Object;
 	}
 }
