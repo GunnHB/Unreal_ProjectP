@@ -83,14 +83,6 @@ void UPlayerAnimInstance::PlayDrawWeaponMontage()
 	if(!IsValid(mDrawWeaponMontage))
 		return;
 	
-	// if(!Montage_IsPlaying(mDrawWeaponMontage) && !mPlayDrawWeaponAnim)
-	// {
-	// 	mPlayDrawWeaponAnim = true;
-	// 	
-	// 	Montage_SetPosition(mDrawWeaponMontage, 0.f);
-	// 	Montage_Play(mDrawWeaponMontage);
-	// }
-
 	if(!Montage_IsPlaying(mDrawWeaponMontage))
 	{
 		Montage_SetPosition(mDrawWeaponMontage, 0.f);
@@ -114,14 +106,6 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 	if(!IsValid(mSheathWeaponMontage))
 		return;
 	
-	// if(!Montage_IsPlaying(mSheathWeaponMontage) && !mPlaySheathWeaponAnim)
-	// {
-	// 	mPlaySheathWeaponAnim = true;
-	// 	
-	// 	Montage_SetPosition(mSheathWeaponMontage, 0.f);
-	// 	Montage_Play(mSheathWeaponMontage);
-	// }
-
 	if(!Montage_IsPlaying(mSheathWeaponMontage))
 	{
 		Montage_SetPosition(mSheathWeaponMontage, 0.f);
