@@ -2,17 +2,17 @@
 
 #pragma once
 
-#include "../../System/GameInfo.h"
+#include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "ContinueAttack.generated.h"
+#include "AnimNotify_DrawSheath.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTP_API UContinueAttack : public UAnimNotify
+class PROJECTP_API UAnimNotify_DrawSheath : public UAnimNotify
 {
 	GENERATED_BODY()
-	
+
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 };

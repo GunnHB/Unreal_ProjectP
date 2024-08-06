@@ -15,32 +15,24 @@ protected:
 	TObjectPtr<class AWeaponBase> mMainWeapon = nullptr;
 
 	bool bIsCombatEnable = false;
-
-	int32 mAttackCount = 0;
 	bool bIsAttackSaved = false;
 	bool bIsAttacking = false;
+	int32 mAttackCount = 0;
 
 public:	
-	// Sets default values for this component's properties
-	UCombatComponent();
-	
 	// getter
-	AWeaponBase* GetMainWeapon() const {return mMainWeapon;}
 	bool GetCombatEnable() const {return bIsCombatEnable;}
 	bool GetIsAttacking() const {return bIsAttacking;}
 	bool GetIsAttackSaved() const {return bIsAttackSaved;}
+	AWeaponBase* GetMainWeapon() const {return mMainWeapon;}
+	int32 GetAttackCount() const {return mAttackCount;}
 	
 	// setter
-	void SetMainWeapon(AWeaponBase* value) {mMainWeapon = value;}
 	void SetCombatEnable(bool value) {bIsCombatEnable = value;}
 	void SetIsAttacking(bool value) {bIsAttacking = value;}
 	void SetIsAttackSaved(bool value) {bIsAttackSaved = value;}
+	void SetMainWeapon(AWeaponBase* value) {mMainWeapon = value;}
+	void SetAttackCount(int32 value) {mAttackCount = value;}
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void IncreaseAttackCount();
 };

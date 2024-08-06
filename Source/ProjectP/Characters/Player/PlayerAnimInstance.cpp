@@ -33,7 +33,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if(mPlayer->GetCombat()->GetMainWeapon() != nullptr)
 	{
 		bIsOneHandWeapon = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon())->GetSwordData()->type == ESwordType::OneHand;
-		bIsEquipped = mPlayer->GetCombat()->GetMainWeapon()->IsEquipped();
+		bIsEquipped = mPlayer->GetCombat()->GetMainWeapon()->GetIsEquipped();
 	}
 	else
 	{
@@ -83,10 +83,16 @@ void UPlayerAnimInstance::PlayDrawWeaponMontage()
 	if(!IsValid(mDrawWeaponMontage))
 		return;
 	
-	if(!Montage_IsPlaying(mDrawWeaponMontage) && !mPlayDrawWeaponAnim)
+	// if(!Montage_IsPlaying(mDrawWeaponMontage) && !mPlayDrawWeaponAnim)
+	// {
+	// 	mPlayDrawWeaponAnim = true;
+	// 	
+	// 	Montage_SetPosition(mDrawWeaponMontage, 0.f);
+	// 	Montage_Play(mDrawWeaponMontage);
+	// }
+
+	if(!Montage_IsPlaying(mDrawWeaponMontage))
 	{
-		mPlayDrawWeaponAnim = true;
-		
 		Montage_SetPosition(mDrawWeaponMontage, 0.f);
 		Montage_Play(mDrawWeaponMontage);
 	}
@@ -108,10 +114,16 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 	if(!IsValid(mSheathWeaponMontage))
 		return;
 	
-	if(!Montage_IsPlaying(mSheathWeaponMontage) && !mPlaySheathWeaponAnim)
+	// if(!Montage_IsPlaying(mSheathWeaponMontage) && !mPlaySheathWeaponAnim)
+	// {
+	// 	mPlaySheathWeaponAnim = true;
+	// 	
+	// 	Montage_SetPosition(mSheathWeaponMontage, 0.f);
+	// 	Montage_Play(mSheathWeaponMontage);
+	// }
+
+	if(!Montage_IsPlaying(mSheathWeaponMontage))
 	{
-		mPlaySheathWeaponAnim = true;
-		
 		Montage_SetPosition(mSheathWeaponMontage, 0.f);
 		Montage_Play(mSheathWeaponMontage);
 	}
@@ -141,32 +153,8 @@ void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
 	}
 }
 
-void UPlayerAnimInstance::AnimNotify_DrawWeapon()
-{
-	mPlayer->GetCombat()->GetMainWeapon()->OnEquip();
-	
-	// 플래그 변환
-	mPlayDrawWeaponAnim = false;
-}
-
-void UPlayerAnimInstance::AnimNotify_SheathWeapon()
-{
-	mPlayer->GetCombat()->GetMainWeapon()->OnUnequip();
-
-	// 플래그 변환
-	mPlaySheathWeaponAnim = false;
-}
-
 void UPlayerAnimInstance::AnimNotify_LandEnd()
 {
 	// 플래그 변환
 	bIsLandingAnimEnd = true;
-}
-
-void UPlayerAnimInstance::AnimNotify_ContinueAttack()
-{
-	mPlayer->GetCombat()->SetIsAttacking(false);
-
-	if(mPlayer->GetCombat()->GetIsAttackSaved())
-		mPlayer->GetCombat()->SetIsAttackSaved(false);
 }

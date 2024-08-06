@@ -28,7 +28,7 @@ private:
 
 public:
 	// getter
-	bool IsEquipped() const {return bIsEquipped;}
+	bool GetIsEquipped() const {return bIsEquipped;}
 
 	// setter
 	void SetSkeletalMesh(USkeletalMeshComponent* value) {mSkeletalMesh = value;}

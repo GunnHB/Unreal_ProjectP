@@ -4,6 +4,7 @@
 
 #include "InputActionValue.h"
 #include "../../Interface/Interactable.h"
+#include "../../Interface/Combatable.h"
 #include "../../System/GameInfo.h"
 #include "../../System/CombatInfo.h"
 
@@ -11,7 +12,7 @@
 #include "PlayerControls.generated.h"
 
 UCLASS()
-class PROJECTP_API APlayerControls : public ACharacter, public IInteractable
+class PROJECTP_API APlayerControls : public ACharacter, public IInteractable, public ICombatable
 {
 	GENERATED_BODY()
 
@@ -64,7 +65,12 @@ public:
 	
 	bool AddMoney(const FMoney* moneyData);
 
+	// interface
 	virtual void Interact() override;
+	virtual void ContinueAttack() override;
+	virtual void EnableCombat() override;
+	virtual void ResetAttack() override;
+	virtual void DrawSheath() override;
 
 protected:
 	void InitAssets();														// 에셋 초기화
@@ -78,7 +84,7 @@ protected:
 	void AttackAction(const FInputActionValue& value);						// 공격
 	void SprintAction(const FInputActionValue& value);						// 달리기
 	void FocusAction(const FInputActionValue& value);						// 포커싱
-	void DrawWeaponAction(const FInputActionValue& value);					// 무기 장비
+	void DrawSheathAction(const FInputActionValue& value);					// 무기 장비
 	void InteractAction(const FInputActionValue& value);					// 상호작용
 
 	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
@@ -90,10 +96,15 @@ private:
 	void AdjustCameraRotation();											// 카메라 회전 조정
 	void AdjustActorRotation();												// 캐릭터 회전 조정
 	
-	void DrawArrow();
 	void TraceForInteractable(float deltaTime);
 
 	void PickUpItem(const class AItemBase* itemBase);
 
+	void TryDrawSheath();
+
+	void TryAttack();
 	void PerformAttack(int32 attackIndex, bool randomIndex);
+
+	// 디버깅용
+	void DrawArrow();
 };

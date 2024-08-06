@@ -24,8 +24,6 @@ protected:
 
 	// anim flag
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlayJumpAnim = false;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlayDrawWeaponAnim = false;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlaySheathWeaponAnim = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool bIsLandingAnimEnd = true;
 
 	// montage
@@ -63,8 +61,5 @@ public:
 
 private:
 	// anim notify
-	UFUNCTION() void AnimNotify_DrawWeapon();
-	UFUNCTION() void AnimNotify_SheathWeapon();
 	UFUNCTION() void AnimNotify_LandEnd();
-	UFUNCTION() void AnimNotify_ContinueAttack();
 };

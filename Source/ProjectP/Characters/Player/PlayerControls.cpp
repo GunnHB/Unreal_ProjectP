@@ -130,7 +130,7 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Started, this, &APlayerControls::SprintAction);
 	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Triggered, this, &APlayerControls::FocusAction);
-	inputComponent->BindAction(inputData->mInputToDrawWeapon, ETriggerEvent::Triggered, this, &APlayerControls::DrawWeaponAction);
+	inputComponent->BindAction(inputData->mInputToDrawSheath, ETriggerEvent::Triggered, this, &APlayerControls::DrawSheathAction);
 	inputComponent->BindAction(inputData->mInputToInteract, ETriggerEvent::Triggered, this, &APlayerControls::InteractAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
@@ -193,16 +193,13 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
 {
-	if(!mCombat->GetCombatEnable())
+	if (!IsValid(mCombat))
 		return;
-
+	
 	if(mCombat->GetIsAttacking())
 		mCombat->SetIsAttackSaved(true);
 	else
-	{
-		mCombat->SetIsAttacking(true);	
-		PerformAttack(-1, true);
-	}
+		TryAttack();
 }
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
@@ -215,21 +212,12 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 
 }
 
-void APlayerControls::DrawWeaponAction(const FInputActionValue& value)
+void APlayerControls::DrawSheathAction(const FInputActionValue& value)
 {
-	if(!IsValid(mCombat->GetMainWeapon()))
+	if(!IsValid(mCombat) || !IsValid(mCombat->GetMainWeapon()))
 		return;
 
-	if (mCombat->GetMainWeapon()->IsEquipped())
-	{
-		mAnimInstance->PlaySheathWeaponMontage();
-		mCombat->SetCombatEnable(false);
-	}
-	else
-	{
-		mAnimInstance->PlayDrawWeaponMontage();
-		mCombat->SetCombatEnable(true);
-	}
+	TryDrawSheath();
 }
 
 void APlayerControls::InteractAction(const FInputActionValue& value)
@@ -292,14 +280,6 @@ void APlayerControls::AdjustActorRotation()
 	SetActorRotation(rotation);
 }
 
-void APlayerControls::DrawArrow()
-{
-	FVector startLocation = GetActorLocation();
-	FVector endLocation = startLocation + GetActorForwardVector() * 100.f;
-	
-	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
-}
-
 void APlayerControls::TraceForInteractable(float deltaTime)
 {
 	mTraceStartPoint = GetActorLocation() - FVector(0.f, 0.f, GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
@@ -336,9 +316,38 @@ void APlayerControls::PickUpItem(const AItemBase* itemBase)
 	}
 }
 
+void APlayerControls::TryDrawSheath()
+{
+	if (mCombat->GetMainWeapon()->GetIsEquipped())
+		mAnimInstance->PlaySheathWeaponMontage();
+	else
+		mAnimInstance->PlayDrawWeaponMontage();
+}
+
+void APlayerControls::TryAttack()
+{
+	if(!IsValid(mCombat) || !IsValid(mCombat->GetMainWeapon()))
+		return;
+	
+	PerformAttack(mCombat->GetAttackCount(), false);
+}
+
 void APlayerControls::PerformAttack(int32 attackIndex, bool randomIndex)
 {
+	if(!IsValid(mCombat))
+		return;
+
+	if(!mCombat->GetCombatEnable())
+	{
+		TryDrawSheath();
+		return;	
+	}
+	
 	mAnimInstance->PlayAttackMontage(attackIndex, randomIndex);
+
+	mCombat->SetIsAttacking(true);	
+	mCombat->IncreaseAttackCount();
+
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
@@ -361,4 +370,57 @@ void APlayerControls::Interact()
 {
 	if(mHitResult.GetActor()->IsA(AItemBase::StaticClass()))
 		PickUpItem(Cast<AItemBase>(mHitResult.GetActor()));
+}
+
+void APlayerControls::ContinueAttack()
+{
+	if(!IsValid(mCombat))
+		return;
+
+	mCombat->SetIsAttacking(false);
+	
+	if(mCombat->GetIsAttackSaved())
+	{
+		mCombat->SetIsAttackSaved(false);
+		
+		TryAttack();
+	}
+}
+
+void APlayerControls::EnableCombat()
+{
+	if(!IsValid(mCombat))
+		return;
+
+	bool combatEnable = !mCombat->GetCombatEnable();
+	mCombat->SetCombatEnable(combatEnable);
+}
+
+void APlayerControls::ResetAttack()
+{
+	if(!IsValid(mCombat))
+		return;
+
+	mCombat->SetIsAttacking(false);
+	mCombat->SetIsAttackSaved(false);
+	mCombat->SetAttackCount(0);
+}
+
+void APlayerControls::DrawSheath()
+{
+	if(!IsValid(mCombat))
+		return;
+
+	if(mCombat->GetMainWeapon()->GetIsEquipped())
+		mCombat->GetMainWeapon()->OnUnequip();
+	else
+		mCombat->GetMainWeapon()->OnEquip();
+}
+
+void APlayerControls::DrawArrow()
+{
+	FVector startLocation = GetActorLocation();
+	FVector endLocation = startLocation + GetActorForwardVector() * 100.f;
+	
+	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
 }
