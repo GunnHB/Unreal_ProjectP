@@ -410,6 +410,8 @@ void APlayerControls::DrawSheath()
 {
 	if(!IsValid(mCombat))
 		return;
+	
+	ResetAttack();
 
 	if(mCombat->GetMainWeapon()->GetIsEquipped())
 		mCombat->GetMainWeapon()->OnUnequip();
