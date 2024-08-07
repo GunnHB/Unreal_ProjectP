@@ -154,13 +154,7 @@ void APlayerControls::MovementAction(const FInputActionValue& value)
 {
 	mInputVector = value.Get<FVector>();
 
-	// 공중일 때 || 착지했을 때 회전 막기
-	if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
-		return;
-
-	AdjustActorRotation();
-
-	AddMovementInput(GetActorForwardVector());
+	TryMovement();
 }
 
 void APlayerControls::CancelMovementAction(const FInputActionValue& value)
@@ -213,12 +207,12 @@ void APlayerControls::DrawSheathAction(const FInputActionValue& value)
 	if(!CanPerformTogglingToCombat())
 		return;
 
-	bIsToggling =	true;
+	bIsToggling = true;
 	
 	if(!IsValid(mCombat) || !IsValid(mCombat->GetMainWeapon()))
 		return;
 
-	TryDrawSheath();
+	PerformDrawSheath();
 }
 
 void APlayerControls::InteractAction(const FInputActionValue& value)
@@ -231,18 +225,11 @@ void APlayerControls::InteractAction(const FInputActionValue& value)
 
 void APlayerControls::DodgeAction(const FInputActionValue& value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("i am dodge"));
-
-	if(bIsDodging)
-		return;
-
 	TryDodge();
 }
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("i am sprint"));
-
 	TrySprint();
 }
 
@@ -348,7 +335,31 @@ bool APlayerControls::CanPerformTogglingToCombat()
 	return !mCombat->GetIsAttacking() && !bIsToggling;
 }
 
-void APlayerControls::TryDrawSheath()
+bool APlayerControls::CanPerformTogglingToDodge()
+{
+	if(!IsValid(mCombat))
+		return false;
+
+	return !mCombat->GetIsDodge() && !bIsToggling;
+}
+
+void APlayerControls::TryMovement()
+{
+	// 공중일 때 || 착지했을 때 회전 막기
+	if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
+		return;
+
+	PerformMovement();
+}
+
+void APlayerControls::PerformMovement()
+{
+	AdjustActorRotation();
+	
+	AddMovementInput(GetActorForwardVector());
+}
+
+void APlayerControls::PerformDrawSheath()
 {
 	if (mCombat->GetMainWeapon()->GetIsEquipped())
 		mAnimInstance->PlaySheathWeaponMontage();
@@ -374,7 +385,7 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
 
 	if(!mCombat->GetCombatEnable())
 	{
-		TryDrawSheath();
+		PerformDrawSheath();
 		return;	
 	}
 	
@@ -387,22 +398,70 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
 
 void APlayerControls::TryDodge()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("dodge!!!!"));
+	if(!IsValid(mCombat))
+		return;
 	
-	PerformDodge(0,true);
+	if(mCombat->GetIsDodge())
+		PerformRoll();
+	else	
+		PerformDodge();
 }
 
-void APlayerControls::PerformDodge(int32 montageIndex, bool randomIndex)
+void APlayerControls::PerformDodge()
 {
-	mAnimInstance->SetIsDodge(true);
+	if(!CanPerformTogglingToDodge())
+		return;
+
+	bIsToggling = true;
+	
+	ESwordType type = ESwordType::None;
+
+	if(mCombat->GetMainWeapon() == nullptr)
+		type = ESwordType::OneHand;
+	else
+	{
+		if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+		{
+			AWeaponSword* sword = Cast<AWeaponSword>(mCombat->GetMainWeapon());
+			
+			type = !sword->GetIsEquipped() ? ESwordType::OneHand : sword->GetSwordData()->type;
+		}
+	}
+
+	mCombat->SetIsDodge(true);
+	mAnimInstance->PlayDodgeMontage(type, false);
+}
+
+void APlayerControls::PerformRoll()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, TEXT("asdfasdf"));
+	//
+	// if(!CanPerformTogglingToDodge())
+	// 	return;
+	//
+	// bIsToggling = true;
+	//
+	ESwordType type = ESwordType::None;
+
+	if(mCombat->GetMainWeapon() == nullptr)
+		type = ESwordType::OneHand;
+	else
+	{
+		if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+		{
+			AWeaponSword* sword = Cast<AWeaponSword>(mCombat->GetMainWeapon());
+			
+			type = !sword->GetIsEquipped() ? ESwordType::OneHand : sword->GetSwordData()->type;
+		}
+	}
+
+	mAnimInstance->PlayDodgeMontage(type, true);
 }
 
 void APlayerControls::TrySprint()
 {
 	if(mInputVector == FVector::ZeroVector)
 		return;
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("sprint!!!!"));
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
@@ -476,9 +535,20 @@ void APlayerControls::DrawSheath()
 	bIsToggling = false;
 }
 
-FRotator APlayerControls::GetDesiredRotation()
+void APlayerControls::ResetDodge()
 {
-	return FRotator::ZeroRotator;
+	if(!IsValid(mCombat))
+		return;
+	
+	mCombat->SetIsDodge(false);
+
+	bIsToggling = false;
+}
+
+void APlayerControls::ResetCombat()
+{
+	ResetAttack();
+	ResetDodge();
 }
 
 void APlayerControls::DrawArrow()

@@ -140,6 +140,20 @@ void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
 	}
 }
 
+void UPlayerAnimInstance::PlayDodgeMontage(ESwordType& swordType, bool isRoll)
+{
+	UAnimMontage* tempMontage = isRoll ? mRollMontageMap[swordType] : mDodgeMontageMap[swordType];
+
+	if(tempMontage == nullptr)
+		return;
+	
+	if(!Montage_IsPlaying(tempMontage))
+	{
+		Montage_SetPosition(tempMontage, 0.f);
+		Montage_Play(tempMontage);
+	}
+}
+
 void UPlayerAnimInstance::AnimNotify_LandEnd()
 {
 	// 플래그 변환

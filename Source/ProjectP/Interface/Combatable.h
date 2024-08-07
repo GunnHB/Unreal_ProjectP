@@ -23,7 +23,8 @@ class PROJECTP_API ICombatable
 public:
 	virtual void ContinueAttack() = 0;
 	virtual void EnableCombat() = 0;
-	virtual void ResetAttack() = 0;
 	virtual void DrawSheath() = 0;
-	virtual FRotator GetDesiredRotation() = 0;
+	virtual void ResetAttack() = 0;
+	virtual void ResetDodge() = 0;
+	virtual void ResetCombat() = 0;
 };

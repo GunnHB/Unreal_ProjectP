@@ -75,7 +75,8 @@ public:
 	virtual void EnableCombat() override;
 	virtual void ResetAttack() override;
 	virtual void DrawSheath() override;
-	virtual FRotator GetDesiredRotation() override;
+	virtual void ResetDodge() override;
+	virtual void ResetCombat() override;
 
 protected:
 	void InitAssets();														// 에셋 초기화
@@ -108,14 +109,19 @@ private:
 	void PickUpItem(const class AItemBase* itemBase);
 
 	bool CanPerformTogglingToCombat();
+	bool CanPerformTogglingToDodge();
 
-	void TryDrawSheath();
+	void TryMovement();
+	void PerformMovement();
+
+	void PerformDrawSheath();
 
 	void TryAttack();
 	void PerformAttack(int32 montageIndex, bool randomIndex);
 
 	void TryDodge();
-	void PerformDodge(int32 montageIndex, bool randomIndex);
+	void PerformDodge();
+	void PerformRoll();
 	
 	void TrySprint();
 
