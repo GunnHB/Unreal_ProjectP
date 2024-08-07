@@ -11,9 +11,11 @@ class GameValue
 {
 private:
 	static int32 MaxMoney;
+	static float MaxWalkSpeed;
 
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
+	static float GetMaxWalkSpeed() {return MaxWalkSpeed;}
 };
 
 UENUM()

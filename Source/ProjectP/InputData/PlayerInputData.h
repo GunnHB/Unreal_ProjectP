@@ -32,7 +32,6 @@ public:
 	UInputAction* mInputToDrawSheath = nullptr;
 	UInputAction* mInputToInteract = nullptr;
 	UInputAction* mInputToDodge = nullptr;
-	UInputAction* mInputToRoll = nullptr;
 	UInputAction* mInputToSprint = nullptr;
 
 	UInputAction* mInputToInventory = nullptr;

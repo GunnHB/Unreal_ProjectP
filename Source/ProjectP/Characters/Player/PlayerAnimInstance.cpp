@@ -41,9 +41,12 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		bIsEquipped = false;
 	}
 	
-	if (!mIsInAir)
-		mPlayJumpAnim = false;
-	else
+	// if (!mIsInAir)
+	// 	mPlayJumpAnim = false;
+	// else
+	// 	bIsLandingAnimEnd = false;
+
+	if(mIsInAir)
 		bIsLandingAnimEnd = false;
 }
 

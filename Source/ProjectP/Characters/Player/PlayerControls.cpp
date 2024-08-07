@@ -102,11 +102,11 @@ void APlayerControls::InitComponentsValue()
 	// 컨트롤러의 회전에 영향을 받지 않도록
 	bUseControllerRotationYaw = false;
 
-	// 이동 속도 조정
 	UCharacterMovementComponent* movement = Cast<UCharacterMovementComponent>(GetCharacterMovement());
 
+	// 이동 속도 조정
 	if (movement != nullptr)
-		movement->MaxWalkSpeed = 500.f;
+		movement->MaxWalkSpeed = GameValue::GetMaxWalkSpeed();
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
@@ -132,7 +132,6 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToDrawSheath, ETriggerEvent::Triggered, this, &APlayerControls::DrawSheathAction);
 	inputComponent->BindAction(inputData->mInputToInteract, ETriggerEvent::Triggered, this, &APlayerControls::InteractAction);
 	inputComponent->BindAction(inputData->mInputToDodge, ETriggerEvent::Triggered, this, &APlayerControls::DodgeAction);
-	inputComponent->BindAction(inputData->mInputToRoll, ETriggerEvent::Triggered, this, &APlayerControls::RollAction);
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Triggered, this, &APlayerControls::SprintAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
@@ -188,7 +187,7 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 {
 	if (CanJump())
 	{
-		mAnimInstance->SetPlayJumpAnim(true);
+		// mAnimInstance->SetPlayJumpAnim(true);
 		Jump();
 	}
 }
@@ -211,7 +210,7 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 
 void APlayerControls::DrawSheathAction(const FInputActionValue& value)
 {
-	if(!CanPerformToggling())
+	if(!CanPerformTogglingToCombat())
 		return;
 
 	bIsToggling =	true;
@@ -234,14 +233,10 @@ void APlayerControls::DodgeAction(const FInputActionValue& value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("i am dodge"));
 
+	if(bIsDodging)
+		return;
+
 	TryDodge();
-}
-
-void APlayerControls::RollAction(const FInputActionValue& value)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("i am roll"));
-
-	TryRoll();
 }
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
@@ -344,7 +339,7 @@ void APlayerControls::PickUpItem(const AItemBase* itemBase)
 	}
 }
 
-bool APlayerControls::CanPerformToggling()
+bool APlayerControls::CanPerformTogglingToCombat()
 {
 	if(!IsValid(mCombat))
 		return false;
@@ -363,13 +358,13 @@ void APlayerControls::TryDrawSheath()
 
 void APlayerControls::TryAttack()
 {
-	if(!CanPerformToggling())
-		return;
-	
-	if(!IsValid(mCombat) || !IsValid(mCombat->GetMainWeapon()))
-		return;
-	
-	PerformAttack(mCombat->GetAttackCount(), false);
+	if(IsValid(mCombat) && IsValid(mCombat->GetMainWeapon()))
+	{
+		if(!CanPerformTogglingToCombat())
+			return;
+		
+		PerformAttack(mCombat->GetAttackCount(), false);
+	}
 }
 
 void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
@@ -393,25 +388,13 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
 void APlayerControls::TryDodge()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("dodge!!!!"));
-
-	if (IsValid(mCombat))
-	{
-		if(!mCombat->GetIsAttacking())
-			PerformDodge(0,true);
-	}
+	
+	PerformDodge(0,true);
 }
 
 void APlayerControls::PerformDodge(int32 montageIndex, bool randomIndex)
 {
-	
-}
-
-void APlayerControls::TryRoll()
-{
-	if(mInputVector == FVector::ZeroVector)
-		return;
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, TEXT("roll!!!!"));
+	mAnimInstance->SetIsDodge(true);
 }
 
 void APlayerControls::TrySprint()
@@ -491,6 +474,11 @@ void APlayerControls::DrawSheath()
 		mCombat->GetMainWeapon()->OnEquip();
 
 	bIsToggling = false;
+}
+
+FRotator APlayerControls::GetDesiredRotation()
+{
+	return FRotator::ZeroRotator;
 }
 
 void APlayerControls::DrawArrow()

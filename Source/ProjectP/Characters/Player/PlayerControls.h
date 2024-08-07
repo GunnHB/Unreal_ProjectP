@@ -35,14 +35,16 @@ private:
 	FVector mInputVector;
 	FRotator mCamRotator;
 
-	// for trace
+	// for trace channel
 	FVector mTraceStartPoint;
 	FVector mTraceEndPoint;
 	FHitResult mHitResult;
 	FCollisionQueryParams mQueryParam;
 	bool bEnableToInteract;
 
-	bool bIsToggling = false;				// 전투 <-> 비전투 전환 시의 플래그
+	bool bIsToggling = false;				// 행동 전환 시의 플래그
+	bool bIsDodging = false;				// dodge 플래그
+	bool bIsRolling = false;				// roll 플래그
 
 public:
 	// Sets default values for this character's properties
@@ -73,6 +75,7 @@ public:
 	virtual void EnableCombat() override;
 	virtual void ResetAttack() override;
 	virtual void DrawSheath() override;
+	virtual FRotator GetDesiredRotation() override;
 
 protected:
 	void InitAssets();														// 에셋 초기화
@@ -88,7 +91,6 @@ protected:
 	void DrawSheathAction(const FInputActionValue& value);					// 무기 장비
 	void InteractAction(const FInputActionValue& value);					// 상호작용
 	void DodgeAction(const FInputActionValue& value);						// 회피
-	void RollAction(const FInputActionValue& value);						// 구르기
 	void SprintAction(const FInputActionValue& value);						// 달리기
 	void CancelSprintAction(const FInputActionValue& value);				// 달리기 취소
 
@@ -105,7 +107,7 @@ private:
 
 	void PickUpItem(const class AItemBase* itemBase);
 
-	bool CanPerformToggling();
+	bool CanPerformTogglingToCombat();
 
 	void TryDrawSheath();
 
@@ -115,7 +117,6 @@ private:
 	void TryDodge();
 	void PerformDodge(int32 montageIndex, bool randomIndex);
 	
-	void TryRoll();
 	void TrySprint();
 
 	// 디버깅용

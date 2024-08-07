@@ -86,15 +86,6 @@ UPlayerInputData::UPlayerInputData()
 			mInputToDodge = asset.Object;
 	}
 
-	// roll
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT(""));
-
-		if (asset.Succeeded())
-			mInputToRoll = asset.Object;
-	}
-
 	// sprint
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>

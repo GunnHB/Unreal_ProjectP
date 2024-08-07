@@ -25,4 +25,5 @@ public:
 	virtual void EnableCombat() = 0;
 	virtual void ResetAttack() = 0;
 	virtual void DrawSheath() = 0;
+	virtual FRotator GetDesiredRotation() = 0;
 };

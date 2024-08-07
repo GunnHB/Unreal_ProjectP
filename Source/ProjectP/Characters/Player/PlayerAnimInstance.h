@@ -21,19 +21,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bInputForMovement = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsOneHandWeapon = true;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsEquipped = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsDodge = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsRoll = false;
 
 	// anim flag
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool mPlayJumpAnim = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool bIsLandingAnimEnd = true;
 
 	// montage
 	TObjectPtr<UAnimMontage> mDrawWeaponMontage = nullptr;
 	TObjectPtr<UAnimMontage> mSheathWeaponMontage = nullptr;
 	TObjectPtr<UAnimMontage> mAttackMontage = nullptr;
-
-	// variables
-	bool mAttackState = false;
-	bool mAttackCombo = false;
 
 	TObjectPtr<class APlayerControls> mPlayer = nullptr;
 	TObjectPtr<UCharacterMovementComponent> mPlayerMovement = nullptr;
@@ -52,7 +49,11 @@ public:
 	bool GetIsLandingAnimEnd() const {return bIsLandingAnimEnd;}
 
 	// setter
-	void SetPlayJumpAnim(const bool value) {mPlayJumpAnim = value;}
+	void SetIsDodge(const bool value) {bIsDodge = value;}
+	void SetIsRoll(const bool value) {bIsRoll = value;}
+	
+	// void SetPlayJumpAnim(const bool value) {mPlayJumpAnim = value;}
+	// void SetPlayDodgeAnim(const bool value) {mPlayDodgeAnim = value;}
 	
 	void PlayDrawWeaponMontage();
 	void PlaySheathWeaponMontage();
