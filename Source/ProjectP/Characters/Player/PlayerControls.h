@@ -3,16 +3,17 @@
 #pragma once
 
 #include "InputActionValue.h"
-#include "../../Interface/Interactable.h"
-#include "../../Interface/Combatable.h"
+
 #include "../../System/GameInfo.h"
 #include "../../System/CombatInfo.h"
 
 #include "GameFramework/Character.h"
 #include "PlayerControls.generated.h"
 
+class AItemBase;
+
 UCLASS()
-class PROJECTP_API APlayerControls : public ACharacter, public IInteractable, public ICombatable
+class PROJECTP_API APlayerControls : public ACharacter, public ICombatable
 {
 	GENERATED_BODY()
 
@@ -70,13 +71,13 @@ public:
 	bool AddMoney(const FMoney* moneyData);
 
 	// interface
-	virtual void Interact() override;
 	virtual void ContinueAttack() override;
 	virtual void EnableCombat() override;
 	virtual void ResetAttack() override;
 	virtual void DrawSheath() override;
 	virtual void ResetDodge() override;
 	virtual void ResetCombat() override;
+	virtual void PickUpItem(AItemBase* item) override;
 
 protected:
 	void InitAssets();														// 에셋 초기화
@@ -106,13 +107,14 @@ private:
 	
 	void TraceForInteractable(float deltaTime);
 
-	void PickUpItem(const class AItemBase* itemBase);
 
 	bool CanPerformTogglingToCombat();
 	bool CanPerformTogglingToDodge();
 
 	void TryMovement();
 	void PerformMovement();
+	
+	void TryInteract(const AActor* actor);
 
 	void PerformDrawSheath();
 

@@ -4,12 +4,13 @@
 
 #include "../../System/GameInfo.h"
 #include "../../System/Manager/ItemManager.h"
+#include "../..//Interface/Interactable.h"
 
 #include "GameFramework/Actor.h"
 #include "ItemBase.generated.h"
 
 UCLASS()
-class PROJECTP_API AItemBase : public AActor
+class PROJECTP_API AItemBase : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 
@@ -40,6 +41,9 @@ public:
 
 	// setter
 	virtual void SetData(FItem* itemData, bool relocate);
+
+	// inteface
+	virtual void Interact(AActor* targetActor) override;
 
 private:
 	void SetItem(const bool relocate) const;

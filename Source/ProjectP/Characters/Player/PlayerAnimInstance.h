@@ -50,10 +50,6 @@ public:
 	// getter
 	bool GetIsInAir() const { return mIsInAir; }
 	bool GetIsLandingAnimEnd() const {return bIsLandingAnimEnd;}
-	// bool GetIsDodge() const {return bIsDodge;}
-
-	// setter
-	// void SetIsDodge(bool value) {bIsDodge = value;}
 
 	// play montage
 	void PlayDrawWeaponMontage();

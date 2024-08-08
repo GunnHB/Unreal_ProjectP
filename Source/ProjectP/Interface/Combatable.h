@@ -21,6 +21,7 @@ class PROJECTP_API ICombatable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	virtual void PickUpItem(class AItemBase* item) = 0;
 	virtual void ContinueAttack() = 0;
 	virtual void EnableCombat() = 0;
 	virtual void DrawSheath() = 0;

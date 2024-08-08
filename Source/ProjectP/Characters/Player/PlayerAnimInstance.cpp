@@ -30,16 +30,16 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mIsInAir = mPlayerMovement->IsFalling();
 	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
 
-	if(mPlayer->GetCombat()->GetMainWeapon() != nullptr)
-	{
-		bIsOneHandWeapon = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon())->GetSwordData()->type == ESwordType::OneHand;
-		bIsEquipped = mPlayer->GetCombat()->GetMainWeapon()->GetIsEquipped();
-	}
-	else
-	{
-		bIsOneHandWeapon = true;
-		bIsEquipped = false;
-	}
+	// if(mPlayer->GetCombat()->GetMainWeapon() != nullptr)
+	// {
+	// 	bIsOneHandWeapon = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon())->GetSwordData()->type == ESwordType::OneHand;
+	// 	bIsEquipped = mPlayer->GetCombat()->GetMainWeapon()->GetIsEquipped();
+	// }
+	// else
+	// {
+	// 	bIsOneHandWeapon = true;
+	// 	bIsEquipped = false;
+	// }
 	
 	// if (!mIsInAir)
 	// 	mPlayJumpAnim = false;

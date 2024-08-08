@@ -9,7 +9,6 @@
 
 #include "../../Data/Player/PlayerData.h"
 #include "../../Inventory/Widget/InventoryWidget.h"
-
 #include "../../Inventory/Item/Weapon/WeaponSword.h"
 
 // Sets default values
@@ -180,10 +179,7 @@ void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 void APlayerControls::JumpAction(const FInputActionValue& value)
 {
 	if (CanJump())
-	{
-		// mAnimInstance->SetPlayJumpAnim(true);
 		Jump();
-	}
 }
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
@@ -220,7 +216,10 @@ void APlayerControls::InteractAction(const FInputActionValue& value)
 	if(!bEnableToInteract)
 		return;
 
-	Interact();
+	IInteractable* interactable = Cast<IInteractable>(mHitResult.GetActor());
+
+	if(interactable != nullptr)
+		interactable->Interact(this);
 }
 
 void APlayerControls::DodgeAction(const FInputActionValue& value)
@@ -304,28 +303,6 @@ void APlayerControls::TraceForInteractable(float deltaTime)
 #endif
 }
 
-void APlayerControls::PickUpItem(const AItemBase* itemBase)
-{
-	if(itemBase->GetThisItemData()->item_class == AWeaponSword::StaticClass())
-	{
-		// 기존의 mMainWeapon은 파괴
-		if(IsValid(mCombat->GetMainWeapon()))
-			mCombat->GetMainWeapon()->Destroy();
-		
-		AWeaponSword* sword = GetWorld()->SpawnActor<AWeaponSword>();
-
-		if(!IsValid(sword))
-			return;
-		
-		sword->SetData(itemBase->GetThisItemData(), false);
-		sword->SetSkeletalMesh(GetMesh());
-		sword->OnUnequip();
-
-		mCombat->SetMainWeapon(sword);
-		mCombat->SetCombatEnable(false);
-	}
-}
-
 bool APlayerControls::CanPerformTogglingToCombat()
 {
 	if(!IsValid(mCombat))
@@ -357,6 +334,11 @@ void APlayerControls::PerformMovement()
 	AdjustActorRotation();
 	
 	AddMovementInput(GetActorForwardVector());
+}
+
+void APlayerControls::TryInteract(const AActor* actor)
+{
+	
 }
 
 void APlayerControls::PerformDrawSheath()
@@ -473,12 +455,6 @@ bool APlayerControls::AddMoney(const FMoney* moneyData)
 	return true;
 }
 
-void APlayerControls::Interact()
-{
-	if(mHitResult.GetActor()->IsA(AItemBase::StaticClass()))
-		PickUpItem(Cast<AItemBase>(mHitResult.GetActor()));
-}
-
 void APlayerControls::ContinueAttack()
 {
 	if(!IsValid(mCombat))
@@ -542,6 +518,32 @@ void APlayerControls::ResetCombat()
 {
 	ResetAttack();
 	ResetDodge();
+}
+
+void APlayerControls::PickUpItem(AItemBase* item)
+{
+	IEquippable* equippable = Cast<IEquippable>(item);
+
+	if(equippable != nullptr)
+	{
+		if(!IsValid(mCombat))
+			return;
+
+		if(IsValid(mCombat->GetMainWeapon()))
+			mCombat->GetMainWeapon()->Destroy();
+
+		AWeaponBase* spawnWeapon = GetWorld()->SpawnActor<AWeaponBase>(item->GetThisItemData()->item_class);
+		
+		if(IsValid(spawnWeapon))
+		{
+			spawnWeapon->SetData(item->GetThisItemData(), false);
+			spawnWeapon->SetSkeletalMesh(GetMesh());
+			spawnWeapon->OnUnequip();
+		
+			mCombat->SetMainWeapon(spawnWeapon);
+			mCombat->SetCombatEnable(false);
+		}
+	}
 }
 
 void APlayerControls::DrawArrow()
