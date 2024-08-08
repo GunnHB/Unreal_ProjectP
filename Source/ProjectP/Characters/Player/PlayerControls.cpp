@@ -190,6 +190,9 @@ void APlayerControls::AttackAction(const FInputActionValue& value)
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
+	if(bIsToggling)
+		return;
+		
 	bIsFocusing = true;
 }
 
