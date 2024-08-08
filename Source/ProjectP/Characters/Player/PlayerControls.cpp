@@ -39,7 +39,7 @@ void APlayerControls::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// DrawArrow();
+	DrawArrow();
 	TraceForInteractable(DeltaTime);
 }
 
@@ -123,11 +123,11 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 		return;
 
 	inputComponent->BindAction(inputData->mInputToMovement, ETriggerEvent::Triggered, this, &APlayerControls::MovementAction);
-	inputComponent->BindAction(inputData->mInputToMovement, ETriggerEvent::Completed, this, &APlayerControls::CancelMovementAction);
 	inputComponent->BindAction(inputData->mInputToCameraMovement, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovementAction);
 	inputComponent->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::JumpAction);
 	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
 	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Triggered, this, &APlayerControls::FocusAction);
+	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Completed, this, &APlayerControls::CancelFocusAction);
 	inputComponent->BindAction(inputData->mInputToDrawSheath, ETriggerEvent::Triggered, this, &APlayerControls::DrawSheathAction);
 	inputComponent->BindAction(inputData->mInputToInteract, ETriggerEvent::Triggered, this, &APlayerControls::InteractAction);
 	inputComponent->BindAction(inputData->mInputToDodge, ETriggerEvent::Triggered, this, &APlayerControls::DodgeAction);
@@ -154,11 +154,6 @@ void APlayerControls::MovementAction(const FInputActionValue& value)
 	mInputVector = value.Get<FVector>();
 
 	TryMovement();
-}
-
-void APlayerControls::CancelMovementAction(const FInputActionValue& value)
-{
-	mInputVector = FVector::ZeroVector;
 }
 
 void APlayerControls::CameraMovementAction(const FInputActionValue& value)
@@ -195,7 +190,12 @@ void APlayerControls::AttackAction(const FInputActionValue& value)
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
+	bIsFocusing = true;
+}
 
+void APlayerControls::CancelFocusAction(const FInputActionValue& value)
+{
+	bIsFocusing = false;
 }
 
 void APlayerControls::DrawSheathAction(const FInputActionValue& value)
@@ -270,7 +270,7 @@ void APlayerControls::AdjustCameraRotation()
 
 void APlayerControls::AdjustActorRotation()
 {
-	FVector direction = mInputVector.GetSafeNormal();
+	FVector direction = bIsFocusing ? FVector::ZeroVector : mInputVector.GetSafeNormal();
 
 	float targetAngle = FMath::Atan2(direction.X, direction.Y) * FMathf::RadToDeg + mSpringArm->GetRelativeRotation().Yaw;
 
@@ -332,13 +332,14 @@ void APlayerControls::TryMovement()
 void APlayerControls::PerformMovement()
 {
 	AdjustActorRotation();
-	
-	AddMovementInput(GetActorForwardVector());
-}
 
-void APlayerControls::TryInteract(const AActor* actor)
-{
-	
+	if(bIsFocusing)
+	{
+		AddMovementInput(GetActorForwardVector(), mInputVector.Y);
+		AddMovementInput(GetActorRightVector(), mInputVector.X);
+	}
+	else
+		AddMovementInput(GetActorForwardVector());
 }
 
 void APlayerControls::PerformDrawSheath()
@@ -396,41 +397,13 @@ void APlayerControls::PerformDodge()
 
 	bIsToggling = true;
 	
-	// ESwordType type = ESwordType::None;
-	//
-	// if(mCombat->GetMainWeapon() == nullptr)
-	// 	type = ESwordType::OneHand;
-	// else
-	// {
-	// 	if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
-	// 	{
-	// 		AWeaponSword* sword = Cast<AWeaponSword>(mCombat->GetMainWeapon());
-	// 		
-	// 		type = !sword->GetIsEquipped() ? ESwordType::OneHand : sword->GetSwordData()->type;
-	// 	}
-	// }
-
 	mCombat->SetIsDodge(true);
-	// mAnimInstance->PlayDodgeMontage(type, false);
+	mAnimInstance->TryPlayDodgeMontage(false);
 }
 
 void APlayerControls::PerformRoll()
 {
-	// ESwordType type = ESwordType::None;
-	//
-	// if(mCombat->GetMainWeapon() == nullptr)
-	// 	type = ESwordType::OneHand;
-	// else
-	// {
-	// 	if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
-	// 	{
-	// 		AWeaponSword* sword = Cast<AWeaponSword>(mCombat->GetMainWeapon());
-	// 		
-	// 		type = !sword->GetIsEquipped() ? ESwordType::OneHand : sword->GetSwordData()->type;
-	// 	}
-	// }
-
-	// mAnimInstance->PlayDodgeMontage(type, true);
+	mAnimInstance->TryPlayDodgeMontage(true);
 }
 
 void APlayerControls::TrySprint()
@@ -546,10 +519,38 @@ void APlayerControls::PickUpItem(AItemBase* item)
 	}
 }
 
+float APlayerControls::GetAcos()
+{
+	if(!bIsFocusing)
+		return 0.f;
+
+	FVector actorForwardVector = GetActorForwardVector();
+	
+	FVector rightVector = GetActorRightVector() * mInputVector.X;
+	FVector forwardVector = GetActorForwardVector() * mInputVector.Y;
+
+	FVector targetVector = forwardVector + rightVector;
+	
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("x->%f y->%f z->%f"), targetVector.X, targetVector.Y, targetVector.Z));
+	
+	if(targetVector.Normalize())
+	{
+		float dot = FVector::DotProduct(actorForwardVector, targetVector);
+		float angle = FMath::RadiansToDegrees(FMath::Acos(dot));
+		
+		return angle * (mInputVector.X > 0 ? 1 : -1);
+	}
+	else
+		return 0.f;
+}
+
 void APlayerControls::DrawArrow()
 {
 	FVector startLocation = GetActorLocation();
 	FVector endLocation = startLocation + GetActorForwardVector() * 100.f;
+
+	FVector camEndLocation = startLocation + mCamera->GetForwardVector().GetSafeNormal2D() * 150.f;
 	
 	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
+	DrawDebugDirectionalArrow(GetWorld(), startLocation, camEndLocation, 120.f, FColor::Blue, false, -1.f, 0.f, 3.f);
 }

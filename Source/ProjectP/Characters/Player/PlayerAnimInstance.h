@@ -26,13 +26,15 @@ protected:
 	// anim flag
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool bIsLandingAnimEnd = true;
 
-	// // montage
-	// UPROPERTY(EditAnywhere, BlueprintReadOnly) TMap<ESwordType, TObjectPtr<UAnimMontage>> mDodgeMontageMap;
-	// UPROPERTY(EditAnywhere, BlueprintReadOnly) TMap<ESwordType, TObjectPtr<UAnimMontage>> mRollMontageMap;
+	// anim montage
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Montages") TObjectPtr<UAnimMontage> mBaseDodgeMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Montages") TObjectPtr<UAnimMontage> mBaseRollMontage;
 	
 	TObjectPtr<UAnimMontage> mDrawWeaponMontage = nullptr;
 	TObjectPtr<UAnimMontage> mSheathWeaponMontage = nullptr;
 	TObjectPtr<UAnimMontage> mAttackMontage = nullptr;
+	TObjectPtr<UAnimMontage> mDodgeMontage = nullptr;
+	TObjectPtr<UAnimMontage> mRollMontage = nullptr;
 
 	// cache
 	TObjectPtr<class APlayerControls> mPlayer = nullptr;
@@ -56,9 +58,11 @@ public:
 	void PlaySheathWeaponMontage();
 
 	void PlayAttackMontage(int32 attackIndex, bool randomIndex);
-	void PlayDodgeMontage(bool isRoll);
+	void TryPlayDodgeMontage(bool isRoll);
 
 private:
+	void PerformPlayMontage(UAnimMontage* montage);
+	
 	// anim notify
 	UFUNCTION() void AnimNotify_LandEnd();
 };

@@ -34,6 +34,7 @@ protected:
 
 private:
 	FVector mInputVector;
+	FVector mLastInputVector;
 	FRotator mCamRotator;
 
 	// for trace channel
@@ -44,8 +45,7 @@ private:
 	bool bEnableToInteract;
 
 	bool bIsToggling = false;				// 행동 전환 시의 플래그
-	bool bIsDodging = false;				// dodge 플래그
-	bool bIsRolling = false;				// roll 플래그
+	bool bIsFocusing = false;				// focus 플래그
 
 public:
 	// Sets default values for this character's properties
@@ -64,7 +64,6 @@ public:
 	
 	// getter
 	FVector GetInputVector() const {return mInputVector;}
-	FVector GetCameraFowradVector() const {return mCamera->GetForwardVector();}
 	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
 	UCombatComponent* GetCombat() const {return mCombat;}
 	
@@ -79,17 +78,20 @@ public:
 	virtual void ResetCombat() override;
 	virtual void PickUpItem(AItemBase* item) override;
 
+	float GetAcos();
+
 protected:
 	void InitAssets();														// 에셋 초기화
 	void InitComponentsValue();												// 컴포넌트 값 초기화
 
 	// 액션
 	void MovementAction(const FInputActionValue& value);					// 이동
-	void CancelMovementAction(const FInputActionValue& value);				// 이동 취소
+	// void CancelMovementAction(const FInputActionValue& value);				// 이동 취소
 	void CameraMovementAction(const FInputActionValue& value);				// 카메라 이동
 	void JumpAction(const FInputActionValue& value);						// 점프
 	void AttackAction(const FInputActionValue& value);						// 공격
 	void FocusAction(const FInputActionValue& value);						// 포커싱
+	void CancelFocusAction(const FInputActionValue& value);					// 포커싱 취소
 	void DrawSheathAction(const FInputActionValue& value);					// 무기 장비
 	void InteractAction(const FInputActionValue& value);					// 상호작용
 	void DodgeAction(const FInputActionValue& value);						// 회피
@@ -106,16 +108,13 @@ private:
 	void AdjustActorRotation();												// 캐릭터 회전 조정
 	
 	void TraceForInteractable(float deltaTime);
-
-
+	
 	bool CanPerformTogglingToCombat();
 	bool CanPerformTogglingToDodge();
 
 	void TryMovement();
 	void PerformMovement();
 	
-	void TryInteract(const AActor* actor);
-
 	void PerformDrawSheath();
 
 	void TryAttack();
@@ -126,7 +125,7 @@ private:
 	void PerformRoll();
 	
 	void TrySprint();
-
+	
 	// 디버깅용
 	void DrawArrow();
 };

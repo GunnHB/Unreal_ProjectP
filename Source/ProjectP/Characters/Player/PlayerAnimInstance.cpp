@@ -24,28 +24,28 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	
 	if(!IsValid(mPlayerMovement))
 		return;
-	
+
+	mDegreee = mPlayer->GetAcos();
 	mSpeed = mPlayerMovement->Velocity.Size();
 	mAcceleration = mPlayerMovement->GetCurrentAcceleration().Length() > 0.f;
 	mIsInAir = mPlayerMovement->IsFalling();
 	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
 
-	// if(mPlayer->GetCombat()->GetMainWeapon() != nullptr)
-	// {
-	// 	bIsOneHandWeapon = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon())->GetSwordData()->type == ESwordType::OneHand;
-	// 	bIsEquipped = mPlayer->GetCombat()->GetMainWeapon()->GetIsEquipped();
-	// }
-	// else
-	// {
-	// 	bIsOneHandWeapon = true;
-	// 	bIsEquipped = false;
-	// }
-	
-	// if (!mIsInAir)
-	// 	mPlayJumpAnim = false;
-	// else
-	// 	bIsLandingAnimEnd = false;
+	if(!mPlayer->GetCombat()->IsMainWeaponNull())
+	{
+		AWeaponBase* weapon = mPlayer->GetCombat()->GetMainWeapon();
 
+		if(weapon->GetWeaponData()->type == EWeaponType::Sword)
+			bIsOneHandWeapon = Cast<AWeaponSword>(weapon)->GetSwordData()->type == ESwordType::OneHand;
+
+		bIsEquipped = mPlayer->GetCombat()->GetMainWeapon()->GetIsEquipped();
+	}
+	else
+	{
+		bIsOneHandWeapon = true;
+		bIsEquipped = false;
+	}
+	
 	if(mIsInAir)
 		bIsLandingAnimEnd = false;
 }
@@ -72,20 +72,17 @@ void UPlayerAnimInstance::NativeBeginPlay()
 
 void UPlayerAnimInstance::PlayDrawWeaponMontage()
 {
-	if(mPlayer->GetCombat()->GetMainWeapon() == nullptr)
+	if(mPlayer->GetCombat()->IsMainWeaponNull())
 		return;
 
-	if(mPlayer->GetCombat()->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
-	{
-		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon());
+	AWeaponBase* tempWeapon = mPlayer->GetCombat()->GetMainWeapon();
 
-		if(IsValid(sword))
-			mDrawWeaponMontage = sword->GetSwordData()->montage_draw;
-	}
-	
+	if(tempWeapon->GetWeaponData()->type == EWeaponType::Sword)
+		mDrawWeaponMontage = Cast<AWeaponSword>(tempWeapon)->GetSwordData()->montage_draw;
+
 	if(!IsValid(mDrawWeaponMontage))
 		return;
-	
+
 	if(!Montage_IsPlaying(mDrawWeaponMontage))
 	{
 		Montage_SetPosition(mDrawWeaponMontage, 0.f);
@@ -95,20 +92,17 @@ void UPlayerAnimInstance::PlayDrawWeaponMontage()
 
 void UPlayerAnimInstance::PlaySheathWeaponMontage()
 {
-	if(mPlayer->GetCombat()->GetMainWeapon() == nullptr)
+	if(mPlayer->GetCombat()->IsMainWeaponNull())
 		return;
 
-	if(mPlayer->GetCombat()->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
-	{
-		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon());
+	AWeaponBase* tempWeapon = mPlayer->GetCombat()->GetMainWeapon();
 
-		if(IsValid(sword))
-			mSheathWeaponMontage = sword->GetSwordData()->montage_sheath;
-	}
+	if(tempWeapon->GetWeaponData()->type == EWeaponType::Sword)
+		mSheathWeaponMontage = Cast<AWeaponSword>(tempWeapon)->GetSwordData()->montage_sheath;
 
 	if(!IsValid(mSheathWeaponMontage))
 		return;
-	
+
 	if(!Montage_IsPlaying(mSheathWeaponMontage))
 	{
 		Montage_SetPosition(mSheathWeaponMontage, 0.f);
@@ -140,24 +134,34 @@ void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
 	}
 }
 
-void UPlayerAnimInstance::PlayDodgeMontage(bool isRoll)
+void UPlayerAnimInstance::TryPlayDodgeMontage(bool isRoll)
 {
+	if(mPlayer->GetCombat()->IsMainWeaponNull())
+		PerformPlayMontage(isRoll ? mBaseRollMontage : mBaseDodgeMontage);
+	else
+	{
+		AWeaponBase* tempWeapon = mPlayer->GetCombat()->GetMainWeapon();
+
+		if(!tempWeapon->GetIsEquipped())
+			PerformPlayMontage(isRoll ? mBaseRollMontage : mBaseDodgeMontage);
+		else
+		{
+			if(tempWeapon->GetWeaponData()->type == EWeaponType::Sword)
+				PerformPlayMontage(isRoll ? Cast<AWeaponSword>(tempWeapon)->GetSwordData()->montage_roll : Cast<AWeaponSword>(tempWeapon)->GetSwordData()->montage_dodge);
+		}
+	}
+}
+
+void UPlayerAnimInstance::PerformPlayMontage(UAnimMontage* montage)
+{
+	if(!IsValid(montage))
+		return;
 	
-
-
-
-
-	
-	// UAnimMontage* tempMontage = isRoll ? mRollMontageMap[swordType] : mDodgeMontageMap[swordType];
-	//
-	// if(tempMontage == nullptr)
-	// 	return;
-	//
-	// if(!Montage_IsPlaying(tempMontage))
-	// {
-	// 	Montage_SetPosition(tempMontage, 0.f);
-	// 	Montage_Play(tempMontage);
-	// }
+	if(!Montage_IsPlaying(montage))
+	{
+		Montage_SetPosition(montage, 0.f);
+		Montage_Play(montage);
+	}
 }
 
 void UPlayerAnimInstance::AnimNotify_LandEnd()

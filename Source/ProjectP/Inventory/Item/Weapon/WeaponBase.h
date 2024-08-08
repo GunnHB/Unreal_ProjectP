@@ -28,6 +28,7 @@ private:
 
 public:
 	// getter
+	FWeapon* GetWeaponData() const {return mWeaponData;}
 	bool GetIsEquipped() const {return bIsEquipped;}
 
 	// setter

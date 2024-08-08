@@ -11,8 +11,8 @@ void UCombatComponent::IncreaseAttackCount()
 		return;
 
 	int32 arraySize = 0;
-
-	if(mMainWeapon->IsA(AWeaponSword::StaticClass()))
+	
+	if(Cast<AWeaponSword>(mMainWeapon))
 		arraySize = Cast<AWeaponSword>(mMainWeapon)->GetSwordData()->montage_attack_array.Num();
 
 	if(arraySize == 0)

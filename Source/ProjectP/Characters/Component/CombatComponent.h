@@ -46,4 +46,5 @@ public:
 	void SetIsDodge(bool value) {bIsDodge = value;}
 
 	void IncreaseAttackCount();
+	bool IsMainWeaponNull() const {return mMainWeapon == nullptr;}
 };
