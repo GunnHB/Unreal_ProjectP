@@ -18,6 +18,15 @@ public:
 	static float GetMaxWalkSpeed() {return MaxWalkSpeed;}
 };
 
+enum EMontageType : int8
+{
+	None = -1,
+	Draw,
+	Sheath,
+	Dodge,
+	Roll,
+};
+
 UENUM()
 enum class EMoneyType : int8
 {
@@ -75,14 +84,14 @@ struct FItem : public FTableRowBase
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 id;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) EItemType type;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) UClass* item_class;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) TSubclassOf<class AItemBase> item_class;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) UStaticMesh* mesh;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString item_name;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString item_desc;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float capsule_half_height;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float capsule_radius;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FTransform mesh_transform;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 ref_id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName ref_row_name;
 };
 
 USTRUCT()
@@ -97,7 +106,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 duration;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName sheath_socket_name;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName hand_socket_name;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 ref_id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName ref_row_name;
 };
 
 USTRUCT()
@@ -111,4 +120,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) UAnimMontage* montage_draw;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) UAnimMontage* montage_sheath;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) TArray<UAnimMontage*> montage_attack_array;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) UAnimMontage* montage_dodge;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) UAnimMontage* montage_roll;
 };

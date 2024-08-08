@@ -22,42 +22,8 @@ CItemManager::CItemManager()
 
 	if(swordTable.Succeeded())
 		mSwordTable = swordTable.Object;
-
-	Initialize();
 }
 
 CItemManager::~CItemManager()
 {
-}
-
-void CItemManager::Initialize()
-{
-	InitTable(mItemTable, mItemDataArray);
-	InitTable(mWeaponTable, mWeaponDataArray);
-	InitTable(mSwordTable, mSwordDataArray);
-
-	SetWeaponMap();
-	SetSwordMap();
-}
-
-void CItemManager::SetWeaponMap()
-{
-	for (int index = 0; index < mWeaponDataArray.Num(); ++index)
-		mWeaponMap.Add(mWeaponDataArray[index]->id, mWeaponDataArray[index]);
-}
-
-void CItemManager::SetSwordMap()
-{
-	for (int index = 0; index < mSwordDataArray.Num(); ++index)
-		mSwordMap.Add(mSwordDataArray[index]->id, mSwordDataArray[index]);
-}
-
-template <typename T>
-void CItemManager::InitTable(UDataTable* table, TArray<T*>& array)
-{
-	if(!IsValid(table))
-		return;
-	
-	table->GetAllRows<T>(TEXT(""), array);
-	mTableArray.Add(table);
 }

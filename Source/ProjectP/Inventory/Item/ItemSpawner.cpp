@@ -26,7 +26,7 @@ AItemSpawner::AItemSpawner()
 
 	static ConstructorHelpers::FObjectFinder<UDataTable>
 		tableAsset(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Item.DT_Item'"));
-
+	
 	if(tableAsset.Succeeded())
 		mTableHandle.DataTable = tableAsset.Object;
 }
@@ -53,8 +53,8 @@ void AItemSpawner::SpawnItem() const
 {
 	FActorSpawnParameters param;
 	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::Undefined;
-
-	FItem* itemData = CItemManager::GetInstance()->GetData<FItem>(mTableHandle.RowName);
+	
+	FItem* itemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(mTableHandle.RowName, "");
 
 	if(itemData == nullptr)
 		return;
@@ -64,7 +64,7 @@ void AItemSpawner::SpawnItem() const
 
 	AItemBase* spawnItem = GetWorld()->SpawnActor<AItemBase>(itemData->item_class, spawnLocation, spawnRotation, param);
 
-	if(itemData->item_class == AWeaponSword::StaticClass())
-		Cast<AWeaponSword>(spawnItem)->SetData(itemData, true);
+	if(IsValid(spawnItem))
+		spawnItem->SetData(itemData, true);
 }
 

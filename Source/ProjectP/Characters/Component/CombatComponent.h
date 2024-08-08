@@ -12,6 +12,10 @@ class PROJECTP_API UCombatComponent : public UActorComponent
 
 protected:
 	TObjectPtr<class AWeaponBase> mMainWeapon = nullptr;
+	TObjectPtr<class AWeaponBase> mSubWeapon = nullptr;
+
+	TSubclassOf<class AWeaponBase> mMainWeaponClass = nullptr;
+	TSubclassOf<class AWeaponBase> mSubWeaponClass = nullptr;
 
 	// attack
 	bool bIsCombatEnable = false;

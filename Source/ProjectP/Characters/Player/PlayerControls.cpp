@@ -414,48 +414,41 @@ void APlayerControls::PerformDodge()
 
 	bIsToggling = true;
 	
-	ESwordType type = ESwordType::None;
-
-	if(mCombat->GetMainWeapon() == nullptr)
-		type = ESwordType::OneHand;
-	else
-	{
-		if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
-		{
-			AWeaponSword* sword = Cast<AWeaponSword>(mCombat->GetMainWeapon());
-			
-			type = !sword->GetIsEquipped() ? ESwordType::OneHand : sword->GetSwordData()->type;
-		}
-	}
+	// ESwordType type = ESwordType::None;
+	//
+	// if(mCombat->GetMainWeapon() == nullptr)
+	// 	type = ESwordType::OneHand;
+	// else
+	// {
+	// 	if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+	// 	{
+	// 		AWeaponSword* sword = Cast<AWeaponSword>(mCombat->GetMainWeapon());
+	// 		
+	// 		type = !sword->GetIsEquipped() ? ESwordType::OneHand : sword->GetSwordData()->type;
+	// 	}
+	// }
 
 	mCombat->SetIsDodge(true);
-	mAnimInstance->PlayDodgeMontage(type, false);
+	// mAnimInstance->PlayDodgeMontage(type, false);
 }
 
 void APlayerControls::PerformRoll()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, TEXT("asdfasdf"));
+	// ESwordType type = ESwordType::None;
 	//
-	// if(!CanPerformTogglingToDodge())
-	// 	return;
-	//
-	// bIsToggling = true;
-	//
-	ESwordType type = ESwordType::None;
+	// if(mCombat->GetMainWeapon() == nullptr)
+	// 	type = ESwordType::OneHand;
+	// else
+	// {
+	// 	if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+	// 	{
+	// 		AWeaponSword* sword = Cast<AWeaponSword>(mCombat->GetMainWeapon());
+	// 		
+	// 		type = !sword->GetIsEquipped() ? ESwordType::OneHand : sword->GetSwordData()->type;
+	// 	}
+	// }
 
-	if(mCombat->GetMainWeapon() == nullptr)
-		type = ESwordType::OneHand;
-	else
-	{
-		if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
-		{
-			AWeaponSword* sword = Cast<AWeaponSword>(mCombat->GetMainWeapon());
-			
-			type = !sword->GetIsEquipped() ? ESwordType::OneHand : sword->GetSwordData()->type;
-		}
-	}
-
-	mAnimInstance->PlayDodgeMontage(type, true);
+	// mAnimInstance->PlayDodgeMontage(type, true);
 }
 
 void APlayerControls::TrySprint()

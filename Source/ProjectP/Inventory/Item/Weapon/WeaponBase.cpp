@@ -31,7 +31,7 @@ void AWeaponBase::SetData(FItem* itemData, bool relocate)
 	Super::SetData(itemData, relocate);
 
 	if(itemData != nullptr)
-		mWeaponData = CItemManager::GetInstance()->mWeaponMap[itemData->ref_id];
+		mWeaponData = CItemManager::GetInstance()->mWeaponTable->FindRow<FWeapon>(itemData->ref_row_name, "");
 }
 
 void AWeaponBase::AttachActor(FName& socketName)

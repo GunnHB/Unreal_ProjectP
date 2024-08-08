@@ -13,7 +13,7 @@ void AWeaponSword::SetData(FItem* itemData, bool relocate)
 	Super::SetData(itemData, relocate);
 	
 	if(mWeaponData != nullptr)
-		mSwordData = CItemManager::GetInstance()->mSwordMap[mWeaponData->ref_id];
+		mSwordData = CItemManager::GetInstance()->mSwordTable->FindRow<FSword>(mWeaponData->ref_row_name, "");
 }
 
 void AWeaponSword::ResetTransform()
