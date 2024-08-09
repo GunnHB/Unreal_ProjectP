@@ -328,6 +328,7 @@ bool APlayerControls::CanPerformTogglingToDodge()
 	if(!IsValid(mCombat))
 		return false;
 
+	// 닷지 실행 중이 아니거나 행동 전환 중이 아님
 	return !mCombat->GetIsDodge() && !bIsToggling;
 }
 
@@ -405,16 +406,14 @@ void APlayerControls::PerformDodge()
 {
 	if(!CanPerformTogglingToDodge())
 		return;
-
-	bIsToggling = true;
 	
+	bIsToggling = true;
 	mCombat->SetIsDodge(true);
-	// mAnimInstance->TryPlayDodgeMontage(false);
 }
 
 void APlayerControls::PerformRoll()
 {
-	// mAnimInstance->TryPlayDodgeMontage(true);
+
 }
 
 void APlayerControls::TrySprint()
@@ -425,6 +424,9 @@ void APlayerControls::TrySprint()
 
 float APlayerControls::GetDegree(const FVector& inputVector)
 {
+	if(!bIsFocusing)
+		return 0.f;
+	
 	FVector forwardVector = GetActorForwardVector() * inputVector.Y;
 	FVector rightVector = GetActorRightVector() * inputVector.X;
 	FVector targetVector = rightVector + forwardVector;
@@ -541,9 +543,6 @@ void APlayerControls::PickUpItem(AItemBase* item)
 
 float APlayerControls::GetInputDegree()
 {
-	if(!bIsFocusing)
-		return 0.f;
-
 	return GetDegree(mInputVector);
 }
 

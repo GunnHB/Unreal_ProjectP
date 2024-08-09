@@ -67,6 +67,10 @@ public:
 	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
 	UCombatComponent* GetCombat() const {return mCombat;}
 	
+	float GetInputDegree();
+	float GetLastDegree();
+	float GetAnimOffsetX();
+	
 	bool AddMoney(const FMoney* moneyData);
 
 	// interface
@@ -77,10 +81,6 @@ public:
 	virtual void ResetDodge() override;
 	virtual void ResetCombat() override;
 	virtual void PickUpItem(AItemBase* item) override;
-
-	float GetInputDegree();
-	float GetLastDegree();
-	float GetAnimOffsetX();
 
 protected:
 	void InitAssets();														// 에셋 초기화
