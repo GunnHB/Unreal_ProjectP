@@ -25,11 +25,13 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if(!IsValid(mPlayerMovement))
 		return;
 
-	mDegreee = mPlayer->GetAcos();
+	mDegreee = mPlayer->GetDegree();
+	mAimOffsetX = mPlayer->GetAnimOffsetX();
 	mSpeed = mPlayerMovement->Velocity.Size();
 	mAcceleration = mPlayerMovement->GetCurrentAcceleration().Length() > 0.f;
 	mIsInAir = mPlayerMovement->IsFalling();
 	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
+	bIsDodge = mPlayer->GetCombat()->GetIsDodge();
 
 	if(!mPlayer->GetCombat()->IsMainWeaponNull())
 	{

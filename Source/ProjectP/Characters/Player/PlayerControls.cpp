@@ -40,6 +40,7 @@ void APlayerControls::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	DrawArrow();
+	GetAnimOffsetX();
 	TraceForInteractable(DeltaTime);
 }
 
@@ -123,6 +124,7 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 		return;
 
 	inputComponent->BindAction(inputData->mInputToMovement, ETriggerEvent::Triggered, this, &APlayerControls::MovementAction);
+	inputComponent->BindAction(inputData->mInputToMovement, ETriggerEvent::Completed, this, &APlayerControls::CancelMovementAction);
 	inputComponent->BindAction(inputData->mInputToCameraMovement, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovementAction);
 	inputComponent->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::JumpAction);
 	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
@@ -154,6 +156,11 @@ void APlayerControls::MovementAction(const FInputActionValue& value)
 	mInputVector = value.Get<FVector>();
 
 	TryMovement();
+}
+
+void APlayerControls::CancelMovementAction(const FInputActionValue& value)
+{
+	mInputVector = FVector::ZeroVector;
 }
 
 void APlayerControls::CameraMovementAction(const FInputActionValue& value)
@@ -327,7 +334,10 @@ void APlayerControls::TryMovement()
 {
 	// 공중일 때 || 착지했을 때 회전 막기
 	if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
+	{
+		mLastInputVector = mInputVector;
 		return;
+	}
 
 	PerformMovement();
 }
@@ -401,12 +411,12 @@ void APlayerControls::PerformDodge()
 	bIsToggling = true;
 	
 	mCombat->SetIsDodge(true);
-	mAnimInstance->TryPlayDodgeMontage(false);
+	// mAnimInstance->TryPlayDodgeMontage(false);
 }
 
 void APlayerControls::PerformRoll()
 {
-	mAnimInstance->TryPlayDodgeMontage(true);
+	// mAnimInstance->TryPlayDodgeMontage(true);
 }
 
 void APlayerControls::TrySprint()
@@ -522,29 +532,42 @@ void APlayerControls::PickUpItem(AItemBase* item)
 	}
 }
 
-float APlayerControls::GetAcos()
+float APlayerControls::GetDegree()
+{
+	if(!bIsFocusing)
+		return 0.f;
+	
+	FVector forwardVector = GetActorForwardVector() * mInputVector.Y;
+	FVector rightVector = GetActorRightVector() * mInputVector.X;
+	FVector targetVector = rightVector + forwardVector;
+	
+	return GetForwardToTargetAngle(targetVector);
+}
+
+float APlayerControls::GetAnimOffsetX()
 {
 	if(!bIsFocusing)
 		return 0.f;
 
-	FVector actorForwardVector = GetActorForwardVector();
-	
-	FVector rightVector = GetActorRightVector() * mInputVector.X;
-	FVector forwardVector = GetActorForwardVector() * mInputVector.Y;
+	FVector camForward = FVector(mCamera->GetForwardVector().X, mCamera->GetForwardVector().Y, 0);
+	return GetForwardToTargetAngle(camForward);
+}
 
-	FVector targetVector = forwardVector + rightVector;
+float APlayerControls::GetForwardToTargetAngle(FVector& target)
+{
+	float angle = 0.f;
+	FVector forward = GetActorForwardVector();
 	
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Cyan, FString::Printf(TEXT("x->%f y->%f z->%f"), targetVector.X, targetVector.Y, targetVector.Z));
-	
-	if(targetVector.Normalize())
+	if(target.Normalize() && forward.Normalize())
 	{
-		float dot = FVector::DotProduct(actorForwardVector, targetVector);
-		float angle = FMath::RadiansToDegrees(FMath::Acos(dot));
-		
-		return angle * (mInputVector.X > 0 ? 1 : -1);
+		float dot = FVector::DotProduct(forward, target);
+		angle = FMath::RadiansToDegrees(FMath::Acos(dot));
+
+		// z축 기준 좌측이면 음수 우측이면 양수
+		angle *= (FVector::CrossProduct(forward, target).Z > 0 ? 1 : -1);
 	}
-	else
-		return 0.f;
+
+	return angle;
 }
 
 void APlayerControls::DrawArrow()

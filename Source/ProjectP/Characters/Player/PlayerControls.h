@@ -78,7 +78,8 @@ public:
 	virtual void ResetCombat() override;
 	virtual void PickUpItem(AItemBase* item) override;
 
-	float GetAcos();
+	float GetDegree();
+	float GetAnimOffsetX();
 
 protected:
 	void InitAssets();														// 에셋 초기화
@@ -86,7 +87,7 @@ protected:
 
 	// 액션
 	void MovementAction(const FInputActionValue& value);					// 이동
-	// void CancelMovementAction(const FInputActionValue& value);				// 이동 취소
+	void CancelMovementAction(const FInputActionValue& value);				// 이동 취소
 	void CameraMovementAction(const FInputActionValue& value);				// 카메라 이동
 	void JumpAction(const FInputActionValue& value);						// 점프
 	void AttackAction(const FInputActionValue& value);						// 공격
@@ -125,6 +126,8 @@ private:
 	void PerformRoll();
 	
 	void TrySprint();
+
+	float GetForwardToTargetAngle(FVector& target);
 	
 	// 디버깅용
 	void DrawArrow();

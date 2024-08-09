@@ -15,6 +15,7 @@ class PROJECTP_API UPlayerAnimInstance : public UAnimInstance
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mDegreee = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mAimOffsetX = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mSpeed = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mAcceleration = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mIsInAir = false;
@@ -52,6 +53,9 @@ public:
 	// getter
 	bool GetIsInAir() const { return mIsInAir; }
 	bool GetIsLandingAnimEnd() const {return bIsLandingAnimEnd;}
+
+	// setter
+	void SetIsDodge(bool value) {bIsDodge = value;}
 
 	// play montage
 	void PlayDrawWeaponMontage();
