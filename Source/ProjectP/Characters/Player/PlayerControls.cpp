@@ -154,6 +154,7 @@ void APlayerControls::MappingContext() const
 void APlayerControls::MovementAction(const FInputActionValue& value)
 {
 	mInputVector = value.Get<FVector>();
+	mLastInputVector = mInputVector;
 
 	TryMovement();
 }
@@ -334,10 +335,7 @@ void APlayerControls::TryMovement()
 {
 	// 공중일 때 || 착지했을 때 회전 막기
 	if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
-	{
-		mLastInputVector = mInputVector;
 		return;
-	}
 
 	PerformMovement();
 }
@@ -423,6 +421,15 @@ void APlayerControls::TrySprint()
 {
 	if(mInputVector == FVector::ZeroVector)
 		return;
+}
+
+float APlayerControls::GetDegree(const FVector& inputVector)
+{
+	FVector forwardVector = GetActorForwardVector() * inputVector.Y;
+	FVector rightVector = GetActorRightVector() * inputVector.X;
+	FVector targetVector = rightVector + forwardVector;
+	
+	return GetForwardToTargetAngle(targetVector);
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
@@ -532,16 +539,17 @@ void APlayerControls::PickUpItem(AItemBase* item)
 	}
 }
 
-float APlayerControls::GetDegree()
+float APlayerControls::GetInputDegree()
 {
 	if(!bIsFocusing)
 		return 0.f;
-	
-	FVector forwardVector = GetActorForwardVector() * mInputVector.Y;
-	FVector rightVector = GetActorRightVector() * mInputVector.X;
-	FVector targetVector = rightVector + forwardVector;
-	
-	return GetForwardToTargetAngle(targetVector);
+
+	return GetDegree(mInputVector);
+}
+
+float APlayerControls::GetLastDegree()
+{
+	return GetDegree(mLastInputVector);
 }
 
 float APlayerControls::GetAnimOffsetX()

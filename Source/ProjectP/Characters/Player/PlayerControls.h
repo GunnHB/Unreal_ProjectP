@@ -78,7 +78,8 @@ public:
 	virtual void ResetCombat() override;
 	virtual void PickUpItem(AItemBase* item) override;
 
-	float GetDegree();
+	float GetInputDegree();
+	float GetLastDegree();
 	float GetAnimOffsetX();
 
 protected:
@@ -127,6 +128,7 @@ private:
 	
 	void TrySprint();
 
+	float GetDegree(const FVector& inputVector);
 	float GetForwardToTargetAngle(FVector& target);
 	
 	// 디버깅용

@@ -15,6 +15,7 @@ class PROJECTP_API UPlayerAnimInstance : public UAnimInstance
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mDegreee = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mLastDegree = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mAimOffsetX = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mSpeed = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mAcceleration = false;
