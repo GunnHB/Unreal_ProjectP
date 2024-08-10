@@ -3,7 +3,7 @@
 
 #include "CombatComponent.h"
 
-#include "../../Inventory/Item/Weapon/WeaponSword.h"
+#include "../Inventory/Item/Weapon/WeaponSword.h"
 
 void UCombatComponent::IncreaseAttackCount()
 {

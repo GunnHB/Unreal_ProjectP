@@ -24,10 +24,6 @@ public:
 	// Sets default values for this actor's properties
 	AItemBase();
 
-	// getter
-	UCapsuleComponent* GetCapsule() const {return mCapsule;}
-	UStaticMeshComponent* GetStaticMesh() const {return mStaticMesh;}
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
