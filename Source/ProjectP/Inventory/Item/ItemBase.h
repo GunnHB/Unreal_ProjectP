@@ -9,6 +9,8 @@
 #include "GameFramework/Actor.h"
 #include "ItemBase.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FAddIgnoreActorDelegate)
+
 UCLASS()
 class PROJECTP_API AItemBase : public AActor, public IInteractable
 {
@@ -28,6 +30,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	FAddIgnoreActorDelegate mAddActorDelegate;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

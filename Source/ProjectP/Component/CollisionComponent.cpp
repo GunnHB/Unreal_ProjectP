@@ -71,3 +71,8 @@ void UCollisionComponent::ClearHitActors()
 	mHitActorArray.Empty();
 }
 
+void UCollisionComponent::AddIgnoreActor(const AActor* actor)
+{
+	mQueryParam.AddIgnoredActor(actor);
+}
+

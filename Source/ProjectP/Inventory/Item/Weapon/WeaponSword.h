@@ -7,9 +7,7 @@
 #include "WeaponBase.h"
 #include "WeaponSword.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class PROJECTP_API AWeaponSword : public AWeaponBase, public ICollisionEnable
 {
@@ -32,4 +30,10 @@ public:
 	virtual FQuat GetQuat() override;
 	
 	void ResetTransform();
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	UFUNCTION() void AddIgnoreActor();
 };

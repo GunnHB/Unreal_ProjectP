@@ -19,6 +19,7 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> mSkeletalMesh = nullptr;
 	
 	FWeapon* mWeaponData = nullptr;
+	TObjectPtr<AActor> mOwner = nullptr;
 
 public:
 	AWeaponBase();
@@ -34,11 +35,14 @@ public:
 	// setter
 	void SetSkeletalMesh(USkeletalMeshComponent* value) {mSkeletalMesh = value;}
 	
+	virtual void SetData(FItem* itemData, bool relocate) override;
+
+	// interface
+	virtual void SetOwner(AActor* actor) override;
 	virtual void OnEquip() override;
 	virtual void OnUnequip() override;
 
-	virtual void SetData(FItem* itemData, bool relocate) override;
-	
 protected:
+	// interface
 	virtual void AttachActor(FName& socketName) override;
 };

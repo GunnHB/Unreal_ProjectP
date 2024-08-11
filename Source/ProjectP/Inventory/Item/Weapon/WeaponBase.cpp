@@ -8,6 +8,25 @@ AWeaponBase::AWeaponBase()
 	
 }
 
+void AWeaponBase::SetData(FItem* itemData, bool relocate)
+{
+	Super::SetData(itemData, relocate);
+
+	if(itemData != nullptr)
+		mWeaponData = CItemManager::GetInstance()->mWeaponTable->FindRow<FWeapon>(itemData->ref_row_name, "");
+}
+
+void AWeaponBase::SetOwner(AActor* actor)
+{
+	if(!IsValid(actor))
+		return;
+
+	mOwner = actor;
+
+	if(mAddActorDelegate.IsBound())
+		mAddActorDelegate.Broadcast();
+}
+
 void AWeaponBase::OnEquip()
 {
 	if(mWeaponData == nullptr)
@@ -24,14 +43,6 @@ void AWeaponBase::OnUnequip()
 	
 	bIsEquipped = false;
 	AttachActor(mWeaponData->sheath_socket_name);
-}
-
-void AWeaponBase::SetData(FItem* itemData, bool relocate)
-{
-	Super::SetData(itemData, relocate);
-
-	if(itemData != nullptr)
-		mWeaponData = CItemManager::GetInstance()->mWeaponTable->FindRow<FWeapon>(itemData->ref_row_name, "");
 }
 
 void AWeaponBase::AttachActor(FName& socketName)

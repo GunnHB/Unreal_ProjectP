@@ -531,6 +531,7 @@ void APlayerControls::PickUpItem(AItemBase* item)
 		
 		if(IsValid(spawnWeapon))
 		{
+			spawnWeapon->SetOwner(this);
 			spawnWeapon->SetData(item->GetThisItemData(), false);
 			spawnWeapon->SetSkeletalMesh(GetMesh());
 			spawnWeapon->OnUnequip();

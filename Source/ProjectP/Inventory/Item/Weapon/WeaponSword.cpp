@@ -12,6 +12,13 @@ AWeaponSword::AWeaponSword()
 	mCollision = CreateDefaultSubobject<UCollisionComponent>(TEXT("COLLISION"));
 }
 
+void AWeaponSword::BeginPlay()
+{
+	Super::BeginPlay();
+
+	mAddActorDelegate.AddUObject(this, &AWeaponSword::AddIgnoreActor);
+}
+
 void AWeaponSword::SetData(FItem* itemData, bool relocate)
 {
 	Super::SetData(itemData, relocate);
@@ -44,4 +51,9 @@ void AWeaponSword::ResetTransform()
 
 	mCapsule->SetRelativeLocation(FVector::ZeroVector);
 	mCapsule->SetRelativeRotation(FRotator::ZeroRotator);
+}
+
+void AWeaponSword::AddIgnoreActor()
+{
+	mCollision->AddIgnoreActor(mOwner);
 }

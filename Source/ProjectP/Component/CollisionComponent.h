@@ -6,7 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "CollisionComponent.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTP_API UCollisionComponent : public UActorComponent
 {
@@ -42,4 +41,6 @@ public:
 	UFUNCTION() void CollisionDisable();
 	UFUNCTION() void CollisionTrace();
 	UFUNCTION() void ClearHitActors();
+
+	void AddIgnoreActor(const AActor* actor);
 };
