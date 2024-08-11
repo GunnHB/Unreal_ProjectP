@@ -5,32 +5,27 @@
 
 #include "../Interface/CollisionEnable.h"
 
-// Sets default values for this component's properties
 UCollisionComponent::UCollisionComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	
-	ICollisionEnable* collisionEnable = Cast<ICollisionEnable>(GetOwner());
+	ICollisionEnable* collision = Cast<ICollisionEnable>(GetOwner());
 
-	if(collisionEnable)
-		mOwnerMeshComponent = collisionEnable->GetMesh();
+	if(collision)
+		mOwnerMeshComponent = collision->GetMesh();
 }
 
-
-// Called when the game starts
 void UCollisionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-// Called every frame
 void UCollisionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	CollisionTrace();
+	if(bIsCollisionEnable)
+		CollisionTrace();
 }
 
 void UCollisionComponent::CollisionEnable()
@@ -60,10 +55,22 @@ void UCollisionComponent::CollisionTrace()
 	ICollisionEnable* collision = Cast<ICollisionEnable>(GetOwner());
 
 	if(collision != nullptr)
-		mQuat = collision->GetQuat();
+		mDebugQuat = collision->GetQuat();
 	
-	DrawDebugCapsule(GetWorld(), (mStartLocation + mEndLocation) * .5f, mHalfHeight, 7.f, mQuat, drawColor, false, .02f);
+	DrawDebugCapsule(GetWorld(), (mStartLocation + mEndLocation) * .5f, mHalfHeight, 7.f, mDebugQuat, drawColor, false, .02f);
 #endif
+
+	for(FHitResult hit : mHitResultArray)
+	{
+		mLastHit = hit;
+		
+		if(!mHitActorArray.Contains(mLastHit.GetActor()))
+		{
+			mHitActor = mLastHit.GetActor();
+
+			mHitActorArray.Add(mHitActor);
+		}
+	}
 }
 
 void UCollisionComponent::ClearHitActors()

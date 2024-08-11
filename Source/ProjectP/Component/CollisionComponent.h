@@ -20,10 +20,12 @@ protected:
 	FVector mStartLocation;
 	FVector mEndLocation;
 	TArray<FHitResult> mHitResultArray;
+	FHitResult mLastHit;
+	TObjectPtr<AActor> mHitActor = nullptr;
 	FCollisionQueryParams mQueryParam;
 	bool bIsAnyCollide;
 	float mHalfHeight;
-	FQuat mQuat = FQuat::Identity;
+	FQuat mDebugQuat = FQuat::Identity;
 
 public:	
 	// Sets default values for this component's properties
@@ -43,4 +45,9 @@ public:
 	UFUNCTION() void ClearHitActors();
 
 	void AddIgnoreActor(const AActor* actor);
+
+	// getter
+	TArray<AActor*> GetHitActorArray() const {return mHitActorArray;}
+	bool GetIsCollisionEnable() const {return bIsCollisionEnable;}
+	FHitResult GetLastHit() const {return mLastHit;}
 };
