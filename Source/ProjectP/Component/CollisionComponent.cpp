@@ -23,9 +23,6 @@ void UCollisionComponent::BeginPlay()
 void UCollisionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if(bIsCollisionEnable)
-		CollisionTrace();
 }
 
 void UCollisionComponent::CollisionEnable()
@@ -42,6 +39,9 @@ void UCollisionComponent::CollisionDisable()
 
 void UCollisionComponent::CollisionTrace()
 {
+	if(!IsValid(GetWorld()))
+		return;
+	
 	bIsAnyCollide = GetWorld()->SweepMultiByChannel(mHitResultArray, mStartLocation, mEndLocation, FQuat::Identity, ECC_GameTraceChannel4, FCollisionShape::MakeSphere(20.f), mQueryParam);
 
 	mStartLocation = mOwnerMeshComponent->GetSocketLocation(GameValue::GetCollisionStartSocketName());
@@ -57,24 +57,23 @@ void UCollisionComponent::CollisionTrace()
 	if(collision != nullptr)
 		mDebugQuat = collision->GetQuat();
 	
-	DrawDebugCapsule(GetWorld(), (mStartLocation + mEndLocation) * .5f, mHalfHeight, 7.f, mDebugQuat, drawColor, false, .02f);
+	DrawDebugCapsule(GetWorld(), (mStartLocation + mEndLocation) * .5f, mHalfHeight, 7.f, mDebugQuat, drawColor, false, -1.f);
 #endif
 
 	for(FHitResult hit : mHitResultArray)
 	{
-		mLastHit = hit;
-		
-		if(!mHitActorArray.Contains(mLastHit.GetActor()))
+		if(!mHitActorArray.Contains(hit.GetActor()))
 		{
-			mHitActor = mLastHit.GetActor();
-
-			mHitActorArray.Add(mHitActor);
+			mHitActorArray.Add(hit.GetActor());
 		}
 	}
 }
 
 void UCollisionComponent::ClearHitActors()
 {
+	if(!IsValid(mOwnerMeshComponent))
+		return;
+	
 	mHitActorArray.Empty();
 }
 

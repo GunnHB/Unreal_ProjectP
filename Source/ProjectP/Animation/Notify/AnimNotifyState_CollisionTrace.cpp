@@ -5,6 +5,7 @@
 
 #include "../..//Component/CombatComponent.h"
 #include "ProjectP/Component/CollisionComponent.h"
+#include "ProjectP/Inventory/Item/Weapon/WeaponBase.h"
 
 void UAnimNotifyState_CollisionTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -13,42 +14,38 @@ void UAnimNotifyState_CollisionTrace::NotifyBegin(USkeletalMeshComponent* MeshCo
 	if(!IsValid(MeshComp))
 		return;
 
-	if(mCollision == nullptr)
+	if(!IsValid(mCollision))
 		SetCollision(MeshComp->GetOwner());
 
-	mCollision->CollisionEnable();
+	if(IsValid(mCollision))
+		mCollision->CollisionEnable();
 }
 
 void UAnimNotifyState_CollisionTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 
-	if(!IsValid(MeshComp))
-		return;
-
-	if(mCollision == nullptr)
-		SetCollision(MeshComp->GetOwner());
+	if(IsValid(mCollision))
+		mCollision->CollisionTrace();
 }
 
 void UAnimNotifyState_CollisionTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
-	if(!IsValid(MeshComp))
-		return;
-
-	if(mCollision == nullptr)
-		SetCollision(MeshComp->GetOwner());
-
-	mCollision->CollisionDisable();
+	if(IsValid(mCollision))
+		mCollision->CollisionDisable();
 }
 
 void UAnimNotifyState_CollisionTrace::SetCollision(AActor* actor)
 {
 	UCombatComponent* combat = actor->GetComponentByClass<UCombatComponent>();
 
-	if(!IsValid(combat) || combat->GetMainWeapon() == nullptr)
+	if(!IsValid(combat) || combat->IsMainWeaponNull())
 		return;
 
-	mCollision = combat->GetOwner()->GetComponentByClass<UCollisionComponent>();
+	UCollisionComponent* component = combat->GetMainWeapon()->GetComponentByClass<UCollisionComponent>();
+	
+	if(IsValid(component))
+		mCollision = component;
 }

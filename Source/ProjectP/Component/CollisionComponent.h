@@ -13,14 +13,13 @@ class PROJECTP_API UCollisionComponent : public UActorComponent
 
 protected:
 	bool bIsCollisionEnable = false;
-	TArray<AActor*> mHitActorArray;
+	UPROPERTY(VisibleAnywhere) TArray<AActor*> mHitActorArray;
 	TObjectPtr<UStaticMeshComponent> mOwnerMeshComponent;
 
 	// for trace
 	FVector mStartLocation;
 	FVector mEndLocation;
 	TArray<FHitResult> mHitResultArray;
-	FHitResult mLastHit;
 	TObjectPtr<AActor> mHitActor = nullptr;
 	FCollisionQueryParams mQueryParam;
 	bool bIsAnyCollide;
@@ -49,5 +48,4 @@ public:
 	// getter
 	TArray<AActor*> GetHitActorArray() const {return mHitActorArray;}
 	bool GetIsCollisionEnable() const {return bIsCollisionEnable;}
-	FHitResult GetLastHit() const {return mLastHit;}
 };

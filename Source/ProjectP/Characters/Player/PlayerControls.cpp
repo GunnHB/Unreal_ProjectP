@@ -11,10 +11,8 @@
 #include "../../Inventory/Widget/InventoryWidget.h"
 #include "../../Inventory/Item/Weapon/WeaponSword.h"
 
-// Sets default values
 APlayerControls::APlayerControls()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	mSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRING_ARM"));
@@ -25,7 +23,6 @@ APlayerControls::APlayerControls()
 	InitComponentsValue();
 }
 
-// Called when the game starts or when spawned
 void APlayerControls::BeginPlay()
 {
 	Super::BeginPlay();
@@ -34,7 +31,6 @@ void APlayerControls::BeginPlay()
 	MappingContext();
 }
 
-// Called every frame
 void APlayerControls::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -44,12 +40,18 @@ void APlayerControls::Tick(float DeltaTime)
 	TraceForInteractable(DeltaTime);
 }
 
-// Called to bind functionality to input
 void APlayerControls::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	BindInputActions(PlayerInputComponent);
+}
+
+float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	return damage;
 }
 
 void APlayerControls::InitAssets()
@@ -214,11 +216,11 @@ void APlayerControls::DrawSheathAction(const FInputActionValue& value)
 	if(!CanPerformTogglingToCombat())
 		return;
 
+	if(!IsValid(mCombat) || mCombat->IsMainWeaponNull())
+		return;
+	
 	bIsToggling = true;
 	
-	if(!IsValid(mCombat) || !IsValid(mCombat->GetMainWeapon()))
-		return;
-
 	PerformDrawSheath();
 }
 
@@ -334,6 +336,9 @@ bool APlayerControls::CanPerformTogglingToDodge()
 
 void APlayerControls::TryMovement()
 {
+	if(mCombat->GetIsAttacking())
+		return;
+	
 	// 공중일 때 || 착지했을 때 회전 막기
 	if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
 		return;
@@ -364,7 +369,7 @@ void APlayerControls::PerformDrawSheath()
 
 void APlayerControls::TryAttack()
 {
-	if(IsValid(mCombat) && IsValid(mCombat->GetMainWeapon()))
+	if(IsValid(mCombat) && !mCombat->IsMainWeaponNull())
 	{
 		if(!CanPerformTogglingToCombat())
 			return;
@@ -381,7 +386,7 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
 	if(!mCombat->GetCombatEnable())
 	{
 		PerformDrawSheath();
-		return;	
+		return;
 	}
 	
 	mAnimInstance->PlayAttackMontage(montageIndex, randomIndex);

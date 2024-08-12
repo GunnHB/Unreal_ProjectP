@@ -137,24 +137,6 @@ void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
 	}
 }
 
-void UPlayerAnimInstance::TryPlayDodgeMontage(bool isRoll)
-{
-	if(mPlayer->GetCombat()->IsMainWeaponNull())
-		PerformPlayMontage(isRoll ? mBaseRollMontage : mBaseDodgeMontage);
-	else
-	{
-		AWeaponBase* tempWeapon = mPlayer->GetCombat()->GetMainWeapon();
-
-		if(!tempWeapon->GetIsEquipped())
-			PerformPlayMontage(isRoll ? mBaseRollMontage : mBaseDodgeMontage);
-		else
-		{
-			if(tempWeapon->GetWeaponData()->type == EWeaponType::Sword)
-				PerformPlayMontage(isRoll ? Cast<AWeaponSword>(tempWeapon)->GetSwordData()->montage_roll : Cast<AWeaponSword>(tempWeapon)->GetSwordData()->montage_dodge);
-		}
-	}
-}
-
 void UPlayerAnimInstance::PerformPlayMontage(UAnimMontage* montage)
 {
 	if(!IsValid(montage))
