@@ -7,9 +7,9 @@
 #include "EnhancedInputComponent.h"
 #include "PlayerAnimInstance.h"
 
-#include "../../Data/Player/PlayerData.h"
 #include "../../Inventory/Widget/InventoryWidget.h"
 #include "../../Inventory/Item/Weapon/WeaponSword.h"
+#include "ProjectP/Data/PlayerStat.h"
 
 APlayerControls::APlayerControls()
 {
@@ -35,9 +35,12 @@ void APlayerControls::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(mPlayerStat->IsCharacterDead())
+		return;
+	
 	DrawArrow();
 	GetAnimOffsetX();
-	TraceForInteractable(DeltaTime);
+	TraceForInteractable();
 }
 
 void APlayerControls::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -51,8 +54,21 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	float health = mPlayerStat->GetCharacterHealth() - DamageAmount;
+	mPlayerStat->SetCharacterHealth(health);
+
+	UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
+	
 	if(IsValid(mCombat))
+	{
+		if(mPlayerStat->GetCharacterHealth() <= 0)
+		{
+			EnableRagdoll();
+			return 0.f;
+		}
+		
 		mCombat->SetTakeDamage(true);
+	}
 	
 	return damage;
 }
@@ -80,8 +96,8 @@ void APlayerControls::InitAssets()
 	if(invenAsset.Succeeded())
 		mInventoryWidgetClass = invenAsset.Class;
 
-	// playerdata
-	mPlayerData = NewObject<UPlayerData>();
+	// playerStat
+	mPlayerStat = NewObject<UPlayerStat>();
 }
 
 void APlayerControls::InitComponentsValue()
@@ -305,7 +321,7 @@ void APlayerControls::AdjustActorRotation()
 	SetActorRotation(rotation);
 }
 
-void APlayerControls::TraceForInteractable(float deltaTime)
+void APlayerControls::TraceForInteractable()
 {
 	mTraceStartPoint = GetActorLocation() - FVector(0.f, 0.f, GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
 	mTraceEndPoint = mTraceStartPoint + GetActorForwardVector() * 120.f;
@@ -335,6 +351,14 @@ bool APlayerControls::CanPerformTogglingToDodge()
 
 	// 닷지 실행 중이 아니거나 행동 전환 중이 아님
 	return !mCombat->GetIsDodge() && !bIsToggling;
+}
+
+bool APlayerControls::CanPerformTogglingToTakeDamage()
+{
+	if (!IsValid(mCombat))
+		return false;
+
+	return !mCombat->GetTakeDamage() && !bIsToggling;
 }
 
 void APlayerControls::TryMovement()
@@ -444,16 +468,16 @@ float APlayerControls::GetDegree(const FVector& vector, bool needFocusInfo)
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
 {
-	if (!IsValid(mPlayerData))
+	if (!IsValid(mPlayerStat))
 		return false;
 
-	if(mPlayerData->GetPlayerMoney() == GameValue::GetMaxMoney())
+	if(mPlayerStat->GetPlayerMoney() == GameValue::GetMaxMoney())
 		return false;
 
-	mPlayerData->SetPlayerMoney(mPlayerData->GetPlayerMoney() + moneyData->amount);
+	mPlayerStat->SetPlayerMoney(mPlayerStat->GetPlayerMoney() + moneyData->amount);
 
-	if(mPlayerData->GetPlayerMoney() >= GameValue::GetMaxMoney())
-		mPlayerData->SetPlayerMoney(GameValue::GetMaxMoney());
+	if(mPlayerStat->GetPlayerMoney() >= GameValue::GetMaxMoney())
+		mPlayerStat->SetPlayerMoney(GameValue::GetMaxMoney());
 
 	return true;
 }
@@ -563,10 +587,18 @@ void APlayerControls::PickUpItem(AItemBase* item)
 
 void APlayerControls::TakeDamage(ICombatable* hitterCombatable)
 {
-	FDamageEvent damageEvent;
-
+	if(mPlayerStat->IsCharacterDead())
+		return;
+	
 	if(hitterCombatable == nullptr)
 		return;
+	
+	if(!CanPerformTogglingToTakeDamage())
+		return;
+
+	bIsToggling = true;
+	
+	FDamageEvent damageEvent;
 
 	UCombatComponent* hitterCombatComp = hitterCombatable->GetCombatComponent();
 
@@ -608,6 +640,16 @@ float APlayerControls::GetForwardToTargetAngle(FVector& target)
 	}
 
 	return angle;
+}
+
+void APlayerControls::EnableRagdoll() const
+{
+	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+	GetMesh()->SetSimulatePhysics(true);
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	mSpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameValue::GetPelvisSocketName());
 }
 
 void APlayerControls::DrawArrow()

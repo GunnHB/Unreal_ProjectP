@@ -28,6 +28,7 @@ protected:
 
 	// take damage
 	bool bTakeDamage = false;
+	bool bDeath = false;
 
 public:	
 	// getter
@@ -40,6 +41,7 @@ public:
 	bool GetIsDodge() const {return bIsDodge;}
 
 	bool GetTakeDamage() const {return bTakeDamage;}
+	bool GetDeath() const {return bDeath;}
 	
 	// setter
 	void SetCombatEnable(bool value) {bIsCombatEnable = value;}
@@ -51,6 +53,7 @@ public:
 	void SetIsDodge(bool value) {bIsDodge = value;}
 
 	void SetTakeDamage(bool value) {bTakeDamage = value;}
+	void SetDeath(bool value) {bDeath = value;}
 
 	void IncreaseAttackCount();
 	bool IsMainWeaponNull() const {return mMainWeapon == nullptr;}

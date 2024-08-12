@@ -4,7 +4,7 @@
 #include "InventoryWidget.h"
 
 #include "../../Characters/Player/PlayerControls.h"
-#include "ProjectP/Data/Player/PlayerData.h"
+#include "ProjectP/Data/PlayerStat.h"
 
 void UInventoryWidget::NativeConstruct()
 {
@@ -56,7 +56,7 @@ void UInventoryWidget::SetMoneyText()
 	if(!IsValid(player))
 		return;
 
-	mMoneyText->SetText(FText::FromString(FString::Printf(TEXT("%d"), player->GetThisPlayerData()->GetPlayerMoney())));
+	mMoneyText->SetText(FText::FromString(FString::Printf(TEXT("%d"), player->GetThisPlayerStat()->GetPlayerMoney())));
 }
 
 void UInventoryWidget::SetMode(const FInputModeDataBase& mode, bool showCursor)

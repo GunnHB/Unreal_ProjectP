@@ -29,8 +29,10 @@ protected:
 	TSubclassOf<UInventoryWidget> mInventoryWidgetClass;
 	bool mInventoryOpen = false;								// ui 종료되고 바로 실행되는 현상 방지위한 플래그
 
-	// playerData
-	TObjectPtr<class UPlayerData> mPlayerData = nullptr;
+	// // playerData
+	// TObjectPtr<class UPlayerData> mPlayerData = nullptr;
+	// playerStat
+	TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
 
 private:
 	FVector mInputVector;
@@ -60,7 +62,8 @@ public:
 	
 	// getter
 	FVector GetInputVector() const {return mInputVector;}
-	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
+	// UPlayerData* GetThisPlayerData() const {return mPlayerData;}
+	UPlayerStat* GetThisPlayerStat() const {return mPlayerStat;}
 	
 	float GetInputDegree();
 	float GetLastDegree();
@@ -108,10 +111,11 @@ private:
 	void AdjustCameraRotation();											// 카메라 회전 조정
 	void AdjustActorRotation();												// 캐릭터 회전 조정
 	
-	void TraceForInteractable(float deltaTime);
+	void TraceForInteractable();
 	
 	bool CanPerformTogglingToCombat();
 	bool CanPerformTogglingToDodge();
+	bool CanPerformTogglingToTakeDamage();
 
 	void TryMovement();
 	void PerformMovement();
@@ -129,6 +133,8 @@ private:
 
 	float GetDegree(const FVector& vector, bool needFocusInfo = true);
 	float GetForwardToTargetAngle(FVector& target);
+
+	void EnableRagdoll() const;
 	
 	// 디버깅용
 	void DrawArrow();

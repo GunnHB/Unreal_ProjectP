@@ -14,12 +14,14 @@ private:
 	static float MaxWalkSpeed;
 	static FName mCollisionStartSocketName;
 	static FName mCollisionEndSocketName;
+	static FName mPelvisSocketName;
 
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
 	static float GetMaxWalkSpeed() {return MaxWalkSpeed;}
 	static FName GetCollisionStartSocketName() {return mCollisionStartSocketName;}
 	static FName GetCollisionEndSocketName() {return mCollisionEndSocketName;}
+	static FName GetPelvisSocketName() {return mPelvisSocketName;}
 };
 
 enum EMontageType : int8
