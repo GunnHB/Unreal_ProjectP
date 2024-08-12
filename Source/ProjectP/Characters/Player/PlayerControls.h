@@ -77,7 +77,10 @@ public:
 	virtual void ResetDodge() override;
 	virtual void ResetCombat() override;
 	virtual void PickUpItem(AItemBase* item) override;
-
+	virtual void TakeDamage(ICombatable* hitterCombatable) override;
+	virtual AController* GetThisController() override {return GetController();}
+	virtual UCombatComponent* GetCombatComponent() override {return mCombat;}
+	
 protected:
 	void InitAssets();														// 에셋 초기화
 	void InitComponentsValue();												// 컴포넌트 값 초기화

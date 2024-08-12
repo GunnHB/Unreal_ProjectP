@@ -3,7 +3,9 @@
 
 #include "CollisionComponent.h"
 
+#include "CombatComponent.h"
 #include "../Interface/CollisionEnable.h"
+#include "../Interface/Combatable.h"
 
 UCollisionComponent::UCollisionComponent()
 {
@@ -39,9 +41,6 @@ void UCollisionComponent::CollisionDisable()
 
 void UCollisionComponent::CollisionTrace()
 {
-	if(!IsValid(GetWorld()))
-		return;
-	
 	bIsAnyCollide = GetWorld()->SweepMultiByChannel(mHitResultArray, mStartLocation, mEndLocation, FQuat::Identity, ECC_GameTraceChannel4, FCollisionShape::MakeSphere(20.f), mQueryParam);
 
 	mStartLocation = mOwnerMeshComponent->GetSocketLocation(GameValue::GetCollisionStartSocketName());
@@ -65,20 +64,25 @@ void UCollisionComponent::CollisionTrace()
 		if(!mHitActorArray.Contains(hit.GetActor()))
 		{
 			mHitActorArray.Add(hit.GetActor());
+
+			ICombatable* takerCombatable = Cast<ICombatable>(hit.GetActor());
+			ICombatable* hitterCombatable = Cast<ICombatable>(mOwnerActor);
+
+			if(takerCombatable != nullptr && IsValid(mOwnerActor))
+				takerCombatable->TakeDamage(hitterCombatable);
 		}
 	}
 }
 
 void UCollisionComponent::ClearHitActors()
 {
-	if(!IsValid(mOwnerMeshComponent))
-		return;
-	
 	mHitActorArray.Empty();
 }
 
-void UCollisionComponent::AddIgnoreActor(const AActor* actor)
+void UCollisionComponent::AddIgnoreActor(AActor* actor)
 {
+	mOwnerActor = actor;
+	
 	mQueryParam.AddIgnoredActor(actor);
 }
 

@@ -47,4 +47,5 @@ public:
 
 	void IncreaseAttackCount();
 	bool IsMainWeaponNull() const {return mMainWeapon == nullptr;}
+	float GetMainWeaponAbilityValue() const;
 };

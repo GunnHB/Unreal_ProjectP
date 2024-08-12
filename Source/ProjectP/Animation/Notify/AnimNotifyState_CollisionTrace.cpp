@@ -3,9 +3,11 @@
 
 #include "AnimNotifyState_CollisionTrace.h"
 
-#include "../..//Component/CombatComponent.h"
-#include "ProjectP/Component/CollisionComponent.h"
-#include "ProjectP/Inventory/Item/Weapon/WeaponBase.h"
+#include "../../Interface/Combatable.h"
+#include "../../Interface/CollisionEnable.h"
+#include "../../Component/CollisionComponent.h"
+#include "../../Component/CombatComponent.h"
+#include "../../Inventory/Item/Weapon/WeaponSword.h"
 
 void UAnimNotifyState_CollisionTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
@@ -14,38 +16,43 @@ void UAnimNotifyState_CollisionTrace::NotifyBegin(USkeletalMeshComponent* MeshCo
 	if(!IsValid(MeshComp))
 		return;
 
-	if(!IsValid(mCollision))
-		SetCollision(MeshComp->GetOwner());
+	ICombatable* combatable = Cast<ICombatable>(MeshComp->GetOwner());
 
-	if(IsValid(mCollision))
-		mCollision->CollisionEnable();
+	if(combatable != nullptr)
+	{
+		ICollisionEnable* collisionEnable = Cast<ICollisionEnable>(combatable->GetCombatComponent()->GetMainWeapon());
+		
+		if(collisionEnable != nullptr)
+			collisionEnable->GetCollision()->CollisionEnable();
+	}
 }
 
 void UAnimNotifyState_CollisionTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 
-	if(IsValid(mCollision))
-		mCollision->CollisionTrace();
+	ICombatable* combatable = Cast<ICombatable>(MeshComp->GetOwner());
+
+	if(combatable != nullptr)
+	{
+		ICollisionEnable* collisionEnable = Cast<ICollisionEnable>(combatable->GetCombatComponent()->GetMainWeapon());
+		
+		if(collisionEnable != nullptr)
+			collisionEnable->GetCollision()->CollisionTrace();
+	}
 }
 
 void UAnimNotifyState_CollisionTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
-	if(IsValid(mCollision))
-		mCollision->CollisionDisable();
-}
+	ICombatable* combatable = Cast<ICombatable>(MeshComp->GetOwner());
 
-void UAnimNotifyState_CollisionTrace::SetCollision(AActor* actor)
-{
-	UCombatComponent* combat = actor->GetComponentByClass<UCombatComponent>();
-
-	if(!IsValid(combat) || combat->IsMainWeaponNull())
-		return;
-
-	UCollisionComponent* component = combat->GetMainWeapon()->GetComponentByClass<UCollisionComponent>();
-	
-	if(IsValid(component))
-		mCollision = component;
+	if(combatable != nullptr)
+	{
+		ICollisionEnable* collisionEnable = Cast<ICollisionEnable>(combatable->GetCombatComponent()->GetMainWeapon());
+		
+		if(collisionEnable != nullptr)
+			collisionEnable->GetCollision()->CollisionDisable();
+	}
 }

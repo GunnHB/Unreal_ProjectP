@@ -23,3 +23,11 @@ void UCombatComponent::IncreaseAttackCount()
 	if(mAttackCount >= arraySize)
 		mAttackCount = 0;
 }
+
+float UCombatComponent::GetMainWeaponAbilityValue() const
+{
+	if(!IsValid(mMainWeapon))
+		return 0.f;
+
+	return mMainWeapon->GetWeaponData()->ability_value;
+}

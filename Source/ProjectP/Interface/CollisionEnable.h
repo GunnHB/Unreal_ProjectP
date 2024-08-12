@@ -23,4 +23,5 @@ class PROJECTP_API ICollisionEnable
 public:
 	virtual UStaticMeshComponent* GetMesh() = 0;
 	virtual FQuat GetQuat() = 0;
+	virtual class UCollisionComponent* GetCollision() = 0;
 };

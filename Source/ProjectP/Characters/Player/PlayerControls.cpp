@@ -51,6 +51,9 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	FString damageString = FString::Printf(TEXT("%f"), DamageAmount);
+	UE_LOG(ProjectP, Warning, TEXT("%s"), *damageString);
+
 	return damage;
 }
 
@@ -545,6 +548,19 @@ void APlayerControls::PickUpItem(AItemBase* item)
 			mCombat->SetCombatEnable(false);
 		}
 	}
+}
+
+void APlayerControls::TakeDamage(ICombatable* hitterCombatable)
+{
+	FDamageEvent damageEvent;
+
+	if(hitterCombatable == nullptr)
+		return;
+
+	UCombatComponent* hitterCombatComp = hitterCombatable->GetCombatComponent();
+
+	if(IsValid(hitterCombatComp) && !hitterCombatComp->IsMainWeaponNull())
+		TakeDamage(hitterCombatComp->GetMainWeaponAbilityValue(), damageEvent, hitterCombatable->GetThisController(), hitterCombatComp->GetMainWeapon());
 }
 
 float APlayerControls::GetInputDegree()

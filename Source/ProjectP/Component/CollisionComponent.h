@@ -14,7 +14,8 @@ class PROJECTP_API UCollisionComponent : public UActorComponent
 protected:
 	bool bIsCollisionEnable = false;
 	UPROPERTY(VisibleAnywhere) TArray<AActor*> mHitActorArray;
-	TObjectPtr<UStaticMeshComponent> mOwnerMeshComponent;
+	TObjectPtr<UStaticMeshComponent> mOwnerMeshComponent;				// 무기 메시
+	TObjectPtr<AActor> mOwnerActor;										// 무기 주인
 
 	// for trace
 	FVector mStartLocation;
@@ -43,7 +44,7 @@ public:
 	UFUNCTION() void CollisionTrace();
 	UFUNCTION() void ClearHitActors();
 
-	void AddIgnoreActor(const AActor* actor);
+	void AddIgnoreActor(AActor* actor);
 
 	// getter
 	TArray<AActor*> GetHitActorArray() const {return mHitActorArray;}
