@@ -26,6 +26,9 @@ protected:
 	// dodge / roll
 	bool bIsDodge = false;
 
+	// take damage
+	bool bTakeDamage = false;
+
 public:	
 	// getter
 	bool GetCombatEnable() const {return bIsCombatEnable;}
@@ -35,6 +38,8 @@ public:
 	int32 GetAttackCount() const {return mAttackCount;}
 
 	bool GetIsDodge() const {return bIsDodge;}
+
+	bool GetTakeDamage() const {return bTakeDamage;}
 	
 	// setter
 	void SetCombatEnable(bool value) {bIsCombatEnable = value;}
@@ -44,6 +49,8 @@ public:
 	void SetAttackCount(int32 value) {mAttackCount = value;}
 
 	void SetIsDodge(bool value) {bIsDodge = value;}
+
+	void SetTakeDamage(bool value) {bTakeDamage = value;}
 
 	void IncreaseAttackCount();
 	bool IsMainWeaponNull() const {return mMainWeapon == nullptr;}

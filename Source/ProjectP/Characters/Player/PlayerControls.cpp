@@ -51,6 +51,9 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	if(IsValid(mCombat))
+		mCombat->SetTakeDamage(true);
+	
 	return damage;
 }
 
@@ -479,16 +482,6 @@ void APlayerControls::EnableCombat()
 	mCombat->SetCombatEnable(combatEnable);
 }
 
-void APlayerControls::ResetAttack()
-{
-	if(!IsValid(mCombat))
-		return;
-
-	mCombat->SetIsAttacking(false);
-	mCombat->SetIsAttackSaved(false);
-	mCombat->SetAttackCount(0);
-}
-
 void APlayerControls::DrawSheath()
 {
 	if(!IsValid(mCombat))
@@ -504,6 +497,16 @@ void APlayerControls::DrawSheath()
 	bIsToggling = false;
 }
 
+void APlayerControls::ResetAttack()
+{
+	if(!IsValid(mCombat))
+		return;
+
+	mCombat->SetIsAttacking(false);
+	mCombat->SetIsAttackSaved(false);
+	mCombat->SetAttackCount(0);
+}
+
 void APlayerControls::ResetDodge()
 {
 	if(!IsValid(mCombat))
@@ -514,10 +517,21 @@ void APlayerControls::ResetDodge()
 	bIsToggling = false;
 }
 
+void APlayerControls::ResetTakeDamage()
+{
+	if(!IsValid(mCombat))
+		return;
+
+	mCombat->SetTakeDamage(false);
+
+	bIsToggling = false;
+}
+
 void APlayerControls::ResetCombat()
 {
 	ResetAttack();
 	ResetDodge();
+	ResetTakeDamage();
 }
 
 void APlayerControls::PickUpItem(AItemBase* item)

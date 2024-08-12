@@ -31,17 +31,19 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mSpeed = mPlayerMovement->Velocity.Size();
 	mAcceleration = mPlayerMovement->GetCurrentAcceleration().Length() > 0.f;
 	mIsInAir = mPlayerMovement->IsFalling();
+	
 	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
-	bIsDodge = mPlayer->GetCombat()->GetIsDodge();
+	bIsDodge = mPlayer->GetCombatComponent()->GetIsDodge();
+	bTakeDamage = mPlayer->GetCombatComponent()->GetTakeDamage();
 
-	if(!mPlayer->GetCombat()->IsMainWeaponNull())
+	if(!mPlayer->GetCombatComponent()->IsMainWeaponNull())
 	{
-		AWeaponBase* weapon = mPlayer->GetCombat()->GetMainWeapon();
+		AWeaponBase* weapon = mPlayer->GetCombatComponent()->GetMainWeapon();
 
 		if(weapon->GetWeaponData()->type == EWeaponType::Sword)
 			bIsOneHandWeapon = Cast<AWeaponSword>(weapon)->GetSwordData()->type == ESwordType::OneHand;
 
-		bIsEquipped = mPlayer->GetCombat()->GetMainWeapon()->GetIsEquipped();
+		bIsEquipped = mPlayer->GetCombatComponent()->GetMainWeapon()->GetIsEquipped();
 	}
 	else
 	{
@@ -75,10 +77,10 @@ void UPlayerAnimInstance::NativeBeginPlay()
 
 void UPlayerAnimInstance::PlayDrawWeaponMontage()
 {
-	if(mPlayer->GetCombat()->IsMainWeaponNull())
+	if(mPlayer->GetCombatComponent()->IsMainWeaponNull())
 		return;
 
-	AWeaponBase* tempWeapon = mPlayer->GetCombat()->GetMainWeapon();
+	AWeaponBase* tempWeapon = mPlayer->GetCombatComponent()->GetMainWeapon();
 
 	if(tempWeapon->GetWeaponData()->type == EWeaponType::Sword)
 		mDrawWeaponMontage = Cast<AWeaponSword>(tempWeapon)->GetSwordData()->montage_draw;
@@ -95,10 +97,10 @@ void UPlayerAnimInstance::PlayDrawWeaponMontage()
 
 void UPlayerAnimInstance::PlaySheathWeaponMontage()
 {
-	if(mPlayer->GetCombat()->IsMainWeaponNull())
+	if(mPlayer->GetCombatComponent()->IsMainWeaponNull())
 		return;
 
-	AWeaponBase* tempWeapon = mPlayer->GetCombat()->GetMainWeapon();
+	AWeaponBase* tempWeapon = mPlayer->GetCombatComponent()->GetMainWeapon();
 
 	if(tempWeapon->GetWeaponData()->type == EWeaponType::Sword)
 		mSheathWeaponMontage = Cast<AWeaponSword>(tempWeapon)->GetSwordData()->montage_sheath;
@@ -115,9 +117,9 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 
 void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
 {
-	if(mPlayer->GetCombat()->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
+	if(mPlayer->GetCombatComponent()->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
 	{
-		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombat()->GetMainWeapon());
+		AWeaponSword* sword = Cast<AWeaponSword>(mPlayer->GetCombatComponent()->GetMainWeapon());
 
 		if(IsValid(sword))
 		{
@@ -137,10 +139,9 @@ void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
 	}
 }
 
-void UPlayerAnimInstance::TakeDamage(const float degreeValue)
+void UPlayerAnimInstance::SetTakeDamageDegree()
 {
-	mDamageDegree = degreeValue;
-	bTakeDamage = true;
+	
 }
 
 void UPlayerAnimInstance::PerformPlayMontage(UAnimMontage* montage)

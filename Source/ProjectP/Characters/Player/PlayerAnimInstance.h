@@ -51,16 +51,13 @@ public:
 	bool GetIsInAir() const { return mIsInAir; }
 	bool GetIsLandingAnimEnd() const {return bIsLandingAnimEnd;}
 
-	// setter
-	void SetIsDodge(bool value) {bIsDodge = value;}
-
 	// play montage
 	void PlayDrawWeaponMontage();
 	void PlaySheathWeaponMontage();
 
 	void PlayAttackMontage(int32 attackIndex, bool randomIndex);
 
-	void TakeDamage(const float degreeValue);
+	void SetTakeDamageDegree();
 
 private:
 	void PerformPlayMontage(UAnimMontage* montage);

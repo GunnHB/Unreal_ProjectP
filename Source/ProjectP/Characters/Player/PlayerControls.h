@@ -61,7 +61,6 @@ public:
 	// getter
 	FVector GetInputVector() const {return mInputVector;}
 	UPlayerData* GetThisPlayerData() const {return mPlayerData;}
-	UCombatComponent* GetCombat() const {return mCombat;}
 	
 	float GetInputDegree();
 	float GetLastDegree();
@@ -76,6 +75,7 @@ public:
 	virtual void DrawSheath() override;
 	virtual void ResetDodge() override;
 	virtual void ResetCombat() override;
+	virtual void ResetTakeDamage() override;
 	virtual void PickUpItem(AItemBase* item) override;
 	virtual void TakeDamage(ICombatable* hitterCombatable) override;
 	virtual AController* GetThisController() override {return GetController();}
