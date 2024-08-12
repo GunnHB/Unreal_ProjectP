@@ -127,7 +127,7 @@ private:
 	
 	void TrySprint();
 
-	float GetDegree(const FVector& inputVector);
+	float GetDegree(const FVector& vector, bool needFocusInfo = true);
 	float GetForwardToTargetAngle(FVector& target);
 	
 	// 디버깅용

@@ -137,6 +137,12 @@ void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
 	}
 }
 
+void UPlayerAnimInstance::TakeDamage(const float degreeValue)
+{
+	mDamageDegree = degreeValue;
+	bTakeDamage = true;
+}
+
 void UPlayerAnimInstance::PerformPlayMontage(UAnimMontage* montage)
 {
 	if(!IsValid(montage))

@@ -51,9 +51,6 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	FString damageString = FString::Printf(TEXT("%f"), DamageAmount);
-	UE_LOG(ProjectP, Warning, TEXT("%s"), *damageString);
-
 	return damage;
 }
 
@@ -430,13 +427,13 @@ void APlayerControls::TrySprint()
 		return;
 }
 
-float APlayerControls::GetDegree(const FVector& inputVector)
+float APlayerControls::GetDegree(const FVector& vector, bool needFocusInfo)
 {
-	if(!bIsFocusing)
+	if(needFocusInfo && !bIsFocusing)
 		return 0.f;
 	
-	FVector forwardVector = GetActorForwardVector() * inputVector.Y;
-	FVector rightVector = GetActorRightVector() * inputVector.X;
+	FVector forwardVector = GetActorForwardVector() * vector.Y;
+	FVector rightVector = GetActorRightVector() * vector.X;
 	FVector targetVector = rightVector + forwardVector;
 	
 	return GetForwardToTargetAngle(targetVector);

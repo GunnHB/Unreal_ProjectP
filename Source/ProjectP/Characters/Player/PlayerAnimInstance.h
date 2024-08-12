@@ -16,6 +16,7 @@ class PROJECTP_API UPlayerAnimInstance : public UAnimInstance
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mDegreee = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mLastDegree = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mDamageDegree = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mAimOffsetX = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mSpeed = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool mAcceleration = false;
@@ -24,6 +25,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsOneHandWeapon = true;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsEquipped = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsDodge = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bTakeDamage = false;
 
 	// anim flag
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool bIsLandingAnimEnd = true;
@@ -57,6 +59,8 @@ public:
 	void PlaySheathWeaponMontage();
 
 	void PlayAttackMontage(int32 attackIndex, bool randomIndex);
+
+	void TakeDamage(const float degreeValue);
 
 private:
 	void PerformPlayMontage(UAnimMontage* montage);
