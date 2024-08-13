@@ -142,8 +142,6 @@ private:
 
 	float GetDegree(const FVector& vector);
 	float GetForwardToTargetAngle(FVector& target);
-
-	void EnableRagdoll() const;
 	
 	// 디버깅용
 	void DrawArrow() const;

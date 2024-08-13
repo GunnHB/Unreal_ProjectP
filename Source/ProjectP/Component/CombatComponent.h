@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "../System/GameInfo.h"
+
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
@@ -63,5 +65,7 @@ public:
 	float GetMainWeaponAbilityValue() const;
 
 	void KnockBack(const AActor* hitter);
+	void EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleComponent* capsule) const;
+	
 	void InterpActorLocation();
 };

@@ -56,16 +56,18 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	// float health = mPlayerStat->GetCharacterHealth() - DamageAmount;
-	// mPlayerStat->SetCharacterHealth(health);
-	//
-	// UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
+	float health = mPlayerStat->GetCharacterHealth() - DamageAmount;
+	mPlayerStat->SetCharacterHealth(health);
+	
+	UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
 	
 	if(IsValid(mCombat))
 	{
 		if(mPlayerStat->GetCharacterHealth() <= 0)
 		{
-			EnableRagdoll();
+			mCombat->EnableRagdoll(GetMesh(), GetCapsuleComponent());
+			mSpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameValue::GetPelvisSocketName());
+			
 			return 0.f;
 		}
 		
@@ -667,16 +669,6 @@ float APlayerControls::GetForwardToTargetAngle(FVector& target)
 	}
 
 	return angle;
-}
-
-void APlayerControls::EnableRagdoll() const
-{
-	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
-	GetMesh()->SetSimulatePhysics(true);
-
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	mSpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameValue::GetPelvisSocketName());
 }
 
 void APlayerControls::DrawArrow() const

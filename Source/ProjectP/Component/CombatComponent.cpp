@@ -4,7 +4,6 @@
 #include "CombatComponent.h"
 
 #include "../Inventory/Item/Weapon/WeaponSword.h"
-#include "../Interface/Combatable.h"
 
 void UCombatComponent::IncreaseAttackCount()
 {
@@ -54,11 +53,26 @@ void UCombatComponent::KnockBack(const AActor* hitter)
 	}
 }
 
+void UCombatComponent::EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleComponent* capsule) const
+{
+	if(!IsValid(mesh) || !IsValid(capsule))
+		return;
+	
+	mesh->SetCollisionProfileName(TEXT("Ragdoll"));
+	mesh->SetSimulatePhysics(true);
+	
+	// mesh->AddImpulse(mKnockBackTarget * 5000.f);
+	
+	capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
 void UCombatComponent::InterpActorLocation()
 {
 	if((mKnockBackTarget - GetOwner()->GetActorLocation()).Size() < 0.01f)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(mInterpTimeHandle);
+		mKnockBackTarget = FVector::ZeroVector;
+		
 		return;
 	}
 	
