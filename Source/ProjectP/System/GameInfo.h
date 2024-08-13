@@ -31,13 +31,14 @@ public:
 	static FName GetPelvisSocketName() {return PelvisSocketName;}
 };
 
-enum EMontageType : int8
+enum ECharacterState : int8
 {
 	None = -1,
-	Draw,
-	Sheath,
+	Idle,
+	Movement,
+	Attack,
 	Dodge,
-	Roll,
+	Focus,
 };
 
 UENUM()
@@ -135,4 +136,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) TArray<UAnimMontage*> montage_attack_array;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) UAnimMontage* montage_dodge;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) UAnimMontage* montage_roll;
+};
+
+USTRUCT()
+struct FEnemy : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<USkeletalMesh> mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString enemy_name;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString enemy_desc;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float capsule_half_height;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float capsule_radius;
 };
