@@ -25,6 +25,10 @@ public:
 	virtual void TakeDamage(ICombatable* hitterCombatable) = 0;
 	virtual AController* GetThisController() = 0;
 	virtual class UCombatComponent* GetCombatComponent() = 0;
+
+	virtual void StartHitStop(const float time) = 0;
+	virtual void EndHitStop() = 0;
+	
 	virtual void ContinueAttack() = 0;
 	virtual void EnableCombat() = 0;
 	virtual void DrawSheath() = 0;

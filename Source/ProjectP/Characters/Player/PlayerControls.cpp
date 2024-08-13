@@ -37,9 +37,11 @@ void APlayerControls::Tick(float DeltaTime)
 
 	if(mPlayerStat->IsCharacterDead())
 		return;
-	
+
+#if ENABLE_DRAW_DEBUG
 	DrawArrow();
 	GetAnimOffsetX();
+#endif
 	TraceForInteractable();
 }
 
@@ -54,10 +56,10 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	float health = mPlayerStat->GetCharacterHealth() - DamageAmount;
-	mPlayerStat->SetCharacterHealth(health);
-
-	UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
+	// float health = mPlayerStat->GetCharacterHealth() - DamageAmount;
+	// mPlayerStat->SetCharacterHealth(health);
+	//
+	// UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
 	
 	if(IsValid(mCombat))
 	{
@@ -69,6 +71,11 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		
 		mCombat->SetTakeDamage(true);
 	}
+
+	StartHitStop(.25f);
+	
+	SetDamageDegree(EventInstigator->GetPawn());
+	mCombat->KnockBack(EventInstigator->GetPawn());
 	
 	return damage;
 }
@@ -454,9 +461,9 @@ void APlayerControls::TrySprint()
 		return;
 }
 
-float APlayerControls::GetDegree(const FVector& vector, bool needFocusInfo)
+float APlayerControls::GetDegree(const FVector& vector)
 {
-	if(needFocusInfo && !bIsFocusing)
+	if(!bIsFocusing)
 		return 0.f;
 	
 	FVector forwardVector = GetActorForwardVector() * vector.Y;
@@ -464,6 +471,14 @@ float APlayerControls::GetDegree(const FVector& vector, bool needFocusInfo)
 	FVector targetVector = rightVector + forwardVector;
 	
 	return GetForwardToTargetAngle(targetVector);
+}
+
+void APlayerControls::SetDamageDegree(const AActor* hitter)
+{
+	FVector targetDirection = hitter->GetActorLocation() - GetActorLocation();
+	
+	if(targetDirection.Normalize())
+		mDamageDegree = GetForwardToTargetAngle(targetDirection);
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
@@ -549,6 +564,18 @@ void APlayerControls::ResetTakeDamage()
 	mCombat->SetTakeDamage(false);
 
 	bIsToggling = false;
+}
+
+void APlayerControls::StartHitStop(const float time)
+{
+	GetWorldSettings()->SetTimeDilation(time);
+	GetWorld()->GetTimerManager().SetTimer(mHitStopTimeHandle, this, &APlayerControls::EndHitStop, GetWorld()->GetDeltaSeconds() / time, false);
+}
+
+void APlayerControls::EndHitStop()
+{
+	GetWorld()->GetTimerManager().ClearTimer(mHitStopTimeHandle);
+	GetWorldSettings()->SetTimeDilation(1.f);
 }
 
 void APlayerControls::ResetCombat()
@@ -652,13 +679,18 @@ void APlayerControls::EnableRagdoll() const
 	mSpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameValue::GetPelvisSocketName());
 }
 
-void APlayerControls::DrawArrow()
+void APlayerControls::DrawArrow() const
 {
 	FVector startLocation = GetActorLocation();
 	FVector endLocation = startLocation + GetActorForwardVector() * 100.f;
-
-	FVector camEndLocation = startLocation + mCamera->GetForwardVector().GetSafeNormal2D() * 150.f;
 	
 	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
-	DrawDebugDirectionalArrow(GetWorld(), startLocation, camEndLocation, 120.f, FColor::Blue, false, -1.f, 0.f, 3.f);
+
+	FVector camForwardNormal = mCamera->GetForwardVector();
+
+	if(camForwardNormal.Normalize())
+	{
+		FVector camEndLocation = startLocation + FVector(camForwardNormal.X, camForwardNormal.Y, 0.f) * 150.f;
+		DrawDebugDirectionalArrow(GetWorld(), startLocation, camEndLocation, 120.f, FColor::Blue, false, -1.f, 0.f, 3.f);
+	}
 }

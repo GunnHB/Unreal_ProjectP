@@ -11,17 +11,24 @@ class GameValue
 {
 private:
 	static int32 MaxMoney;
+
 	static float MaxWalkSpeed;
-	static FName mCollisionStartSocketName;
-	static FName mCollisionEndSocketName;
-	static FName mPelvisSocketName;
+	static float KnockBackAmount;
+	
+	static FName CollisionStartSocketName;
+	static FName CollisionEndSocketName;
+	static FName PelvisSocketName;
+	
 
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
+
 	static float GetMaxWalkSpeed() {return MaxWalkSpeed;}
-	static FName GetCollisionStartSocketName() {return mCollisionStartSocketName;}
-	static FName GetCollisionEndSocketName() {return mCollisionEndSocketName;}
-	static FName GetPelvisSocketName() {return mPelvisSocketName;}
+	static float GetKnockBackAmount() {return KnockBackAmount;}
+	
+	static FName GetCollisionStartSocketName() {return CollisionStartSocketName;}
+	static FName GetCollisionEndSocketName() {return CollisionEndSocketName;}
+	static FName GetPelvisSocketName() {return PelvisSocketName;}
 };
 
 enum EMontageType : int8

@@ -30,6 +30,9 @@ protected:
 	bool bTakeDamage = false;
 	bool bDeath = false;
 
+	FTimerHandle mInterpTimeHandle;
+	FVector mKnockBackTarget = FVector::ZeroVector;
+
 public:	
 	// getter
 	bool GetCombatEnable() const {return bIsCombatEnable;}
@@ -58,4 +61,7 @@ public:
 	void IncreaseAttackCount();
 	bool IsMainWeaponNull() const {return mMainWeapon == nullptr;}
 	float GetMainWeaponAbilityValue() const;
+
+	void KnockBack(const AActor* hitter);
+	void InterpActorLocation();
 };

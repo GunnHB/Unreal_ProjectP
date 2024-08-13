@@ -27,6 +27,8 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	mDegreee = mPlayer->GetInputDegree();
 	mLastDegree = mPlayer->GetLastDegree();
+	mDamageDegree = mPlayer->GetDamageDegree();
+	
 	mAimOffsetX = mPlayer->GetAnimOffsetX();
 	mSpeed = mPlayerMovement->Velocity.Size();
 	mAcceleration = mPlayerMovement->GetCurrentAcceleration().Length() > 0.f;

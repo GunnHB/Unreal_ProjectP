@@ -28,10 +28,7 @@ protected:
 	TObjectPtr<class UInventoryWidget> mInventoryWidget;
 	TSubclassOf<UInventoryWidget> mInventoryWidgetClass;
 	bool mInventoryOpen = false;								// ui 종료되고 바로 실행되는 현상 방지위한 플래그
-
-	// // playerData
-	// TObjectPtr<class UPlayerData> mPlayerData = nullptr;
-	// playerStat
+	
 	TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
 
 private:
@@ -45,9 +42,13 @@ private:
 	FHitResult mHitResult;
 	FCollisionQueryParams mQueryParam;
 	bool bEnableToInteract;
-
+	
 	bool bIsToggling = false;				// 행동 전환 시의 플래그
 	bool bIsFocusing = false;				// focus 플래그
+
+	float mDamageDegree = 0.f;
+	
+	FTimerHandle mHitStopTimeHandle;
 
 public:
 	APlayerControls();
@@ -62,13 +63,17 @@ public:
 	
 	// getter
 	FVector GetInputVector() const {return mInputVector;}
-	// UPlayerData* GetThisPlayerData() const {return mPlayerData;}
 	UPlayerStat* GetThisPlayerStat() const {return mPlayerStat;}
 	
 	float GetInputDegree();
 	float GetLastDegree();
 	float GetAnimOffsetX();
-	
+
+	float GetDamageDegree() const {return mDamageDegree;}
+
+	// setter
+	void SetDamageDegree(const AActor* hitter);
+
 	bool AddMoney(const FMoney* moneyData);
 
 	// interface
@@ -79,11 +84,15 @@ public:
 	virtual void ResetDodge() override;
 	virtual void ResetCombat() override;
 	virtual void ResetTakeDamage() override;
+
+	virtual void StartHitStop(const float time) override;
+	virtual void EndHitStop() override;
+	
 	virtual void PickUpItem(AItemBase* item) override;
 	virtual void TakeDamage(ICombatable* hitterCombatable) override;
 	virtual AController* GetThisController() override {return GetController();}
 	virtual UCombatComponent* GetCombatComponent() override {return mCombat;}
-	
+
 protected:
 	void InitAssets();														// 에셋 초기화
 	void InitComponentsValue();												// 컴포넌트 값 초기화
@@ -131,11 +140,11 @@ private:
 	
 	void TrySprint();
 
-	float GetDegree(const FVector& vector, bool needFocusInfo = true);
+	float GetDegree(const FVector& vector);
 	float GetForwardToTargetAngle(FVector& target);
 
 	void EnableRagdoll() const;
 	
 	// 디버깅용
-	void DrawArrow();
+	void DrawArrow() const;
 };

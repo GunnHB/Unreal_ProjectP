@@ -4,6 +4,7 @@
 #include "CombatComponent.h"
 
 #include "../Inventory/Item/Weapon/WeaponSword.h"
+#include "../Interface/Combatable.h"
 
 void UCombatComponent::IncreaseAttackCount()
 {
@@ -30,4 +31,37 @@ float UCombatComponent::GetMainWeaponAbilityValue() const
 		return 0.f;
 
 	return mMainWeapon->GetWeaponData()->ability_value;
+}
+
+void UCombatComponent::KnockBack(const AActor* hitter)
+{
+	if(!IsValid(hitter))
+		return;
+	
+	FVector direction = GetOwner()->GetActorLocation() - hitter->GetActorLocation();
+
+	if(direction.Normalize())
+	{
+		mKnockBackTarget = GetOwner()->GetActorLocation() + direction * GameValue::GetKnockBackAmount();
+		GetWorld()->GetTimerManager().SetTimer(mInterpTimeHandle, this, &UCombatComponent::InterpActorLocation, GetWorld()->GetDeltaSeconds(), true, -1);
+		
+#if ENABLE_DRAW_DEBUG
+		FVector start = GetOwner()->GetActorLocation();
+		FVector end = start + direction * 100.f;
+		
+		DrawDebugDirectionalArrow(GetWorld(), start, end, 120.f, FColor::Green, false, 5.f, 0.f, 3.f);
+#endif
+	}
+}
+
+void UCombatComponent::InterpActorLocation()
+{
+	if((mKnockBackTarget - GetOwner()->GetActorLocation()).Size() < 0.01f)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(mInterpTimeHandle);
+		return;
+	}
+	
+	FVector knockBackLocation = FMath::VInterpTo(GetOwner()->GetActorLocation(), mKnockBackTarget, GetWorld()->GetDeltaSeconds(), 10.f);
+	GetOwner()->SetActorRelativeLocation(knockBackLocation);
 }

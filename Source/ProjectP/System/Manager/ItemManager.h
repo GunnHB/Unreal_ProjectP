@@ -3,7 +3,6 @@
 #pragma once
 
 #include "BaseManager.h"
-#include "ProjectP/System/GameInfo.h"
 
 class PROJECTP_API CItemManager : public CBaseManager<CItemManager>
 {
