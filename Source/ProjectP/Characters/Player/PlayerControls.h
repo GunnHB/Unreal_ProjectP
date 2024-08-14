@@ -5,7 +5,10 @@
 #include "InputActionValue.h"
 
 #include "../../System/GameInfo.h"
-#include "../../System/InterfaceInfo.h"
+
+#include "../../Interface/Combatable.h"
+#include "../../Interface/Damageable.h"
+#include "../../Interface/PickupEnable.h"
 
 #include "GameFramework/Character.h"
 #include "PlayerControls.generated.h"

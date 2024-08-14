@@ -13,6 +13,7 @@ private:
 	static int32 MaxMoney;
 
 	static float MaxWalkSpeed;
+	static float MaxJogSpeed;
 	static float KnockBackAmount;
 	
 	static FName CollisionStartSocketFName;
@@ -27,6 +28,7 @@ public:
 	static int32 GetMaxMoney() { return MaxMoney; }
 
 	static float GetMaxWalkSpeed() {return MaxWalkSpeed;}
+	static float GetMaxJogSpeed() {return MaxJogSpeed;}
 	static float GetKnockBackAmount() {return KnockBackAmount;}
 	
 	static FName GetCollisionStartSocketName() {return CollisionStartSocketFName;}

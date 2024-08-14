@@ -142,7 +142,7 @@ void APlayerControls::InitComponentsValue()
 
 	// 이동 속도 조정
 	if (movement != nullptr)
-		movement->MaxWalkSpeed = GameValue::GetMaxWalkSpeed();
+		movement->MaxWalkSpeed = GameValue::GetMaxJogSpeed();
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCapsuleComponent()->SetCollisionProfileName(GameValue::GetPlayerFName());

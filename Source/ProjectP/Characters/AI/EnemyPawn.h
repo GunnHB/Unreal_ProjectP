@@ -2,12 +2,12 @@
 
 #pragma once
 
+#include "../../Interface/Combatable.h"
+#include "../../Interface/Damageable.h"
+
 #include "../AI/AIPawn.h"
 #include "EnemyPawn.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class PROJECTP_API AEnemyPawn : public AAIPawn, public ICombatable, public IDamageable
 {

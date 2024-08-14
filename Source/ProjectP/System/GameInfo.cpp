@@ -5,7 +5,8 @@ DEFINE_LOG_CATEGORY(ProjectP);
 
 int32 GameValue::MaxMoney = 9999;
 
-float GameValue::MaxWalkSpeed = 400.f;
+float GameValue::MaxWalkSpeed = 100.f;
+float GameValue::MaxJogSpeed = 400.f;
 float GameValue::KnockBackAmount = 85.f;
 
 FName GameValue::CollisionStartSocketFName = "CollisionStart";

@@ -31,6 +31,18 @@ AEnemyPawn::AEnemyPawn()
 
 	if(animAsset.Succeeded())
 		mMesh->SetAnimInstanceClass(animAsset.Class);
+
+	static ConstructorHelpers::FObjectFinder<UBlackboardData>
+		bbAsset(TEXT("/Script/AIModule.BlackboardData'/Game/07_AI/BB_Enemy.BB_Enemy'"));
+
+	if(bbAsset.Succeeded())
+		mBlackboardData = bbAsset.Object;
+
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree>
+		btAsset(TEXT("/Script/AIModule.BehaviorTree'/Game/07_AI/BT_Enemy.BT_Enemy'"));
+
+	if(btAsset.Succeeded())
+		mBehaviorTree = btAsset.Object;
 }
 
 void AEnemyPawn::BeginPlay()
