@@ -14,6 +14,13 @@ class PROJECTP_API UBTTask_FindNextPatrolPoint : public UBTTaskNode
 	GENERATED_BODY()
 
 protected:
-	FVector mTargetLocation = FVector::ZeroVector;
 	uint8 mPatrolIndex = 0;
+
+	TObjectPtr<class AEnemyPawn> mOwnerEnemy;
+
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+private:
+	bool SetPathLocation(UBlackboardComponent* blackboard);
+	void IncreasePathIndex(UBlackboardComponent* blackboard);
 };

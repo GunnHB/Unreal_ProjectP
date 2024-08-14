@@ -2,20 +2,27 @@
 
 #include "BTTask_SetMovementSpeed.h"
 
+#include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
 EBTNodeResult::Type UBTTask_SetMovementSpeed::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	APawn* ownerPawn = Cast<APawn>(OwnerComp.GetOwner());
+	APawn* ownerPawn = OwnerComp.GetAIOwner()->GetPawn();
 
-	if(IsValid(ownerPawn))
-		SetMovementSpeed(ownerPawn);
-	
-	return Super::ExecuteTask(OwnerComp, NodeMemory);
+	if(!IsValid(ownerPawn))
+		return EBTNodeResult::Failed;
+
+	return SetMovementSpeed(ownerPawn) ? EBTNodeResult::Succeeded : EBTNodeResult::Failed;
 }
 
-void UBTTask_SetMovementSpeed::SetMovementSpeed(const APawn* owner) const
+bool UBTTask_SetMovementSpeed::SetMovementSpeed(const APawn* pawn) const
 {
-	UFloatingPawnMovement* movement = owner->FindComponentByClass<UFloatingPawnMovement>();
+	UFloatingPawnMovement* movement = pawn->FindComponentByClass<UFloatingPawnMovement>();
 
-	if(IsValid(movement))
-		movement->MaxSpeed = GameValue::GetMaxWalkSpeed();
+	if(!IsValid(movement))
+		return false;
+	
+	movement->MaxSpeed = GameValue::GetMaxWalkSpeed();
+
+	return true;
 }

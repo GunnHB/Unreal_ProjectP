@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../../Data/EnemyStat.h"
+#include "AIController.h"
 
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"

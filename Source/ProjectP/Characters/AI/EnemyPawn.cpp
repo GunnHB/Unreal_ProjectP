@@ -6,6 +6,7 @@
 #include "../../Component/EnemyMovementComponent.h"
 #include "../../Component/CombatComponent.h"
 #include "EnemyAnimInstance.h"
+#include "EnemyController.h"
 
 AEnemyPawn::AEnemyPawn()
 {
@@ -32,17 +33,7 @@ AEnemyPawn::AEnemyPawn()
 	if(animAsset.Succeeded())
 		mMesh->SetAnimInstanceClass(animAsset.Class);
 
-	static ConstructorHelpers::FObjectFinder<UBlackboardData>
-		bbAsset(TEXT("/Script/AIModule.BlackboardData'/Game/07_AI/BB_Enemy.BB_Enemy'"));
-
-	if(bbAsset.Succeeded())
-		mBlackboardData = bbAsset.Object;
-
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree>
-		btAsset(TEXT("/Script/AIModule.BehaviorTree'/Game/07_AI/BT_Enemy.BT_Enemy'"));
-
-	if(btAsset.Succeeded())
-		mBehaviorTree = btAsset.Object;
+	AIControllerClass = AEnemyController::StaticClass();
 }
 
 void AEnemyPawn::BeginPlay()
@@ -51,6 +42,8 @@ void AEnemyPawn::BeginPlay()
 
 	if(IsValid(mMesh->GetAnimInstance()))
 		mAnimInstance = Cast<UEnemyAnimInstance>(mMesh->GetAnimInstance());
+
+	bUseControllerRotationYaw = false;
 }
 
 float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -58,6 +51,11 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	return damage;
+}
+
+void AEnemyPawn::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
 }
 
 void AEnemyPawn::ContinueAttack()

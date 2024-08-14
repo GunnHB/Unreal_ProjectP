@@ -24,6 +24,11 @@ private:
 	static FName EnemyFName;
 	static FName ItemFName;
 
+	static FName PatrolIndexFName;
+	static FName TargetLocationFName;
+
+	static FString BTTaskMoveToTargetFName;
+
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
 
@@ -38,6 +43,11 @@ public:
 	static FName GetPlayerFName() {return PlayerFName;}
 	static FName GetEnemyFName() {return EnemyFName;}
 	static FName GetItemFName() {return ItemFName;}
+
+	static FName GetPatrolIndexFName() {return PatrolIndexFName;}
+	static FName GetTargetLocationFName() {return TargetLocationFName;}
+
+	static FString GetBTTaskMoveToTargetFName() {return BTTaskMoveToTargetFName;}
 };
 
 enum ECharacterState : int8

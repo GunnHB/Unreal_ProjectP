@@ -17,9 +17,6 @@ protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<USkeletalMeshComponent> mMesh = nullptr;
 
-	TObjectPtr<UBlackboardData> mBlackboardData = nullptr;
-	TObjectPtr<UBehaviorTree> mBehaviorTree = nullptr;
-
 public:
 	// Sets default values for this pawn's properties
 	AAIPawn();

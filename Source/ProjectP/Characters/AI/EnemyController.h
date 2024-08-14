@@ -21,4 +21,10 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UAIPerceptionComponent> mPerceptionComp = nullptr;
 	TObjectPtr<UAISense_Sight> mSightSense = nullptr;
+	
+	TObjectPtr<UBlackboardData> mBlackboard = nullptr;
+	TObjectPtr<UBehaviorTree> mBehaviorTree = nullptr;
+
+	virtual void OnPossess(APawn* InPawn) override;
+	virtual void OnUnPossess() override;
 };

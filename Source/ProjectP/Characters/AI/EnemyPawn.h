@@ -16,6 +16,7 @@ class PROJECTP_API AEnemyPawn : public AAIPawn, public ICombatable, public IDama
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UEnemyMovementComponent> mMovement = nullptr;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UCombatComponent> mCombat = nullptr;
+	UPROPERTY(EditAnywhere) TArray<class AAIPatrolPoint*> mPatrolPointArray;
 
 	TObjectPtr<class UEnemyAnimInstance> mAnimInstance = nullptr;
 	
@@ -38,7 +39,13 @@ protected:
 public:
 	AEnemyPawn();
 
+	// getter
+	TArray<AAIPatrolPoint*> GetPatrolPointArray() const {return mPatrolPointArray;}
+	UCapsuleComponent* GetCapsuleComponent() const {return mCapsule;}
+	
+
 protected:
 	virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void PossessedBy(AController* NewController) override;
 };

@@ -17,5 +17,6 @@ void UAnimInstanceBase::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	mSpeed = mPawnMovement->GetMaxSpeed();
+	if(IsValid(mPawnMovement))
+		mSpeed = mPawnMovement->GetMaxSpeed();
 }

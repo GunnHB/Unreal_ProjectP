@@ -16,3 +16,8 @@ FName GameValue::PelvisSocketFName = "pelvis";
 FName GameValue::PlayerFName = "Player";
 FName GameValue::EnemyFName = "Enemy";
 FName GameValue::ItemFName = "Item";
+
+FName GameValue::PatrolIndexFName = "PatrolIndex";
+FName GameValue::TargetLocationFName = "TargetLocation";
+
+FString GameValue::BTTaskMoveToTargetFName = "MoveToTarget";

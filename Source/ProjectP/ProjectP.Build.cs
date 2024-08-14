@@ -15,6 +15,7 @@ public class ProjectP : ModuleRules
 			"Engine",
 			"InputCore", 
 			"EnhancedInput",
+			"AIModule",
 			"UMG"
 		});
 

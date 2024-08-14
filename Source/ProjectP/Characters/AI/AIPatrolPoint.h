@@ -9,7 +9,14 @@ UCLASS()
 class PROJECTP_API AAIPatrolPoint : public AActor
 {
 	GENERATED_BODY()
-	
+
+protected:
+	UPROPERTY(VisibleAnywhere) TObjectPtr<USceneComponent> mRoot = nullptr;
+
+#if WITH_EDITORONLY_DATA
+	UPROPERTY(VisibleAnywhere) TObjectPtr<class UArrowComponent> mArrow = nullptr;
+#endif
+
 public:	
 	// Sets default values for this actor's properties
 	AAIPatrolPoint();

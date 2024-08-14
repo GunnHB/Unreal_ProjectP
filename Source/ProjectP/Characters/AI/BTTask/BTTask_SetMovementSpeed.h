@@ -16,8 +16,11 @@ class PROJECTP_API UBTTask_SetMovementSpeed : public UBTTaskNode
 	GENERATED_BODY()
 
 protected:
+	bool bIsArrived = false;
+
+protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 private:
-	void SetMovementSpeed(const APawn* owner) const;
+	bool SetMovementSpeed(const APawn* pawn) const;
 };
