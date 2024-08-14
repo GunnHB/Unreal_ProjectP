@@ -2,14 +2,20 @@
 
 #include "PlayerControls.h"
 
-#include "../../InputData/PlayerInputData.h"
+#include "Engine/DamageEvents.h"
+
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "PlayerAnimInstance.h"
 
+#include "../../InputData/PlayerInputData.h"
+
 #include "../../Inventory/Widget/InventoryWidget.h"
 #include "../../Inventory/Item/Weapon/WeaponSword.h"
-#include "ProjectP/Data/PlayerStat.h"
+
+#include "../../Data/PlayerStat.h"
+
+#include "../../Component/CombatComponent.h"
 
 APlayerControls::APlayerControls()
 {
@@ -139,7 +145,7 @@ void APlayerControls::InitComponentsValue()
 		movement->MaxWalkSpeed = GameValue::GetMaxWalkSpeed();
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
+	GetCapsuleComponent()->SetCollisionProfileName(GameValue::GetPlayerFName());
 
 	// 나는 무시
 	mQueryParam.AddIgnoredActor(this);
@@ -614,25 +620,25 @@ void APlayerControls::PickUpItem(AItemBase* item)
 	}
 }
 
-void APlayerControls::TakeDamage(ICombatable* hitterCombatable)
+void APlayerControls::TakeDamage(APawn* hitterPawn)
 {
 	if(mPlayerStat->IsCharacterDead())
 		return;
-	
-	if(hitterCombatable == nullptr)
+
+	if(!IsValid(hitterPawn))
 		return;
-	
+
 	if(!CanPerformTogglingToTakeDamage())
 		return;
 
 	bIsToggling = true;
-	
+
 	FDamageEvent damageEvent;
 
-	UCombatComponent* hitterCombatComp = hitterCombatable->GetCombatComponent();
+	UCombatComponent* hitterCombatComp = hitterPawn->FindComponentByClass<UCombatComponent>();
 
 	if(IsValid(hitterCombatComp) && !hitterCombatComp->IsMainWeaponNull())
-		TakeDamage(hitterCombatComp->GetMainWeaponAbilityValue(), damageEvent, hitterCombatable->GetThisController(), hitterCombatComp->GetMainWeapon());
+		TakeDamage(hitterCombatComp->GetMainWeaponAbilityValue(), damageEvent, hitterPawn->GetController(), hitterCombatComp->GetMainWeapon());
 }
 
 float APlayerControls::GetInputDegree()

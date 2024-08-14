@@ -3,6 +3,7 @@
 
 #include "CombatComponent.h"
 
+#include "CollisionComponent.h"
 #include "../Inventory/Item/Weapon/WeaponSword.h"
 
 void UCombatComponent::IncreaseAttackCount()
@@ -30,6 +31,14 @@ float UCombatComponent::GetMainWeaponAbilityValue() const
 		return 0.f;
 
 	return mMainWeapon->GetWeaponData()->ability_value;
+}
+
+UCollisionComponent* UCombatComponent::GetMainCollisionComp() const
+{
+	if(IsMainWeaponNull())
+		return nullptr;
+
+	return mMainWeapon->FindComponentByClass<UCollisionComponent>();
 }
 
 void UCombatComponent::KnockBack(const AActor* hitter)

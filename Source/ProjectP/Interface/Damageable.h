@@ -3,11 +3,11 @@
 #pragma once
 
 #include "UObject/Interface.h"
-#include "Combatable.generated.h"
+#include "Damageable.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UCombatable : public UInterface
+class UDamageable : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -15,17 +15,13 @@ class UCombatable : public UInterface
 /**
  * 
  */
-class PROJECTP_API ICombatable
+class PROJECTP_API IDamageable
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void ContinueAttack() = 0;
-	virtual void EnableCombat() = 0;
-	virtual void DrawSheath() = 0;
-	virtual void ResetAttack() = 0;
-	virtual void ResetDodge() = 0;
-	virtual void ResetCombat() = 0;
-	virtual void ResetTakeDamage() = 0;
+	virtual void TakeDamage(APawn* hitterPawn) = 0;
+	virtual void StartHitStop(const float time) = 0;
+	virtual void EndHitStop() = 0;
 };

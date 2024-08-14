@@ -28,7 +28,6 @@ public:
 	// interface
 	virtual UStaticMeshComponent* GetMesh() override;
 	virtual FQuat GetQuat() override;
-	virtual UCollisionComponent* GetCollision() override {return mCollision;}
 	
 	void ResetTransform();
 

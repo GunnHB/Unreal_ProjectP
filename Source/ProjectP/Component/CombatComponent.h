@@ -63,6 +63,8 @@ public:
 	void IncreaseAttackCount();
 	bool IsMainWeaponNull() const {return mMainWeapon == nullptr;}
 	float GetMainWeaponAbilityValue() const;
+	
+	class UCollisionComponent* GetMainCollisionComp() const;
 
 	void KnockBack(const AActor* hitter);
 	void EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleComponent* capsule) const;

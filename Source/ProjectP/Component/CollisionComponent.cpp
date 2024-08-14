@@ -5,7 +5,7 @@
 
 #include "CombatComponent.h"
 #include "../Interface/CollisionEnable.h"
-#include "../Interface/Combatable.h"
+#include "../Interface/Damageable.h"
 
 UCollisionComponent::UCollisionComponent()
 {
@@ -65,11 +65,10 @@ void UCollisionComponent::CollisionTrace()
 		{
 			mHitActorArray.Add(hit.GetActor());
 
-			ICombatable* takerCombatable = Cast<ICombatable>(hit.GetActor());
-			ICombatable* hitterCombatable = Cast<ICombatable>(mOwnerActor);
+			IDamageable* takerDamageable = Cast<IDamageable>(hit.GetActor());
 
-			if(takerCombatable != nullptr && IsValid(mOwnerActor))
-				takerCombatable->TakeDamage(hitterCombatable);
+			if(takerDamageable != nullptr)
+				takerDamageable->TakeDamage(Cast<APawn>(mOwnerActor));
 		}
 	}
 }

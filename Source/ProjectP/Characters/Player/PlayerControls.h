@@ -5,7 +5,7 @@
 #include "InputActionValue.h"
 
 #include "../../System/GameInfo.h"
-#include "../../System/CombatInfo.h"
+#include "../../System/InterfaceInfo.h"
 
 #include "GameFramework/Character.h"
 #include "PlayerControls.generated.h"
@@ -13,14 +13,14 @@
 class AItemBase;
 
 UCLASS()
-class PROJECTP_API APlayerControls : public ACharacter, public ICombatable
+class PROJECTP_API APlayerControls : public ACharacter, public ICombatable, public IDamageable, public IPickupEnable
 {
 	GENERATED_BODY()
 
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<USpringArmComponent> mSpringArm;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UCameraComponent> mCamera;
-	UPROPERTY(VisibleAnywhere) TObjectPtr<UCombatComponent> mCombat;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<class UCombatComponent> mCombat;
 	
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 	
@@ -89,9 +89,7 @@ public:
 	virtual void EndHitStop() override;
 	
 	virtual void PickUpItem(AItemBase* item) override;
-	virtual void TakeDamage(ICombatable* hitterCombatable) override;
-	virtual AController* GetThisController() override {return GetController();}
-	virtual UCombatComponent* GetCombatComponent() override {return mCombat;}
+	virtual void TakeDamage(APawn* hitterPawn) override;
 
 protected:
 	void InitAssets();														// 에셋 초기화

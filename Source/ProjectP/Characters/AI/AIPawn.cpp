@@ -13,6 +13,8 @@ AAIPawn::AAIPawn()
 
 	SetRootComponent(mCapsule);
 	mMesh->SetupAttachment(mCapsule);
+
+	mMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called when the game starts or when spawned

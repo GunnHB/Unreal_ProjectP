@@ -37,6 +37,7 @@ protected:
 	// cache
 	TObjectPtr<class APlayerControls> mPlayer = nullptr;
 	TObjectPtr<UCharacterMovementComponent> mPlayerMovement = nullptr;
+	TObjectPtr<class UCombatComponent> mCombat = nullptr;
 
 public:
 	virtual void NativeInitializeAnimation() override;

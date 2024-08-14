@@ -15,10 +15,13 @@ private:
 	static float MaxWalkSpeed;
 	static float KnockBackAmount;
 	
-	static FName CollisionStartSocketName;
-	static FName CollisionEndSocketName;
-	static FName PelvisSocketName;
-	
+	static FName CollisionStartSocketFName;
+	static FName CollisionEndSocketFName;
+	static FName PelvisSocketFName;
+
+	static FName PlayerFName;
+	static FName EnemyFName;
+	static FName ItemFName;
 
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
@@ -26,9 +29,13 @@ public:
 	static float GetMaxWalkSpeed() {return MaxWalkSpeed;}
 	static float GetKnockBackAmount() {return KnockBackAmount;}
 	
-	static FName GetCollisionStartSocketName() {return CollisionStartSocketName;}
-	static FName GetCollisionEndSocketName() {return CollisionEndSocketName;}
-	static FName GetPelvisSocketName() {return PelvisSocketName;}
+	static FName GetCollisionStartSocketName() {return CollisionStartSocketFName;}
+	static FName GetCollisionEndSocketName() {return CollisionEndSocketFName;}
+	static FName GetPelvisSocketName() {return PelvisSocketFName;}
+
+	static FName GetPlayerFName() {return PlayerFName;}
+	static FName GetEnemyFName() {return EnemyFName;}
+	static FName GetItemFName() {return ItemFName;}
 };
 
 enum ECharacterState : int8

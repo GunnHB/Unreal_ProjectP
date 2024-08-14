@@ -13,7 +13,11 @@ class PROJECTP_API UAnimNotifyState_CollisionTrace : public UAnimNotifyState
 {
 	GENERATED_BODY()
 
+protected:
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference) override;
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
+
+private:
+	class UCollisionComponent* GetCollisionComp(USkeletalMeshComponent* MeshComp) const; 
 };

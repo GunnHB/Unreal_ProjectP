@@ -3,7 +3,7 @@
 
 #include "ItemBase.h"
 
-#include "ProjectP/Interface/Combatable.h"
+#include "ProjectP/Interface/PickupEnable.h"
 
 // Sets default values
 AItemBase::AItemBase()
@@ -42,10 +42,10 @@ void AItemBase::SetData(FItem* itemData, bool relocate)
 
 void AItemBase::Interact(AActor* targetActor)
 {
-	ICombatable* combatable = Cast<ICombatable>(targetActor);
+	IPickupEnable* pickupEnable = Cast<IPickupEnable>(targetActor);
 
-	if(combatable != nullptr)
-		combatable->PickUpItem(this);
+	if(pickupEnable != nullptr)
+		pickupEnable->PickUpItem(this);
 }
 
 void AItemBase::SetItem(const bool relocate) const
