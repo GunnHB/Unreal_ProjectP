@@ -3,7 +3,7 @@
 
 #include "BTTask_MoveToTarget.h"
 
-#include "../EnemyPawn.h"
+#include "../AIPawn.h"
 
 UBTTask_MoveToTarget::UBTTask_MoveToTarget()
 {
@@ -16,6 +16,14 @@ EBTNodeResult::Type UBTTask_MoveToTarget::ExecuteTask(UBehaviorTreeComponent& Ow
 	
 	bNotifyTick = true;
 	mCurrentTargetLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(GameValue::GetTargetLocationFName());
+
+	APawn* pawn = OwnerComp.GetAIOwner()->GetPawn();
+
+	if (IsValid(pawn))
+	{
+		mActorLocationForDistance = pawn->GetActorLocation();
+		mCurrentYaw = pawn->GetActorRotation().Yaw;
+	}
 	
 	return result;
 }
@@ -26,8 +34,17 @@ void UBTTask_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 
 	APawn* ownerPawn = OwnerComp.GetAIOwner()->GetPawn();
 
-	if(IsValid(ownerPawn))
-		SetMovementSpeed(ownerPawn, DeltaSeconds);
+	if(!IsValid(ownerPawn))
+		return;
+		
+	UFloatingPawnMovement* movement = ownerPawn->FindComponentByClass<UFloatingPawnMovement>();
+
+	if(IsValid(movement))
+	{
+		SetCurrentActorLocation(ownerPawn);
+		SetCurrentActorRotation(ownerPawn, DeltaSeconds);
+		SetMovementSpeed(movement, DeltaSeconds);
+	}
 }
 
 void UBTTask_MoveToTarget::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
@@ -45,20 +62,53 @@ void UBTTask_MoveToTarget::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uin
 	}
 }
 
-void UBTTask_MoveToTarget::SetMovementSpeed(APawn* pawn, float deltaSeconds)
+void UBTTask_MoveToTarget::SetCurrentActorLocation(APawn* pawn)
 {
-	UFloatingPawnMovement* movement = pawn->FindComponentByClass<UFloatingPawnMovement>();
-	FVector newLocation = pawn->GetActorLocation();
+	if (!IsValid(pawn))
+		return;
 
-	AEnemyPawn* enemyPawn = Cast<AEnemyPawn>(pawn);
+	AAIPawn* aiPawn = Cast<AAIPawn>(pawn);
 
-	if(IsValid(enemyPawn))
-		newLocation.Z -= enemyPawn->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	if(IsValid(aiPawn))
+	{
+		mActorLocationForDistance = pawn->GetActorLocation();
+		mActorLocationForDistance.Z -= aiPawn->GetCapsuleComp()->GetScaledCapsuleHalfHeight();
+
+		aiPawn->SetActorLocation(FVector(aiPawn->GetActorLocation().X, aiPawn->GetActorLocation().Y,aiPawn->GetCapsuleComp()->GetScaledCapsuleHalfHeight()));
+	}
+}
+
+void UBTTask_MoveToTarget::SetMovementSpeed(UFloatingPawnMovement* movement, float deltaSeconds) const
+{
+	if(!IsValid(movement))
+		return;
 	
-	float distance = FVector::Dist(newLocation, mCurrentTargetLocation);
-	
-	float targetSpeed = distance > 50.f ? GameValue::GetMaxWalkSpeed() : 0.f;
+	float distance = FVector::Dist(mActorLocationForDistance, mCurrentTargetLocation);
+	float targetSpeed = distance > GameValue::GetMoveToTargetLimitAmount() ? GameValue::GetMaxWalkSpeed() : 0.f;
 
+	// 약간 하드코딩인디...
 	if(IsValid(movement))
-		movement->MaxSpeed = FMath::FInterpTo(movement->MaxSpeed, targetSpeed, .2f, 1.f);
+		movement->MaxSpeed = FMath::FInterpTo(movement->MaxSpeed, targetSpeed, deltaSeconds, 5.f);
+}
+
+void UBTTask_MoveToTarget::SetCurrentActorRotation(APawn* pawn, float deltaSeconds)
+{
+	if(!IsValid(pawn))
+		return;
+	
+	FVector direction = mCurrentTargetLocation - mActorLocationForDistance;
+
+	if(direction.Normalize())
+	{
+		float targetYaw = FMath::Atan2(direction.Y, direction.X) * FMathf::RadToDeg;
+
+		if (targetYaw < -180.f)
+			targetYaw = 360 + targetYaw;
+		else if (targetYaw > 180.f)
+			targetYaw = targetYaw - 360.f;
+		
+		mCurrentYaw = FMath::FInterpTo(mCurrentYaw, targetYaw, deltaSeconds, 5.f);
+
+		pawn->SetActorRotation(FRotator(0.f, mCurrentYaw, 0.f));
+	}
 }

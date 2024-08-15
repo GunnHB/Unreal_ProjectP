@@ -21,6 +21,9 @@ public:
 	// Sets default values for this pawn's properties
 	AAIPawn();
 
+	// getter
+	UCapsuleComponent* GetCapsuleComp() const {return mCapsule;}
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -9,6 +9,8 @@ float GameValue::MaxWalkSpeed = 100.f;
 float GameValue::MaxJogSpeed = 400.f;
 float GameValue::KnockBackAmount = 85.f;
 
+float GameValue::MoveToTargetLimitAmount = 50.f;
+
 FName GameValue::CollisionStartSocketFName = "CollisionStart";
 FName GameValue::CollisionEndSocketFName = "CollisionEnd";
 FName GameValue::PelvisSocketFName = "pelvis";

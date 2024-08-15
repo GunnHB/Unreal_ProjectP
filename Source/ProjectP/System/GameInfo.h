@@ -15,6 +15,8 @@ private:
 	static float MaxWalkSpeed;
 	static float MaxJogSpeed;
 	static float KnockBackAmount;
+
+	static float MoveToTargetLimitAmount;
 	
 	static FName CollisionStartSocketFName;
 	static FName CollisionEndSocketFName;
@@ -35,6 +37,8 @@ public:
 	static float GetMaxWalkSpeed() {return MaxWalkSpeed;}
 	static float GetMaxJogSpeed() {return MaxJogSpeed;}
 	static float GetKnockBackAmount() {return KnockBackAmount;}
+	
+	static float GetMoveToTargetLimitAmount() {return MoveToTargetLimitAmount;}
 	
 	static FName GetCollisionStartSocketName() {return CollisionStartSocketFName;}
 	static FName GetCollisionEndSocketName() {return CollisionEndSocketFName;}

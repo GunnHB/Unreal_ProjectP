@@ -17,6 +17,8 @@ class PROJECTP_API UBTTask_MoveToTarget : public UBTTask_MoveTo
 
 protected:
 	FVector mCurrentTargetLocation = FVector::ZeroVector;
+	FVector mActorLocationForDistance = FVector::ZeroVector;
+	float mCurrentYaw = 0.f;
 
 public:
 	UBTTask_MoveToTarget();
@@ -27,5 +29,7 @@ protected:
 	virtual void OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult) override;
 
 private:
-	void SetMovementSpeed(APawn* pawn, float deltaSeconds);
+	void SetCurrentActorLocation(APawn* pawn);
+	void SetCurrentActorRotation(APawn* pawn, float deltaSeconds);
+	void SetMovementSpeed(class UFloatingPawnMovement* movement, float deltaSeconds) const;
 };

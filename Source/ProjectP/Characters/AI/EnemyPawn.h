@@ -41,7 +41,6 @@ public:
 
 	// getter
 	TArray<AAIPatrolPoint*> GetPatrolPointArray() const {return mPatrolPointArray;}
-	UCapsuleComponent* GetCapsuleComponent() const {return mCapsule;}
 	
 
 protected:
