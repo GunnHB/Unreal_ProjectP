@@ -15,6 +15,8 @@ AAIPawn::AAIPawn()
 	mMesh->SetupAttachment(mCapsule);
 
 	mMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	mCapsule->SetCanEverAffectNavigation(false);
 }
 
 // Called when the game starts or when spawned

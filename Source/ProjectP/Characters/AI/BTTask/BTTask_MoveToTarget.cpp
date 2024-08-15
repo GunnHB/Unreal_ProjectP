@@ -74,6 +74,7 @@ void UBTTask_MoveToTarget::SetCurrentActorLocation(APawn* pawn)
 		mActorLocationForDistance = pawn->GetActorLocation();
 		mActorLocationForDistance.Z -= aiPawn->GetCapsuleComp()->GetScaledCapsuleHalfHeight();
 
+		// 공중에 뜨는 현상 방지인데 맘에 안듦
 		aiPawn->SetActorLocation(FVector(aiPawn->GetActorLocation().X, aiPawn->GetActorLocation().Y,aiPawn->GetCapsuleComp()->GetScaledCapsuleHalfHeight()));
 	}
 }
