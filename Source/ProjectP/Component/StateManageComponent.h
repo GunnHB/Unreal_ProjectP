@@ -12,17 +12,22 @@ class PROJECTP_API UStateManageComponent : public UActorComponent
 	GENERATED_BODY()
 
 protected:
-	ECharacterState mCurrentState;
+	ECharacterState mCurrentCharacterState;
+	ECharacterAction mCurrentCharacterAction;
 
 public:	
 	// Sets default values for this component's properties
 	UStateManageComponent();
 
 	// getter
-	ECharacterState GetCurrentState() const {return mCurrentState;}
+	ECharacterState GetCurrentState() const {return mCurrentCharacterState;}
 
-	// setter
 	void SetState(const ECharacterState newState);
+	void ResetState();
+	bool IsCurrentStateEqual(const ECharacterState state) const;
+	bool IsCurrentStateNotEqualToAny(TArray<int8> stateArray) const;
+
+	void SetAction(const ECharacterAction newAction);
 
 protected:
 	// Called when the game starts
@@ -35,4 +40,9 @@ public:
 private:
 	void OnStateBegin(ECharacterState state);
 	void OnStateEnd(ECharacterState state);
+
+	void OnActionBegin(ECharacterAction action);
+	void OnActionEnd(ECharacterAction action);
+
+	void PrintCurrentState();
 };

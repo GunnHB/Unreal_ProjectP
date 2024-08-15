@@ -24,6 +24,7 @@ protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<USpringArmComponent> mSpringArm;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UCameraComponent> mCamera;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UCombatComponent> mCombat;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<class UStateManageComponent> mStateManage;
 	
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 	
@@ -46,7 +47,6 @@ private:
 	FCollisionQueryParams mQueryParam;
 	bool bEnableToInteract;
 	
-	bool bIsToggling = false;				// 행동 전환 시의 플래그
 	bool bIsFocusing = false;				// focus 플래그
 
 	float mDamageDegree = 0.f;
@@ -123,9 +123,10 @@ private:
 	
 	void TraceForInteractable();
 	
-	bool CanPerformTogglingToCombat();
-	bool CanPerformTogglingToDodge();
-	bool CanPerformTogglingToTakeDamage();
+	bool CanPerformCombat();
+	bool CanPerformAttack();
+	bool CanPerformDodge();
+	bool CanPerformTakeDamage();
 
 	void TryMovement();
 	void PerformMovement();

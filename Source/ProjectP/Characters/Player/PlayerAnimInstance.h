@@ -38,6 +38,7 @@ protected:
 	TObjectPtr<class APlayerControls> mPlayer = nullptr;
 	TObjectPtr<UCharacterMovementComponent> mPlayerMovement = nullptr;
 	TObjectPtr<class UCombatComponent> mCombat = nullptr;
+	TObjectPtr<class UStateManageComponent> mStateManage = nullptr;
 
 public:
 	virtual void NativeInitializeAnimation() override;
@@ -49,7 +50,7 @@ public:
 	virtual void NativeBeginPlay() override;
 
 	// getter
-	bool GetIsInAir() const { return mIsInAir; }
+	bool GetIsInAir() const {return mIsInAir;}
 	bool GetIsLandingAnimEnd() const {return bIsLandingAnimEnd;}
 
 	// play montage
@@ -59,6 +60,8 @@ public:
 	void PlayAttackMontage(int32 attackIndex, bool randomIndex);
 
 	void SetTakeDamageDegree();
+	
+	void PerformStopAllMontages();
 
 private:
 	void PerformPlayMontage(UAnimMontage* montage);

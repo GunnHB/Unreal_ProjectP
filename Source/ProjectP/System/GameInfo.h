@@ -54,14 +54,24 @@ public:
 	static FString GetBTTaskMoveToTargetFName() {return BTTaskMoveToTargetFName;}
 };
 
-enum ECharacterState : int8
+enum class ECharacterState : int8
 {
 	None = -1,
-	Idle,
-	Movement,
+	General,
 	Attack,
 	Dodge,
-	Focus,
+	Roll,
+	TakeDamage,
+	Dead,
+};
+
+enum class ECharacterAction : int8
+{
+	None = -1,
+	LightAttack,
+	HeavyAttack,
+	ChargeAttack,
+	Dodge,
 };
 
 UENUM()

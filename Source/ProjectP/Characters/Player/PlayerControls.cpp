@@ -16,6 +16,7 @@
 #include "../../Data/PlayerStat.h"
 
 #include "../../Component/CombatComponent.h"
+#include "../../Component/StateManageComponent.h"
 
 APlayerControls::APlayerControls()
 {
@@ -24,6 +25,7 @@ APlayerControls::APlayerControls()
 	mSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRING_ARM"));
 	mCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	mCombat = CreateDefaultSubobject<UCombatComponent>(TEXT("COMBAT"));
+	mStateManage = CreateDefaultSubobject<UStateManageComponent>(TEXT("STATE_MANAGE"));
 
 	InitAssets();
 	InitComponentsValue();
@@ -34,6 +36,8 @@ void APlayerControls::BeginPlay()
 	Super::BeginPlay();
 	
 	mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	mStateManage->SetState(ECharacterState::General);
+	
 	MappingContext();
 }
 
@@ -71,16 +75,20 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	{
 		if(mPlayerStat->GetCharacterHealth() <= 0)
 		{
+			if(IsValid(mStateManage))
+				mStateManage->SetState(ECharacterState::Dead);
+			
 			mCombat->EnableRagdoll(GetMesh(), GetCapsuleComponent());
 			mSpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameValue::GetPelvisSocketName());
 			
-			return 0.f;
+			return damage;
 		}
 		
-		mCombat->SetTakeDamage(true);
+		if(IsValid(mStateManage))
+			mStateManage->SetState(ECharacterState::TakeDamage);
 	}
 
-	StartHitStop(.25f);
+	StartHitStop(.01f);
 	
 	SetDamageDegree(EventInstigator->GetPawn());
 	mCombat->KnockBack(EventInstigator->GetPawn());
@@ -223,10 +231,15 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
 {
-	if (!IsValid(mCombat))
+	// if (!IsValid(mCombat))
+	// 	return;
+
+	if(!IsValid(mStateManage))
 		return;
 	
-	if(mCombat->GetIsAttacking())
+	// if(mCombat->GetIsAttacking())
+	// 공격 중일 때는 다음 공격 준비
+	if(mStateManage->IsCurrentStateEqual(ECharacterState::Attack))
 		mCombat->SetIsAttackSaved(true);
 	else
 		TryAttack();
@@ -234,9 +247,9 @@ void APlayerControls::AttackAction(const FInputActionValue& value)
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
-	if(bIsToggling)
-		return;
-		
+	// if(bIsToggling)
+	// 	return;
+	// 	
 	bIsFocusing = true;
 }
 
@@ -247,13 +260,11 @@ void APlayerControls::CancelFocusAction(const FInputActionValue& value)
 
 void APlayerControls::DrawSheathAction(const FInputActionValue& value)
 {
-	if(!CanPerformTogglingToCombat())
+	if(!CanPerformCombat())
 		return;
 
 	if(!IsValid(mCombat) || mCombat->IsMainWeaponNull())
 		return;
-	
-	bIsToggling = true;
 	
 	PerformDrawSheath();
 }
@@ -350,35 +361,48 @@ void APlayerControls::TraceForInteractable()
 #endif
 }
 
-bool APlayerControls::CanPerformTogglingToCombat()
+bool APlayerControls::CanPerformCombat()
 {
 	if(!IsValid(mCombat))
 		return false;
 
-	// 공격 중이 아니거나 전환 중이 아님
-	return !mCombat->GetIsAttacking() && !bIsToggling;
+	return mStateManage->IsCurrentStateEqual(ECharacterState::General);
 }
 
-bool APlayerControls::CanPerformTogglingToDodge()
+bool APlayerControls::CanPerformAttack()
 {
-	if(!IsValid(mCombat))
+	if(!IsValid(mStateManage))
 		return false;
 
-	// 닷지 실행 중이 아니거나 행동 전환 중이 아님
-	return !mCombat->GetIsDodge() && !bIsToggling;
+	TArray<int8> stateArray = {static_cast<int8>(ECharacterState::Dodge), static_cast<int8>(ECharacterState::Dead)};
+
+	return mStateManage->IsCurrentStateNotEqualToAny(stateArray);
 }
 
-bool APlayerControls::CanPerformTogglingToTakeDamage()
+bool APlayerControls::CanPerformDodge()
 {
-	if (!IsValid(mCombat))
+	if(!IsValid(mStateManage))
 		return false;
 
-	return !mCombat->GetTakeDamage() && !bIsToggling;
+	TArray<int8> stateArray = {static_cast<int8>(ECharacterState::Dodge), static_cast<int8>(ECharacterState::Dead)};
+
+	return mStateManage->IsCurrentStateNotEqualToAny(stateArray);
+}
+
+bool APlayerControls::CanPerformTakeDamage()
+{
+	if(!IsValid(mStateManage))
+		return false;
+
+	return !mStateManage->IsCurrentStateEqual(ECharacterState::Dead);
 }
 
 void APlayerControls::TryMovement()
 {
-	if(mCombat->GetIsAttacking())
+	// if(mCombat->GetIsAttacking())
+	// 	return;
+
+	if(!mStateManage->IsCurrentStateEqual(ECharacterState::General))
 		return;
 	
 	// 공중일 때 || 착지했을 때 회전 막기
@@ -413,9 +437,9 @@ void APlayerControls::TryAttack()
 {
 	if(IsValid(mCombat) && !mCombat->IsMainWeaponNull())
 	{
-		if(!CanPerformTogglingToCombat())
-			return;
-		
+		// if(!CanPerformTogglingToCombat())
+		// 	return;
+		//
 		PerformAttack(mCombat->GetAttackCount(), false);
 	}
 }
@@ -425,42 +449,55 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
 	if(!IsValid(mCombat))
 		return;
 
+	if(!CanPerformAttack())
+		return;
+
 	if(!mCombat->GetCombatEnable())
 	{
 		PerformDrawSheath();
 		return;
 	}
-	
+
 	mAnimInstance->PlayAttackMontage(montageIndex, randomIndex);
 
-	mCombat->SetIsAttacking(true);	
+	// mCombat->SetIsAttacking(true);
+	mStateManage->SetState(ECharacterState::Attack);
 	mCombat->IncreaseAttackCount();
-
 }
 
 void APlayerControls::TryDodge()
 {
-	if(!IsValid(mCombat))
+	// if(!IsValid(mCombat))
+	// 	return;
+	//
+	// if(mCombat->GetIsDodge())
+
+	if(!IsValid(mStateManage))
 		return;
 	
-	if(mCombat->GetIsDodge())
+	if(mStateManage->IsCurrentStateEqual(ECharacterState::Dodge))
 		PerformRoll();
-	else	
+	else
 		PerformDodge();
 }
 
 void APlayerControls::PerformDodge()
 {
-	if(!CanPerformTogglingToDodge())
+	if(!CanPerformDodge())
 		return;
+
+	if(IsValid(mAnimInstance))
+	{
+		mAnimInstance->PerformStopAllMontages();
+		ResetCombat();	
+	}
 	
-	bIsToggling = true;
-	mCombat->SetIsDodge(true);
+	mStateManage->SetState(ECharacterState::Dodge);
 }
 
 void APlayerControls::PerformRoll()
 {
-
+	
 }
 
 void APlayerControls::TrySprint()
@@ -509,13 +546,10 @@ void APlayerControls::ContinueAttack()
 {
 	if(!IsValid(mCombat))
 		return;
-
-	mCombat->SetIsAttacking(false);
 	
 	if(mCombat->GetIsAttackSaved())
 	{
 		mCombat->SetIsAttackSaved(false);
-		
 		TryAttack();
 	}
 }
@@ -540,8 +574,6 @@ void APlayerControls::DrawSheath()
 		mCombat->GetMainWeapon()->OnUnequip();
 	else
 		mCombat->GetMainWeapon()->OnEquip();
-
-	bIsToggling = false;
 }
 
 void APlayerControls::ResetAttack()
@@ -549,35 +581,27 @@ void APlayerControls::ResetAttack()
 	if(!IsValid(mCombat))
 		return;
 
-	mCombat->SetIsAttacking(false);
+	mStateManage->ResetState();
 	mCombat->SetIsAttackSaved(false);
 	mCombat->SetAttackCount(0);
 }
 
 void APlayerControls::ResetDodge()
 {
-	if(!IsValid(mCombat))
-		return;
-	
-	mCombat->SetIsDodge(false);
-
-	bIsToggling = false;
+	if(IsValid(mStateManage))
+		mStateManage->ResetState();
 }
 
 void APlayerControls::ResetTakeDamage()
 {
-	if(!IsValid(mCombat))
-		return;
-
-	mCombat->SetTakeDamage(false);
-
-	bIsToggling = false;
+	if(IsValid(mStateManage))
+		mStateManage->ResetState();
 }
 
 void APlayerControls::StartHitStop(const float time)
 {
 	GetWorldSettings()->SetTimeDilation(time);
-	GetWorld()->GetTimerManager().SetTimer(mHitStopTimeHandle, this, &APlayerControls::EndHitStop, GetWorld()->GetDeltaSeconds() / time, false);
+	GetWorld()->GetTimerManager().SetTimer(mHitStopTimeHandle, this, &APlayerControls::EndHitStop, GetWorld()->GetDeltaSeconds() / 100, false);
 }
 
 void APlayerControls::EndHitStop()
@@ -628,10 +652,8 @@ void APlayerControls::TakeDamage(APawn* hitterPawn)
 	if(!IsValid(hitterPawn))
 		return;
 
-	if(!CanPerformTogglingToTakeDamage())
+	if(!CanPerformTakeDamage())
 		return;
-
-	bIsToggling = true;
 
 	FDamageEvent damageEvent;
 

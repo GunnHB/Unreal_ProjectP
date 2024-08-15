@@ -5,6 +5,7 @@
 
 #include "PlayerControls.h"
 #include "../../Component/CombatComponent.h"
+#include "../../Component/StateManageComponent.h"
 #include "ProjectP/Inventory/Item/Weapon/WeaponSword.h"
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
@@ -18,6 +19,7 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 
 	mPlayerMovement = Cast<UCharacterMovementComponent>(mPlayer->GetMovementComponent());
 	mCombat = mPlayer->FindComponentByClass<UCombatComponent>();
+	mStateManage = mPlayer->FindComponentByClass<UStateManageComponent>();
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -37,8 +39,10 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mIsInAir = mPlayerMovement->IsFalling();
 	
 	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
-	bIsDodge = mCombat->GetIsDodge();
-	bTakeDamage = mCombat->GetTakeDamage();
+	// bIsDodge = mCombat->GetIsDodge();
+	bIsDodge = mStateManage->IsCurrentStateEqual(ECharacterState::Dodge);
+	// bTakeDamage = mCombat->GetTakeDamage();
+	bTakeDamage = mStateManage->IsCurrentStateEqual(ECharacterState::TakeDamage);
 
 	if(!mCombat->IsMainWeaponNull())
 	{
@@ -158,6 +162,11 @@ void UPlayerAnimInstance::PerformPlayMontage(UAnimMontage* montage)
 		Montage_SetPosition(montage, 0.f);
 		Montage_Play(montage);
 	}
+}
+
+void UPlayerAnimInstance::PerformStopAllMontages()
+{
+	StopAllMontages(.1f);
 }
 
 void UPlayerAnimInstance::AnimNotify_LandEnd()
