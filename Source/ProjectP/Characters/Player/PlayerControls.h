@@ -130,17 +130,20 @@ private:
 
 	void TryMovement();
 	void PerformMovement();
-	
+
+	void TryDrawSheath();
 	void PerformDrawSheath();
 
 	void TryAttack();
-	void PerformAttack(int32 montageIndex, bool randomIndex);
+	void PerformAttack(int32 montageIndex, bool randomIndex, const ECharacterAction attackType);
 
 	void TryDodge();
 	void PerformDodge();
 	void PerformRoll();
 	
 	void TrySprint();
+
+	void PerformAction(const ECharacterState state, const ECharacterAction action) const;
 
 	float GetDegree(const FVector& vector);
 	float GetForwardToTargetAngle(FVector& target);

@@ -21,13 +21,18 @@ public:
 
 	// getter
 	ECharacterState GetCurrentState() const {return mCurrentCharacterState;}
+	ECharacterAction GetCurrentAction() const {return mCurrentCharacterAction;}
 
 	void SetState(const ECharacterState newState);
-	void ResetState();
 	bool IsCurrentStateEqual(const ECharacterState state) const;
-	bool IsCurrentStateNotEqualToAny(TArray<int8> stateArray) const;
+	void ResetState() {mCurrentCharacterState = ECharacterState::General;}
 
 	void SetAction(const ECharacterAction newAction);
+	bool IsCurrentStateEqual(const ECharacterAction action) const;
+	void ResetAction() {mCurrentCharacterAction = ECharacterAction::General;}
+
+	// 이건 공용
+	bool IsCurrentValueNotEqualToAny(TArray<int8> stateArray) const;
 
 protected:
 	// Called when the game starts

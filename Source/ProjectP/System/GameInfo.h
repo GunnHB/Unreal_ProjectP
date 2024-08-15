@@ -60,7 +60,6 @@ enum class ECharacterState : int8
 	General,
 	Attack,
 	Dodge,
-	Roll,
 	TakeDamage,
 	Dead,
 };
@@ -68,10 +67,12 @@ enum class ECharacterState : int8
 enum class ECharacterAction : int8
 {
 	None = -1,
+	General,
 	LightAttack,
 	HeavyAttack,
 	ChargeAttack,
 	Dodge,
+	Roll,
 };
 
 UENUM()

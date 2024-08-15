@@ -231,13 +231,9 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 
 void APlayerControls::AttackAction(const FInputActionValue& value)
 {
-	// if (!IsValid(mCombat))
-	// 	return;
-
 	if(!IsValid(mStateManage))
 		return;
 	
-	// if(mCombat->GetIsAttacking())
 	// 공격 중일 때는 다음 공격 준비
 	if(mStateManage->IsCurrentStateEqual(ECharacterState::Attack))
 		mCombat->SetIsAttackSaved(true);
@@ -247,9 +243,6 @@ void APlayerControls::AttackAction(const FInputActionValue& value)
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
-	// if(bIsToggling)
-	// 	return;
-	// 	
 	bIsFocusing = true;
 }
 
@@ -260,13 +253,7 @@ void APlayerControls::CancelFocusAction(const FInputActionValue& value)
 
 void APlayerControls::DrawSheathAction(const FInputActionValue& value)
 {
-	if(!CanPerformCombat())
-		return;
-
-	if(!IsValid(mCombat) || mCombat->IsMainWeaponNull())
-		return;
-	
-	PerformDrawSheath();
+	TryDrawSheath();
 }
 
 void APlayerControls::InteractAction(const FInputActionValue& value)
@@ -376,7 +363,7 @@ bool APlayerControls::CanPerformAttack()
 
 	TArray<int8> stateArray = {static_cast<int8>(ECharacterState::Dodge), static_cast<int8>(ECharacterState::Dead)};
 
-	return mStateManage->IsCurrentStateNotEqualToAny(stateArray);
+	return mStateManage->IsCurrentValueNotEqualToAny(stateArray);
 }
 
 bool APlayerControls::CanPerformDodge()
@@ -386,7 +373,7 @@ bool APlayerControls::CanPerformDodge()
 
 	TArray<int8> stateArray = {static_cast<int8>(ECharacterState::Dodge), static_cast<int8>(ECharacterState::Dead)};
 
-	return mStateManage->IsCurrentStateNotEqualToAny(stateArray);
+	return mStateManage->IsCurrentValueNotEqualToAny(stateArray);
 }
 
 bool APlayerControls::CanPerformTakeDamage()
@@ -399,9 +386,6 @@ bool APlayerControls::CanPerformTakeDamage()
 
 void APlayerControls::TryMovement()
 {
-	// if(mCombat->GetIsAttacking())
-	// 	return;
-
 	if(!mStateManage->IsCurrentStateEqual(ECharacterState::General))
 		return;
 	
@@ -425,6 +409,17 @@ void APlayerControls::PerformMovement()
 		AddMovementInput(GetActorForwardVector());
 }
 
+void APlayerControls::TryDrawSheath()
+{
+	if(!CanPerformCombat())
+		return;
+
+	if(!IsValid(mCombat) || mCombat->IsMainWeaponNull())
+		return;
+	
+	PerformDrawSheath();
+}
+
 void APlayerControls::PerformDrawSheath()
 {
 	if (mCombat->GetMainWeapon()->GetIsEquipped())
@@ -436,15 +431,10 @@ void APlayerControls::PerformDrawSheath()
 void APlayerControls::TryAttack()
 {
 	if(IsValid(mCombat) && !mCombat->IsMainWeaponNull())
-	{
-		// if(!CanPerformTogglingToCombat())
-		// 	return;
-		//
-		PerformAttack(mCombat->GetAttackCount(), false);
-	}
+		PerformAttack(mCombat->GetAttackCount(), false, ECharacterAction::LightAttack);
 }
 
-void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
+void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex, const ECharacterAction attackType)
 {
 	if(!IsValid(mCombat))
 		return;
@@ -459,19 +449,15 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex)
 	}
 
 	mAnimInstance->PlayAttackMontage(montageIndex, randomIndex);
-
-	// mCombat->SetIsAttacking(true);
+	
 	mStateManage->SetState(ECharacterState::Attack);
+	mStateManage->SetAction(attackType);
+	
 	mCombat->IncreaseAttackCount();
 }
 
 void APlayerControls::TryDodge()
 {
-	// if(!IsValid(mCombat))
-	// 	return;
-	//
-	// if(mCombat->GetIsDodge())
-
 	if(!IsValid(mStateManage))
 		return;
 	
@@ -489,10 +475,11 @@ void APlayerControls::PerformDodge()
 	if(IsValid(mAnimInstance))
 	{
 		mAnimInstance->PerformStopAllMontages();
-		ResetCombat();	
+		ResetCombat();
 	}
 	
 	mStateManage->SetState(ECharacterState::Dodge);
+	mStateManage->SetAction(ECharacterAction::Dodge);
 }
 
 void APlayerControls::PerformRoll()
@@ -504,6 +491,15 @@ void APlayerControls::TrySprint()
 {
 	if(mInputVector == FVector::ZeroVector)
 		return;
+}
+
+void APlayerControls::PerformAction(const ECharacterState state, const ECharacterAction action) const
+{
+	if(IsValid(mStateManage))
+	{
+		mStateManage->SetState(state);
+		mStateManage->SetAction(action);
+	}
 }
 
 float APlayerControls::GetDegree(const FVector& vector)
@@ -581,7 +577,7 @@ void APlayerControls::ResetAttack()
 	if(!IsValid(mCombat))
 		return;
 
-	mStateManage->ResetState();
+	// mStateManage->ResetState();
 	mCombat->SetIsAttackSaved(false);
 	mCombat->SetAttackCount(0);
 }
@@ -612,9 +608,13 @@ void APlayerControls::EndHitStop()
 
 void APlayerControls::ResetCombat()
 {
+	if(IsValid(mStateManage))
+	{
+		mStateManage->ResetState();
+		mStateManage->ResetAction();
+	}
+	
 	ResetAttack();
-	ResetDodge();
-	ResetTakeDamage();
 }
 
 void APlayerControls::PickUpItem(AItemBase* item)

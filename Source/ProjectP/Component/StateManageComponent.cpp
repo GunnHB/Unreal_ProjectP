@@ -26,18 +26,12 @@ void UStateManageComponent::SetState(const ECharacterState newState)
 	OnStateBegin(mCurrentCharacterState);
 }
 
-// general 상태로 전환
-void UStateManageComponent::ResetState()
-{
-	mCurrentCharacterState = ECharacterState::General;
-}
-
 bool UStateManageComponent::IsCurrentStateEqual(const ECharacterState state) const
 {
-	return mCurrentCharacterState == state;
+	return state == mCurrentCharacterState;
 }
 
-bool UStateManageComponent::IsCurrentStateNotEqualToAny(TArray<int8> stateArray) const
+bool UStateManageComponent::IsCurrentValueNotEqualToAny(TArray<int8> stateArray) const
 {
 	for(const int8 state : stateArray)
 	{
@@ -57,6 +51,11 @@ void UStateManageComponent::SetAction(const ECharacterAction newAction)
 
 	mCurrentCharacterAction = newAction;
 	OnActionBegin(mCurrentCharacterAction);
+}
+
+bool UStateManageComponent::IsCurrentStateEqual(const ECharacterAction action) const
+{
+	return action == mCurrentCharacterAction;
 }
 
 // Called when the game starts
