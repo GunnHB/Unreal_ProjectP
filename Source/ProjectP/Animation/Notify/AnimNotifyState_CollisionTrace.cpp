@@ -13,7 +13,7 @@ void UAnimNotifyState_CollisionTrace::NotifyBegin(USkeletalMeshComponent* MeshCo
 	if(!IsValid(MeshComp))
 		return;
 	
-	UCombatComponent* combatComp = Cast<UCombatComponent>(MeshComp->GetOwner());
+	UCombatComponent* combatComp = MeshComp->GetOwner()->FindComponentByClass<UCombatComponent>();
 	
 	if(!IsValid(combatComp))
 		return;
@@ -31,7 +31,7 @@ void UAnimNotifyState_CollisionTrace::NotifyTick(USkeletalMeshComponent* MeshCom
 	if(!IsValid(MeshComp))
 		return;
 	
-	UCombatComponent* combatComp = Cast<UCombatComponent>(MeshComp->GetOwner());
+	UCombatComponent* combatComp = MeshComp->GetOwner()->FindComponentByClass<UCombatComponent>();
 	
 	if(!IsValid(combatComp))
 		return;
@@ -49,7 +49,7 @@ void UAnimNotifyState_CollisionTrace::NotifyEnd(USkeletalMeshComponent* MeshComp
 	if(!IsValid(MeshComp))
 		return;
 	
-	UCombatComponent* combatComp = Cast<UCombatComponent>(MeshComp->GetOwner());
+	UCombatComponent* combatComp = MeshComp->GetOwner()->FindComponentByClass<UCombatComponent>();
 	
 	if(!IsValid(combatComp))
 		return;
