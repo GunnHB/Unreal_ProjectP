@@ -28,4 +28,5 @@ public:
 	virtual void ResetDodge() = 0;
 	virtual void ResetCombat() = 0;
 	virtual void ResetTakeDamage() = 0;
+	virtual void ResetMontage() = 0;
 };

@@ -41,13 +41,22 @@ UPlayerInputData::UPlayerInputData()
 			mInputToJump = asset.Object;
 	}
 
-	// attack
+	// light attack
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Attack.IA_PlayerControls_Attack'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Attack_Light.IA_PlayerControls_Attack_Light'"));
 
 		if (asset.Succeeded())
-			mInputToAttack = asset.Object;
+			mInputToLightAttack = asset.Object;
+	}
+
+	// heavy attack
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_Attack_Heavy.IA_PlayerControls_Attack_Heavy'"));
+
+		if (asset.Succeeded())
+			mInputToHeavyAttack = asset.Object;
 	}
 
 	// focus

@@ -150,7 +150,7 @@ void APlayerControls::InitComponentsValue()
 
 	// 이동 속도 조정
 	if (movement != nullptr)
-		movement->MaxWalkSpeed = GameValue::GetMaxJogSpeed();
+		movement->MaxWalkSpeed = GameValue::GetJogSpeed();
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCapsuleComponent()->SetCollisionProfileName(GameValue::GetPlayerFName());
@@ -171,13 +171,15 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToMovement, ETriggerEvent::Completed, this, &APlayerControls::CancelMovementAction);
 	inputComponent->BindAction(inputData->mInputToCameraMovement, ETriggerEvent::Triggered, this, &APlayerControls::CameraMovementAction);
 	inputComponent->BindAction(inputData->mInputToJump, ETriggerEvent::Started, this, &APlayerControls::JumpAction);
-	inputComponent->BindAction(inputData->mInputToAttack, ETriggerEvent::Started, this, &APlayerControls::AttackAction);
+	inputComponent->BindAction(inputData->mInputToLightAttack, ETriggerEvent::Triggered, this, &APlayerControls::LightAttackAction);
+	inputComponent->BindAction(inputData->mInputToHeavyAttack, ETriggerEvent::Triggered, this, &APlayerControls::HeavyAttackAction);
 	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Triggered, this, &APlayerControls::FocusAction);
 	inputComponent->BindAction(inputData->mInputToFocus, ETriggerEvent::Completed, this, &APlayerControls::CancelFocusAction);
 	inputComponent->BindAction(inputData->mInputToDrawSheath, ETriggerEvent::Triggered, this, &APlayerControls::DrawSheathAction);
 	inputComponent->BindAction(inputData->mInputToInteract, ETriggerEvent::Triggered, this, &APlayerControls::InteractAction);
 	inputComponent->BindAction(inputData->mInputToDodge, ETriggerEvent::Triggered, this, &APlayerControls::DodgeAction);
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Triggered, this, &APlayerControls::SprintAction);
+	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Completed, this, &APlayerControls::CancelSprintAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
 }
@@ -229,16 +231,32 @@ void APlayerControls::JumpAction(const FInputActionValue& value)
 		Jump();
 }
 
-void APlayerControls::AttackAction(const FInputActionValue& value)
+void APlayerControls::LightAttackAction(const FInputActionValue& value)
 {
 	if(!IsValid(mStateManage))
 		return;
-	
-	// 공격 중일 때는 다음 공격 준비
+
 	if(mStateManage->IsCurrentStateEqual(ECharacterState::Attack))
+	{
 		mCombat->SetIsAttackSaved(true);
-	else
-		TryAttack();
+		return;	
+	}
+
+	TryAttack();
+}
+
+void APlayerControls::HeavyAttackAction(const FInputActionValue& value)
+{
+	// if(!IsValid(mStateManage))
+	// 	return;
+	//
+	// if(mStateManage->IsCurrentStateEqual(ECharacterState::Attack))
+	// {
+	// 	mCombat->SetIsAttackSaved(true);
+	// 	return;	
+	// }
+	//
+	// TryAttack();
 }
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
@@ -274,12 +292,14 @@ void APlayerControls::DodgeAction(const FInputActionValue& value)
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
 {
+	UE_LOG(ProjectP, Warning, TEXT("sprint!!!!"));
+	
 	TrySprint();
 }
 
 void APlayerControls::CancelSprintAction(const FInputActionValue& value)
 {
-	
+	SetCurrentMovementType(ECharacterMovementType::Jog);
 }
 
 void APlayerControls::InventoryAction(const FInputActionValue& value)
@@ -348,9 +368,17 @@ void APlayerControls::TraceForInteractable()
 #endif
 }
 
-bool APlayerControls::CanPerformCombat()
+// bool APlayerControls::CanPerformCombat()
+// {
+// 	if(!IsValid(mCombat))
+// 		return false;
+//
+// 	return mStateManage->IsCurrentStateEqual(ECharacterState::General);
+// }
+
+bool APlayerControls::CanPerformMove()
 {
-	if(!IsValid(mCombat))
+	if(!IsValid(mStateManage))
 		return false;
 
 	return mStateManage->IsCurrentStateEqual(ECharacterState::General);
@@ -411,8 +439,8 @@ void APlayerControls::PerformMovement()
 
 void APlayerControls::TryDrawSheath()
 {
-	if(!CanPerformCombat())
-		return;
+	// if(!CanPerformCombat())
+	// 	return;
 
 	if(!IsValid(mCombat) || mCombat->IsMainWeaponNull())
 		return;
@@ -491,6 +519,8 @@ void APlayerControls::TrySprint()
 {
 	if(mInputVector == FVector::ZeroVector)
 		return;
+
+	SetCurrentMovementType(ECharacterMovementType::Sprint);
 }
 
 void APlayerControls::PerformAction(const ECharacterState state, const ECharacterAction action) const
@@ -520,6 +550,36 @@ void APlayerControls::SetDamageDegree(const AActor* hitter)
 	
 	if(targetDirection.Normalize())
 		mDamageDegree = GetForwardToTargetAngle(targetDirection);
+}
+
+void APlayerControls::SetCurrentMovementType(const ECharacterMovementType type)
+{
+	if(type == mCurrentMovementType)
+		return;
+
+	mCurrentMovementType = type;
+	SetMovementSpeed();
+}
+
+void APlayerControls::SetMovementSpeed()
+{
+	UCharacterMovementComponent* movement = Cast<UCharacterMovementComponent>(GetMovementComponent());
+
+	if(!IsValid(movement))
+		return;
+	
+	switch (mCurrentMovementType)
+	{
+	case ECharacterMovementType::Walk:
+		movement->MaxWalkSpeed = GameValue::GetWalkSpeed();
+		break;
+	case ECharacterMovementType::Jog:
+		movement->MaxWalkSpeed = GameValue::GetJogSpeed();
+		break;
+	case ECharacterMovementType::Sprint:
+		movement->MaxWalkSpeed = GameValue::GetSprintSpeed();
+		break;
+	}
 }
 
 bool APlayerControls::AddMoney(const FMoney* moneyData)
@@ -577,7 +637,6 @@ void APlayerControls::ResetAttack()
 	if(!IsValid(mCombat))
 		return;
 
-	// mStateManage->ResetState();
 	mCombat->SetIsAttackSaved(false);
 	mCombat->SetAttackCount(0);
 }
@@ -592,6 +651,12 @@ void APlayerControls::ResetTakeDamage()
 {
 	if(IsValid(mStateManage))
 		mStateManage->ResetState();
+}
+
+void APlayerControls::ResetMontage()
+{
+	if(IsValid(mAnimInstance))
+		mAnimInstance->PerformStopAllMontages();
 }
 
 void APlayerControls::StartHitStop(const float time)

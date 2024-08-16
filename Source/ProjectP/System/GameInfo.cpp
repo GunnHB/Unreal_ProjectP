@@ -5,8 +5,9 @@ DEFINE_LOG_CATEGORY(ProjectP);
 
 int32 GameValue::MaxMoney = 9999;
 
-float GameValue::MaxWalkSpeed = 100.f;
-float GameValue::MaxJogSpeed = 400.f;
+float GameValue::WalkSpeed = 100.f;
+float GameValue::JogSpeed = 400.f;
+float GameValue::SprintSpeed = 800.f;
 float GameValue::KnockBackAmount = 85.f;
 
 float GameValue::MoveToTargetLimitAmount = 50.f;

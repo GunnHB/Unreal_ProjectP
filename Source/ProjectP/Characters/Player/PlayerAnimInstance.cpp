@@ -39,9 +39,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mIsInAir = mPlayerMovement->IsFalling();
 	
 	bInputForMovement = mPlayer->GetInputVector().Size() > 0.01f;
-	// bIsDodge = mCombat->GetIsDodge();
 	bIsDodge = mStateManage->IsCurrentStateEqual(ECharacterState::Dodge);
-	// bTakeDamage = mCombat->GetTakeDamage();
 	bTakeDamage = mStateManage->IsCurrentStateEqual(ECharacterState::TakeDamage);
 
 	if(!mCombat->IsMainWeaponNull())

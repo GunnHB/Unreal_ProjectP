@@ -5,8 +5,11 @@
 
 #include "../../Component/EnemyMovementComponent.h"
 #include "../../Component/CombatComponent.h"
+
 #include "EnemyAnimInstance.h"
 #include "EnemyController.h"
+
+#include "../../Inventory/Item/Weapon/WeaponSword.h"
 
 AEnemyPawn::AEnemyPawn()
 {
@@ -32,7 +35,7 @@ AEnemyPawn::AEnemyPawn()
 
 	if(animAsset.Succeeded())
 		mMesh->SetAnimInstanceClass(animAsset.Class);
-
+	
 	AIControllerClass = AEnemyController::StaticClass();
 }
 
@@ -44,6 +47,8 @@ void AEnemyPawn::BeginPlay()
 		mAnimInstance = Cast<UEnemyAnimInstance>(mMesh->GetAnimInstance());
 
 	bUseControllerRotationYaw = false;
+
+	SpawnWeapon();
 }
 
 float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -56,6 +61,40 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 void AEnemyPawn::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+}
+
+void AEnemyPawn::SpawnWeapon()
+{
+	FItem* itemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(TEXT("Item_Weapon_004"), "");
+
+	if(itemData == nullptr)
+		return;
+
+	AWeaponBase* spawnWeapon = GetWorld()->SpawnActor<AWeaponBase>(itemData->item_class);
+
+	if(IsValid(spawnWeapon))
+		spawnWeapon->SetData(itemData, false);
+
+	IEquippable* equippable = Cast<IEquippable>(spawnWeapon);
+
+	if(equippable != nullptr)
+	{
+		if(!IsValid(mCombat))
+			return;
+
+		if(IsValid(mCombat->GetMainWeapon()))
+			mCombat->GetMainWeapon()->Destroy();
+		
+		if(IsValid(spawnWeapon))
+		{
+			spawnWeapon->SetOwner(this);
+			spawnWeapon->SetSkeletalMesh(mMesh);
+			spawnWeapon->OnUnequip();
+		
+			mCombat->SetMainWeapon(spawnWeapon);
+			mCombat->SetCombatEnable(false);
+		}
+	}
 }
 
 void AEnemyPawn::ContinueAttack()
@@ -83,6 +122,10 @@ void AEnemyPawn::ResetDodge()
 }
 
 void AEnemyPawn::ResetTakeDamage()
+{
+}
+
+void AEnemyPawn::ResetMontage()
 {
 }
 

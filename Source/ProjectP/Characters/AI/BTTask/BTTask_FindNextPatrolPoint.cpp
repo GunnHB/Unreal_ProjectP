@@ -30,6 +30,9 @@ bool UBTTask_FindNextPatrolPoint::SetPathLocation(UBlackboardComponent* blackboa
 {
 	if(!IsValid(mOwnerEnemy) || !IsValid(blackboard))
 		return false;
+
+	if(mOwnerEnemy->GetPatrolPointArray().IsEmpty())
+		return false;
 	
 	if(mOwnerEnemy->GetPatrolPointArray()[mPatrolIndex] != nullptr)
 	{

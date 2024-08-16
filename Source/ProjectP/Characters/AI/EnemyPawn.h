@@ -17,7 +17,7 @@ protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UEnemyMovementComponent> mMovement = nullptr;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UCombatComponent> mCombat = nullptr;
 	UPROPERTY(EditAnywhere) TArray<class AAIPatrolPoint*> mPatrolPointArray;
-
+	
 	TObjectPtr<class UEnemyAnimInstance> mAnimInstance = nullptr;
 	
 	FEnemy mEnemyData;
@@ -30,6 +30,7 @@ protected:
 	virtual void ResetCombat() override;
 	virtual void ResetDodge() override;
 	virtual void ResetTakeDamage() override;
+	virtual void ResetMontage() override;
 
 	// IDamageable pure function
 	virtual void TakeDamage(APawn* hitterPawn) override;
@@ -47,4 +48,6 @@ protected:
 	virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void PossessedBy(AController* NewController) override;
+
+	void SpawnWeapon();
 };

@@ -35,6 +35,8 @@ protected:
 	
 	TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
 
+	ECharacterMovementType mCurrentMovementType = ECharacterMovementType::None;
+
 private:
 	FVector mInputVector;
 	FVector mLastInputVector;
@@ -74,12 +76,16 @@ public:
 
 	float GetDamageDegree() const {return mDamageDegree;}
 
+	ECharacterMovementType GetCurrentMovementType() const {return mCurrentMovementType;}
+
 	// setter
 	void SetDamageDegree(const AActor* hitter);
+	void SetCurrentMovementType(const ECharacterMovementType type);
+	void SetMovementSpeed();
 
 	bool AddMoney(const FMoney* moneyData);
 
-	// interface
+	// icombatable interface
 	virtual void ContinueAttack() override;
 	virtual void EnableCombat() override;
 	virtual void ResetAttack() override;
@@ -87,12 +93,15 @@ public:
 	virtual void ResetDodge() override;
 	virtual void ResetCombat() override;
 	virtual void ResetTakeDamage() override;
+	virtual void ResetMontage() override;
 
+	// idamageable interface
+	virtual void TakeDamage(APawn* hitterPawn) override;
 	virtual void StartHitStop(const float time) override;
 	virtual void EndHitStop() override;
-	
+
+	// ipickupenable interface
 	virtual void PickUpItem(AItemBase* item) override;
-	virtual void TakeDamage(APawn* hitterPawn) override;
 
 protected:
 	void InitAssets();														// 에셋 초기화
@@ -103,7 +112,8 @@ protected:
 	void CancelMovementAction(const FInputActionValue& value);				// 이동 취소
 	void CameraMovementAction(const FInputActionValue& value);				// 카메라 이동
 	void JumpAction(const FInputActionValue& value);						// 점프
-	void AttackAction(const FInputActionValue& value);						// 공격
+	void LightAttackAction(const FInputActionValue& value);					// 공격_약
+	void HeavyAttackAction(const FInputActionValue& value);					// 공격_강
 	void FocusAction(const FInputActionValue& value);						// 포커싱
 	void CancelFocusAction(const FInputActionValue& value);					// 포커싱 취소
 	void DrawSheathAction(const FInputActionValue& value);					// 무기 장비
@@ -123,7 +133,8 @@ private:
 	
 	void TraceForInteractable();
 	
-	bool CanPerformCombat();
+	// bool CanPerformCombat();
+	bool CanPerformMove();
 	bool CanPerformAttack();
 	bool CanPerformDodge();
 	bool CanPerformTakeDamage();

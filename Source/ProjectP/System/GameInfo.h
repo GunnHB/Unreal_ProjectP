@@ -12,8 +12,9 @@ class GameValue
 private:
 	static int32 MaxMoney;
 
-	static float MaxWalkSpeed;
-	static float MaxJogSpeed;
+	static float WalkSpeed;
+	static float JogSpeed;
+	static float SprintSpeed;
 	static float KnockBackAmount;
 
 	static float MoveToTargetLimitAmount;
@@ -34,8 +35,9 @@ private:
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
 
-	static float GetMaxWalkSpeed() {return MaxWalkSpeed;}
-	static float GetMaxJogSpeed() {return MaxJogSpeed;}
+	static float GetWalkSpeed() {return WalkSpeed;}
+	static float GetJogSpeed() {return JogSpeed;}
+	static float GetSprintSpeed() {return SprintSpeed;}
 	static float GetKnockBackAmount() {return KnockBackAmount;}
 	
 	static float GetMoveToTargetLimitAmount() {return MoveToTargetLimitAmount;}
@@ -52,6 +54,14 @@ public:
 	static FName GetTargetLocationFName() {return TargetLocationFName;}
 
 	static FString GetBTTaskMoveToTargetFName() {return BTTaskMoveToTargetFName;}
+};
+
+enum class ECharacterMovementType : int8
+{
+	None = -1,
+	Walk,
+	Jog,
+	Sprint,
 };
 
 enum class ECharacterState : int8

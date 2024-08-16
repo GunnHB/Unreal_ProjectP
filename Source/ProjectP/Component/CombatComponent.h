@@ -24,12 +24,8 @@ protected:
 	bool bIsAttackSaved = false;
 	int32 mAttackCount = 0;
 
-	// take damage
-	// bool bTakeDamage = false;
-	// bool bDeath = false;
-
 	FTimerHandle mInterpTimeHandle;
-	FVector mKnockBackTarget = FVector::ZeroVector;
+	FVector mKnockBackDirection = FVector::ZeroVector;
 
 public:	
 	// getter
@@ -37,18 +33,12 @@ public:
 	bool GetIsAttackSaved() const {return bIsAttackSaved;}
 	AWeaponBase* GetMainWeapon() const {return mMainWeapon;}
 	int32 GetAttackCount() const {return mAttackCount;}
-
-	// bool GetTakeDamage() const {return bTakeDamage;}
-	// bool GetDeath() const {return bDeath;}
 	
 	// setter
 	void SetCombatEnable(bool value) {bIsCombatEnable = value;}
 	void SetIsAttackSaved(bool value) {bIsAttackSaved = value;}
 	void SetMainWeapon(AWeaponBase* value) {mMainWeapon = value;}
 	void SetAttackCount(int32 value) {mAttackCount = value;}
-
-	// void SetTakeDamage(bool value) {bTakeDamage = value;}
-	// void SetDeath(bool value) {bDeath = value;}
 
 	void IncreaseAttackCount();
 	bool IsMainWeaponNull() const {return mMainWeapon == nullptr;}

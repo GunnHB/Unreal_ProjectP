@@ -50,7 +50,7 @@ void UCombatComponent::KnockBack(const AActor* hitter)
 
 	if(direction.Normalize())
 	{
-		mKnockBackTarget = GetOwner()->GetActorLocation() + direction * GameValue::GetKnockBackAmount();
+		mKnockBackDirection = GetOwner()->GetActorLocation() + direction * GameValue::GetKnockBackAmount();
 		GetWorld()->GetTimerManager().SetTimer(mInterpTimeHandle, this, &UCombatComponent::InterpActorLocation, GetWorld()->GetDeltaSeconds(), true, -1);
 		
 #if ENABLE_DRAW_DEBUG
@@ -70,21 +70,21 @@ void UCombatComponent::EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleCompo
 	mesh->SetCollisionProfileName(TEXT("Ragdoll"));
 	mesh->SetSimulatePhysics(true);
 	
-	// mesh->AddImpulse(mKnockBackTarget * 5000.f);
+	// mesh->AddImpulse(mKnockBackDirection * 1000.f);
 	
 	capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void UCombatComponent::InterpActorLocation()
 {
-	if((mKnockBackTarget - GetOwner()->GetActorLocation()).Size() < 0.01f)
+	if((mKnockBackDirection - GetOwner()->GetActorLocation()).Size() < 0.01f)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(mInterpTimeHandle);
-		mKnockBackTarget = FVector::ZeroVector;
+		mKnockBackDirection = FVector::ZeroVector;
 		
 		return;
 	}
 	
-	FVector knockBackLocation = FMath::VInterpTo(GetOwner()->GetActorLocation(), mKnockBackTarget, GetWorld()->GetDeltaSeconds(), 10.f);
+	FVector knockBackLocation = FMath::VInterpTo(GetOwner()->GetActorLocation(), mKnockBackDirection, GetWorld()->GetDeltaSeconds(), 10.f);
 	GetOwner()->SetActorRelativeLocation(knockBackLocation);
 }
