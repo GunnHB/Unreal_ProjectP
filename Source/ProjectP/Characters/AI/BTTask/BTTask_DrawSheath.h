@@ -3,24 +3,19 @@
 #pragma once
 
 #include "../../../System/GameInfo.h"
+#include "../../../System/AIInfo.h"
 
 #include "BehaviorTree/BTTaskNode.h"
-#include "BTTask_SetMovementSpeed.generated.h"
+#include "BTTask_DrawSheath.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTP_API UBTTask_SetMovementSpeed : public UBTTaskNode
+class PROJECTP_API UBTTask_DrawSheath : public UBTTaskNode
 {
 	GENERATED_BODY()
 
-private:
-	UPROPERTY(EditAnywhere) float mMovementSpeed;
-
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-
-private:
-	bool SetMovementSpeed(const APawn* pawn) const;
 };

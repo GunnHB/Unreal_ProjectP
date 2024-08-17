@@ -85,7 +85,7 @@ public:
 
 	bool AddMoney(const FMoney* moneyData);
 
-	// icombatable interface
+	// icombatable pure function
 	virtual void ContinueAttack() override;
 	virtual void EnableCombat() override;
 	virtual void ResetAttack() override;
@@ -95,12 +95,12 @@ public:
 	virtual void ResetTakeDamage() override;
 	virtual void ResetMontage() override;
 
-	// idamageable interface
+	// idamageable pure function
 	virtual void TakeDamage(APawn* hitterPawn) override;
 	virtual void StartHitStop(const float time) override;
 	virtual void EndHitStop() override;
 
-	// ipickupenable interface
+	// ipickupenable pure function
 	virtual void PickUpItem(AItemBase* item) override;
 
 protected:
@@ -133,7 +133,6 @@ private:
 	
 	void TraceForInteractable();
 	
-	// bool CanPerformCombat();
 	bool CanPerformMove();
 	bool CanPerformAttack();
 	bool CanPerformDodge();
@@ -154,11 +153,16 @@ private:
 	
 	void TrySprint();
 
+	void TryInteract();
+	void PerformInteract();
+
 	void PerformAction(const ECharacterState state, const ECharacterAction action) const;
 
 	float GetDegree(const FVector& vector);
 	float GetForwardToTargetAngle(FVector& target);
-	
+
+#if ENABLE_DRAW_DEBUG
 	// 디버깅용
 	void DrawArrow() const;
+#endif
 };

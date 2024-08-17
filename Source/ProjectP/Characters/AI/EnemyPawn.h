@@ -5,6 +5,8 @@
 #include "../../Interface/Combatable.h"
 #include "../../Interface/Damageable.h"
 
+#include "../../Data/EnemyStat.h"
+
 #include "../AI/AIPawn.h"
 #include "EnemyPawn.generated.h"
 
@@ -21,6 +23,7 @@ protected:
 	TObjectPtr<class UEnemyAnimInstance> mAnimInstance = nullptr;
 	
 	FEnemy mEnemyData;
+	TObjectPtr<UEnemyStat> mEnemyStat = nullptr;
 
 	// ICombatable pure function
 	virtual void ContinueAttack() override;

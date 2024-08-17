@@ -13,11 +13,18 @@ private:
 	static int32 MaxMoney;
 
 	static float WalkSpeed;
+	static float ChaseSpeed;
 	static float JogSpeed;
 	static float SprintSpeed;
 	static float KnockBackAmount;
 
 	static float MoveToTargetLimitAmount;
+	static float EnoughToCombatDistance;
+	static float KeepEnemyInCheckTime;
+
+	static float EnemySightRadius;
+	static float EnemyLoseSightRadius;
+	static float EnemyVisionAngleDegree;
 	
 	static FName CollisionStartSocketFName;
 	static FName CollisionEndSocketFName;
@@ -29,18 +36,29 @@ private:
 
 	static FName PatrolIndexFName;
 	static FName TargetLocationFName;
+	static FName TargetFName;
+	static FName KeepEnemyInCheckFName;
+	static FName DrawSheathFName;
 
-	static FString BTTaskMoveToTargetFName;
+	static FString BTTaskMoveToTargetFString;
+	static FString BTTaskWaitToKeepEnemyInCheckFString;
 
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
 
 	static float GetWalkSpeed() {return WalkSpeed;}
+	static float GetChaseSpeed() {return ChaseSpeed;}
 	static float GetJogSpeed() {return JogSpeed;}
 	static float GetSprintSpeed() {return SprintSpeed;}
 	static float GetKnockBackAmount() {return KnockBackAmount;}
 	
 	static float GetMoveToTargetLimitAmount() {return MoveToTargetLimitAmount;}
+	static float GetEnoughToCombatDistance() {return EnoughToCombatDistance;}
+	static float GetKeepEnemyInCheckTime() {return KeepEnemyInCheckTime;}
+
+	static float GetEnemySightRadius() {return EnemySightRadius;}
+	static float GetEnemyLoseSightRadius() {return EnemyLoseSightRadius;}
+	static float GetEnemyVisionAngleDegree() {return EnemyVisionAngleDegree;}
 	
 	static FName GetCollisionStartSocketName() {return CollisionStartSocketFName;}
 	static FName GetCollisionEndSocketName() {return CollisionEndSocketFName;}
@@ -52,8 +70,12 @@ public:
 
 	static FName GetPatrolIndexFName() {return PatrolIndexFName;}
 	static FName GetTargetLocationFName() {return TargetLocationFName;}
+	static FName GetTargetFName() {return TargetFName;}
+	static FName GetKeepEnemyInCheckFName() {return KeepEnemyInCheckFName;}
+	static FName GetDrawSheathFName() {return DrawSheathFName;}
 
-	static FString GetBTTaskMoveToTargetFName() {return BTTaskMoveToTargetFName;}
+	static FString GetBTTaskMoveToTargetFName() {return BTTaskMoveToTargetFString;}
+	static FString GetBTTaskWaitToKeepEnemyInCheckFString() {return BTTaskWaitToKeepEnemyInCheckFString;}
 };
 
 enum class ECharacterMovementType : int8

@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Engine/DamageEvents.h"
+
 #include "UObject/Interface.h"
 #include "Damageable.generated.h"
 

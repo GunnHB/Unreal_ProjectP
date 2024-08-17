@@ -16,6 +16,7 @@ class PROJECTP_API UBTTask_MoveToTarget : public UBTTask_MoveTo
 	GENERATED_BODY()
 
 protected:
+	TObjectPtr<AActor> mTargetActor = nullptr;
 	FVector mCurrentTargetLocation = FVector::ZeroVector;
 	FVector mActorLocationForDistance = FVector::ZeroVector;
 	float mCurrentYaw = 0.f;
@@ -29,6 +30,7 @@ protected:
 	virtual void OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult) override;
 
 private:
+	bool IsSetTarget(const UBlackboardComponent* blackBoardComp);
 	void SetCurrentActorLocation(APawn* pawn);
 	void SetCurrentActorRotation(APawn* pawn, float deltaSeconds);
 	void SetMovementSpeed(class UFloatingPawnMovement* movement, float deltaSeconds) const;

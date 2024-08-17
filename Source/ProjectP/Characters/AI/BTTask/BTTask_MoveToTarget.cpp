@@ -15,7 +15,27 @@ EBTNodeResult::Type UBTTask_MoveToTarget::ExecuteTask(UBehaviorTreeComponent& Ow
 	EBTNodeResult::Type result = Super::ExecuteTask(OwnerComp, NodeMemory);
 	
 	bNotifyTick = true;
-	mCurrentTargetLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(GameValue::GetTargetLocationFName());
+
+	UBlackboardComponent* blackBoardComp = OwnerComp.GetBlackboardComponent();
+
+	if(!IsValid(blackBoardComp))
+		return EBTNodeResult::Failed;
+
+	if(IsSetTarget(blackBoardComp))
+	{
+		AActor* targetActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(GameValue::GetTargetFName()));
+
+		if(IsValid(targetActor))
+		{
+			mTargetActor = targetActor;
+			mCurrentTargetLocation = targetActor->GetActorLocation();
+		}
+	}
+	else
+	{
+		mTargetActor = nullptr;	
+		mCurrentTargetLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(GameValue::GetTargetLocationFName());
+	}
 
 	APawn* pawn = OwnerComp.GetAIOwner()->GetPawn();
 
@@ -31,7 +51,7 @@ EBTNodeResult::Type UBTTask_MoveToTarget::ExecuteTask(UBehaviorTreeComponent& Ow
 void UBTTask_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-
+	
 	APawn* ownerPawn = OwnerComp.GetAIOwner()->GetPawn();
 
 	if(!IsValid(ownerPawn))
@@ -62,6 +82,11 @@ void UBTTask_MoveToTarget::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uin
 	}
 }
 
+bool UBTTask_MoveToTarget::IsSetTarget(const UBlackboardComponent* blackBoardComp)
+{
+	return blackBoardComp->GetValueAsObject(GameValue::GetTargetFName()) != nullptr;
+}
+
 void UBTTask_MoveToTarget::SetCurrentActorLocation(APawn* pawn)
 {
 	if (!IsValid(pawn))
@@ -83,9 +108,11 @@ void UBTTask_MoveToTarget::SetMovementSpeed(UFloatingPawnMovement* movement, flo
 {
 	if(!IsValid(movement))
 		return;
+
+	float speed = IsValid(mTargetActor) ? GameValue::GetChaseSpeed() : GameValue::GetWalkSpeed();
 	
 	float distance = FVector::Dist(mActorLocationForDistance, mCurrentTargetLocation);
-	float targetSpeed = distance > GameValue::GetMoveToTargetLimitAmount() ? GameValue::GetWalkSpeed() : 0.f;
+	float targetSpeed = distance > GameValue::GetMoveToTargetLimitAmount() ? speed : 0.f;
 
 	// 약간 하드코딩인디...
 	if(IsValid(movement))
@@ -96,20 +123,18 @@ void UBTTask_MoveToTarget::SetCurrentActorRotation(APawn* pawn, float deltaSecon
 {
 	if(!IsValid(pawn))
 		return;
+
+	if(mTargetActor != nullptr)
+		mCurrentTargetLocation = mTargetActor->GetActorLocation();
 	
 	FVector direction = mCurrentTargetLocation - mActorLocationForDistance;
-
+	
 	if(direction.Normalize())
 	{
 		float targetYaw = FMath::Atan2(direction.Y, direction.X) * FMathf::RadToDeg;
-
-		if (targetYaw < -180.f)
-			targetYaw = 360 + targetYaw;
-		else if (targetYaw > 180.f)
-			targetYaw = targetYaw - 360.f;
 		
 		mCurrentYaw = FMath::FInterpTo(mCurrentYaw, targetYaw, deltaSeconds, 5.f);
-
+	
 		pawn->SetActorRotation(FRotator(0.f, mCurrentYaw, 0.f));
 	}
 }

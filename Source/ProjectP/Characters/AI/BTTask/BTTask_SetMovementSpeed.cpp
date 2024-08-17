@@ -22,7 +22,7 @@ bool UBTTask_SetMovementSpeed::SetMovementSpeed(const APawn* pawn) const
 	if(!IsValid(movement))
 		return false;
 	
-	movement->MaxSpeed = GameValue::GetWalkSpeed();
+	movement->MaxSpeed = mMovementSpeed;
 
 	return true;
 }

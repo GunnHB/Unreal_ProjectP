@@ -23,6 +23,8 @@ AEnemyPawn::AEnemyPawn()
 	mMesh->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 
 	mCapsule->SetCollisionProfileName(GameValue::GetEnemyFName());
+
+	mEnemyStat = NewObject<UEnemyStat>();
 	
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
 		meshAsset(TEXT("/Script/Engine.SkeletalMesh'/Game/EssentialAnimation/SwordShield/Demo/Mannequin/UE4_Mannequin/Mesh/SK_Mannequin.SK_Mannequin'"));
@@ -43,11 +45,11 @@ void AEnemyPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	mMovement->MaxSpeed = 0.f;
+	
 	if(IsValid(mMesh->GetAnimInstance()))
 		mAnimInstance = Cast<UEnemyAnimInstance>(mMesh->GetAnimInstance());
-
-	bUseControllerRotationYaw = false;
-
+	
 	SpawnWeapon();
 }
 
@@ -55,6 +57,23 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	float health = mEnemyStat->GetCharacterHealth() - DamageAmount;
+	mEnemyStat->SetCharacterHealth(health);
+	
+	UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
+	
+	if(IsValid(mCombat))
+	{
+		if(mEnemyStat->GetCharacterHealth() <= 0)
+		{
+			mCombat->EnableRagdoll(mMesh, mCapsule);
+			return damage;
+		}
+	}
+
+	StartHitStop(.01f);
+	mCombat->KnockBack(EventInstigator->GetPawn());
+	
 	return damage;
 }
 
@@ -131,6 +150,21 @@ void AEnemyPawn::ResetMontage()
 
 void AEnemyPawn::TakeDamage(APawn* hitterPawn)
 {
+	if(mEnemyStat->IsCharacterDead())
+		return;
+
+	if(!IsValid(hitterPawn))
+		return;
+
+	// if(!CanPerformTakeDamage())
+	// 	return;
+
+	FDamageEvent damageEvent;
+
+	UCombatComponent* hitterCombatComp = hitterPawn->FindComponentByClass<UCombatComponent>();
+
+	if(IsValid(hitterCombatComp) && !hitterCombatComp->IsMainWeaponNull())
+		TakeDamage(hitterCombatComp->GetMainWeaponAbilityValue(), damageEvent, hitterPawn->GetController(), hitterCombatComp->GetMainWeapon());
 }
 
 void AEnemyPawn::StartHitStop(const float time)

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../../System/GameInfo.h"
 #include "../../System/AIInfo.h"
 
 #include "AIController.h"
@@ -20,11 +21,20 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UAIPerceptionComponent> mPerceptionComp = nullptr;
-	TObjectPtr<UAISense_Sight> mSightSense = nullptr;
+	TObjectPtr<UAISenseConfig_Sight> mSightConfig = nullptr;
 	
 	TObjectPtr<UBlackboardData> mBlackboard = nullptr;
 	TObjectPtr<UBehaviorTree> mBehaviorTree = nullptr;
 
+	virtual void BeginPlay() override;
+
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnUnPossess() override;
+
+	// ufunction
+	UFUNCTION() void OnTargetDetect(AActor* target, FAIStimulus stimulus);
+	UFUNCTION() void OnTargetForget(AActor* target);
+
+private:
+	void SetSightValue() const;
 };

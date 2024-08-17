@@ -2,8 +2,6 @@
 
 #include "PlayerControls.h"
 
-#include "Engine/DamageEvents.h"
-
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "PlayerAnimInstance.h"
@@ -50,8 +48,8 @@ void APlayerControls::Tick(float DeltaTime)
 
 #if ENABLE_DRAW_DEBUG
 	DrawArrow();
-	GetAnimOffsetX();
 #endif
+	GetAnimOffsetX();
 	TraceForInteractable();
 }
 
@@ -276,13 +274,7 @@ void APlayerControls::DrawSheathAction(const FInputActionValue& value)
 
 void APlayerControls::InteractAction(const FInputActionValue& value)
 {
-	if(!bEnableToInteract)
-		return;
-
-	IInteractable* interactable = Cast<IInteractable>(mHitResult.GetActor());
-
-	if(interactable != nullptr)
-		interactable->Interact(this);
+	TryInteract();
 }
 
 void APlayerControls::DodgeAction(const FInputActionValue& value)
@@ -292,8 +284,6 @@ void APlayerControls::DodgeAction(const FInputActionValue& value)
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
 {
-	UE_LOG(ProjectP, Warning, TEXT("sprint!!!!"));
-	
 	TrySprint();
 }
 
@@ -521,6 +511,22 @@ void APlayerControls::TrySprint()
 		return;
 
 	SetCurrentMovementType(ECharacterMovementType::Sprint);
+}
+
+void APlayerControls::TryInteract()
+{
+	if(!bEnableToInteract)
+		return;
+
+	PerformInteract();
+}
+
+void APlayerControls::PerformInteract()
+{
+	IInteractable* interactable = Cast<IInteractable>(mHitResult.GetActor());
+
+	if(interactable != nullptr)
+		interactable->Interact(this);
 }
 
 void APlayerControls::PerformAction(const ECharacterState state, const ECharacterAction action) const
@@ -764,6 +770,7 @@ float APlayerControls::GetForwardToTargetAngle(FVector& target)
 	return angle;
 }
 
+#if ENABLE_DRAW_DEBUG
 void APlayerControls::DrawArrow() const
 {
 	FVector startLocation = GetActorLocation();
@@ -779,3 +786,4 @@ void APlayerControls::DrawArrow() const
 		DrawDebugDirectionalArrow(GetWorld(), startLocation, camEndLocation, 120.f, FColor::Blue, false, -1.f, 0.f, 3.f);
 	}
 }
+#endif
