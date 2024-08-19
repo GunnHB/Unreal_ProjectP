@@ -3,7 +3,6 @@
 
 #include "CollisionComponent.h"
 
-#include "CombatComponent.h"
 #include "../Interface/CollisionEnable.h"
 #include "../Interface/Damageable.h"
 

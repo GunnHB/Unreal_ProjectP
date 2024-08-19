@@ -79,6 +79,8 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			mCombat->EnableRagdoll(mMesh, mCapsule);
 	}
 
+	SetTakeDamage(EventInstigator->GetPawn());
+
 	StartHitStop(.1f);
 	mCombat->KnockBack(EventInstigator->GetPawn());
 	
@@ -124,6 +126,27 @@ void AEnemyPawn::InitWeapon()
 	}
 }
 
+void AEnemyPawn::SetTakeDamage(const APawn* hitter)
+{
+	if(!IsValid(mAnimInstance) || !IsValid(hitter))
+		return;
+	
+	ResetTakeDamage();
+	
+	FVector targetVector = hitter->GetActorLocation() - GetActorLocation();
+
+	if(targetVector.Normalize())
+	{
+		float dot = FVector::DotProduct(GetActorForwardVector(), targetVector);
+		float angle = FMath::RadiansToDegrees(FMath::Acos(dot));
+
+		angle *= (FVector::CrossProduct(GetActorForwardVector(), targetVector).Z > 0 ? 1.f : -1.f);
+
+		mAnimInstance->SetTakeDamageFlag(true);
+		mAnimInstance->SetTakeDamageDegree(angle);
+	}
+}
+
 void AEnemyPawn::ContinueAttack()
 {
 }
@@ -157,6 +180,7 @@ void AEnemyPawn::ResetDodge()
 
 void AEnemyPawn::ResetTakeDamage()
 {
+	mAnimInstance->SetTakeDamageFlag(false);
 }
 
 void AEnemyPawn::ResetMontage()

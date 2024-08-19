@@ -15,11 +15,10 @@ class PROJECTP_API UAnimInstanceBase : public UAnimInstance
 {
 	GENERATED_BODY()
 
-private:
+protected:
 	TObjectPtr<APawn> mPawn = nullptr;
 	TObjectPtr<UPawnMovementComponent> mPawnMovement = nullptr;
 
-protected:
 	// getter
 	APawn* GetThisPawn() const {return mPawn;}
 	UPawnMovementComponent* GetThisPawnMovement() const {return mPawnMovement;}
@@ -27,8 +26,15 @@ protected:
 	// base variables
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mSpeed = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mDegree = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mTakeDamageDegree = 0.f;
 
-protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bTakeDamage = false;
+
+	// override by UAnimInstance
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+public:
+	void SetTakeDamageDegree(const float value) {mTakeDamageDegree = value;}
+	void SetTakeDamageFlag(const bool value) {bTakeDamage = value;}
 };

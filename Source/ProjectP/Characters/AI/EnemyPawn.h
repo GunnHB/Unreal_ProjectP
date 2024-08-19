@@ -58,4 +58,6 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 
 	void InitWeapon();
+
+	void SetTakeDamage(const APawn* hitter);
 };
