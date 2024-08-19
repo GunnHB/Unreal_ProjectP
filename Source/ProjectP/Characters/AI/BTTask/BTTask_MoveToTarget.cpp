@@ -121,20 +121,26 @@ void UBTTask_MoveToTarget::SetMovementSpeed(UFloatingPawnMovement* movement, flo
 
 void UBTTask_MoveToTarget::SetCurrentActorRotation(APawn* pawn, float deltaSeconds)
 {
-	if(!IsValid(pawn))
+	if (!IsValid(pawn))
 		return;
 
-	if(mTargetActor != nullptr)
+	if (mTargetActor != nullptr)
 		mCurrentTargetLocation = mTargetActor->GetActorLocation();
-	
-	FVector direction = mCurrentTargetLocation - mActorLocationForDistance;
-	
-	if(direction.Normalize())
+
+	FVector targetVector = mCurrentTargetLocation - pawn->GetActorLocation();
+
+	float currentYaw = pawn->GetActorRotation().Yaw;
+	float deltaYaw = 0.f;
+
+	if (targetVector.Normalize())
 	{
-		float targetYaw = FMath::Atan2(direction.Y, direction.X) * FMathf::RadToDeg;
-		
-		mCurrentYaw = FMath::FInterpTo(mCurrentYaw, targetYaw, deltaSeconds, 5.f);
-	
-		pawn->SetActorRotation(FRotator(0.f, mCurrentYaw, 0.f));
+		float dotProduct = FVector::DotProduct(pawn->GetActorForwardVector(), targetVector);
+		FVector crossProduct = FVector::CrossProduct(pawn->GetActorForwardVector(), targetVector);
+
+		float angle = FMath::RadiansToDegrees(FMath::Acos(dotProduct));
+
+		deltaYaw = angle * deltaSeconds * 5.f * (crossProduct.Z > 0 ? 1 : -1);
 	}
+
+	pawn->SetActorRelativeRotation(FRotator(0.f, currentYaw + deltaYaw, 0.f));
 }
