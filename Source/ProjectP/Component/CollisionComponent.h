@@ -26,6 +26,10 @@ protected:
 	bool bIsAnyCollide;
 	float mHalfHeight;
 	FQuat mDebugQuat = FQuat::Identity;
+	
+	// for camera shake
+	TObjectPtr<UCameraShakeBase> mCameraShake = nullptr;
+	TSubclassOf<UCameraShakeBase> mCameraShakeClass = nullptr;
 
 public:	
 	// Sets default values for this component's properties

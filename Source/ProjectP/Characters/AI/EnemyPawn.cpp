@@ -76,10 +76,7 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	if(IsValid(mCombat))
 	{
 		if(mEnemyStat->GetCharacterHealth() <= 0)
-		{
 			mCombat->EnableRagdoll(mMesh, mCapsule);
-			return damage;
-		}
 	}
 
 	StartHitStop(.1f);
@@ -188,11 +185,6 @@ void AEnemyPawn::SpawnEmitter(FHitResult result)
 
 	if(IsValid(particleSystemComp))
 		particleSystemComp->SetRelativeScale3D(particleSystemComp->GetRelativeScale3D() * .5f);
-}
-
-void AEnemyPawn::CameraShake()
-{
-	
 }
 
 void AEnemyPawn::StartHitStop(const float time)

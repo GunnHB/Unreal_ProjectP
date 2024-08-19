@@ -15,6 +15,13 @@ UCollisionComponent::UCollisionComponent()
 
 	if(collision)
 		mOwnerMeshComponent = collision->GetMesh();
+
+	// camera shake
+	static ConstructorHelpers::FClassFinder<UCameraShakeBase>
+		mCamShakeAsset(TEXT("/Script/Engine.Blueprint'/Game/08_BluePrint/BP_CameraShakeByDamage.BP_CameraShakeByDamage_C'"));
+
+	if(mCamShakeAsset.Succeeded())
+		mCameraShakeClass = mCamShakeAsset.Class;
 }
 
 void UCollisionComponent::BeginPlay()
@@ -71,6 +78,9 @@ void UCollisionComponent::CollisionTrace()
 			{
 				takerDamageable->TakeDamage(Cast<APawn>(mOwnerActor));
 				takerDamageable->SpawnEmitter(hit);
+
+				if(IsValid(mCameraShakeClass))
+					GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(mCameraShakeClass);
 			}
 		}
 	}

@@ -25,7 +25,6 @@ class PROJECTP_API IDamageable
 public:
 	virtual void TakeDamage(APawn* hitterPawn) = 0;
 	virtual void SpawnEmitter(FHitResult result) = 0;
-	virtual void CameraShake() = 0;
 	virtual void StartHitStop(const float time) = 0;
 	virtual void EndHitStop() = 0;
 };

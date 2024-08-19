@@ -41,7 +41,6 @@ protected:
 	// IDamageable pure function
 	virtual void TakeDamage(APawn* hitterPawn) override;
 	virtual void SpawnEmitter(FHitResult result) override;
-	virtual void CameraShake() override;
 	virtual void StartHitStop(const float time) override;
 	virtual void EndHitStop() override;
 
