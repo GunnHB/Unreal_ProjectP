@@ -48,6 +48,8 @@ public:
 
 	void KnockBack(const AActor* hitter);
 	void EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleComponent* capsule) const;
+
+	void RotateToHittedActor(const AActor* hittedActor);
 	
 	void InterpActorLocation();
 };

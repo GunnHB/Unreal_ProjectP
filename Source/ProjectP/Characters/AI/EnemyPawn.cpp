@@ -37,8 +37,19 @@ AEnemyPawn::AEnemyPawn()
 
 	if(animAsset.Succeeded())
 		mMesh->SetAnimInstanceClass(animAsset.Class);
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystem>
+		bloodAsset(TEXT("/Script/Engine.ParticleSystem'/Game/Realistic_Starter_VFX_Pack_Vol2/Particles/Blood/P_Blood_Splat_Cone.P_Blood_Splat_Cone'"));
+
+	if(bloodAsset.Succeeded())
+		mDamageParticle = bloodAsset.Object;
 	
 	AIControllerClass = AEnemyController::StaticClass();
+}
+
+void AEnemyPawn::TryDrawSheath(const bool isEquipped) const
+{
+	mAnimInstance->PlayDrawSheathMontage(isEquipped);
 }
 
 void AEnemyPawn::BeginPlay()
@@ -50,7 +61,7 @@ void AEnemyPawn::BeginPlay()
 	if(IsValid(mMesh->GetAnimInstance()))
 		mAnimInstance = Cast<UEnemyAnimInstance>(mMesh->GetAnimInstance());
 	
-	SpawnWeapon();
+	InitWeapon();
 }
 
 float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -71,7 +82,7 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 		}
 	}
 
-	StartHitStop(.01f);
+	StartHitStop(.1f);
 	mCombat->KnockBack(EventInstigator->GetPawn());
 	
 	return damage;
@@ -82,7 +93,7 @@ void AEnemyPawn::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
-void AEnemyPawn::SpawnWeapon()
+void AEnemyPawn::InitWeapon()
 {
 	FItem* itemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(TEXT("Item_Weapon_004"), "");
 
@@ -122,6 +133,13 @@ void AEnemyPawn::ContinueAttack()
 
 void AEnemyPawn::DrawSheath()
 {
+	if(mCombat->GetMainWeapon() == nullptr)
+		return;
+
+	if(mCombat->GetMainWeapon()->GetIsEquipped())
+		mCombat->GetMainWeapon()->OnUnequip();
+	else
+		mCombat->GetMainWeapon()->OnEquip();
 }
 
 void AEnemyPawn::EnableCombat()
@@ -155,10 +173,7 @@ void AEnemyPawn::TakeDamage(APawn* hitterPawn)
 
 	if(!IsValid(hitterPawn))
 		return;
-
-	// if(!CanPerformTakeDamage())
-	// 	return;
-
+	
 	FDamageEvent damageEvent;
 
 	UCombatComponent* hitterCombatComp = hitterPawn->FindComponentByClass<UCombatComponent>();
@@ -167,10 +182,27 @@ void AEnemyPawn::TakeDamage(APawn* hitterPawn)
 		TakeDamage(hitterCombatComp->GetMainWeaponAbilityValue(), damageEvent, hitterPawn->GetController(), hitterCombatComp->GetMainWeapon());
 }
 
+void AEnemyPawn::SpawnEmitter(FHitResult result)
+{
+	UParticleSystemComponent* particleSystemComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), mDamageParticle, result.ImpactPoint, result.ImpactNormal.Rotation(), true);
+
+	if(IsValid(particleSystemComp))
+		particleSystemComp->SetRelativeScale3D(particleSystemComp->GetRelativeScale3D() * .5f);
+}
+
+void AEnemyPawn::CameraShake()
+{
+	
+}
+
 void AEnemyPawn::StartHitStop(const float time)
 {
+	GetWorldSettings()->SetTimeDilation(time);
+	GetWorld()->GetTimerManager().SetTimer(mHitStopTimeHandle, this, &AEnemyPawn::EndHitStop, GetWorld()->GetDeltaSeconds(), false);
 }
 
 void AEnemyPawn::EndHitStop()
 {
+	GetWorld()->GetTimerManager().ClearTimer(mHitStopTimeHandle);
+	GetWorldSettings()->SetTimeDilation(1.f);
 }

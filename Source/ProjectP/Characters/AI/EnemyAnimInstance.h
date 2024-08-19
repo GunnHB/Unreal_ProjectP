@@ -17,7 +17,12 @@ protected:
 	TObjectPtr<class AAIPawn> mAIPawn = nullptr;
 	TObjectPtr<class UEnemyMovementComponent> mAIMovement = nullptr;
 
-protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UAnimMontage> mDrawMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UAnimMontage> mSheathMontage = nullptr;
+
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+public:
+	void PlayDrawSheathMontage(const bool isEquipped);
 };

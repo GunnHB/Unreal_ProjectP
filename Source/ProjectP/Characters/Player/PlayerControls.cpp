@@ -429,9 +429,6 @@ void APlayerControls::PerformMovement()
 
 void APlayerControls::TryDrawSheath()
 {
-	// if(!CanPerformCombat())
-	// 	return;
-
 	if(!IsValid(mCombat) || mCombat->IsMainWeaponNull())
 		return;
 	
@@ -732,6 +729,10 @@ void APlayerControls::TakeDamage(APawn* hitterPawn)
 
 	if(IsValid(hitterCombatComp) && !hitterCombatComp->IsMainWeaponNull())
 		TakeDamage(hitterCombatComp->GetMainWeaponAbilityValue(), damageEvent, hitterPawn->GetController(), hitterCombatComp->GetMainWeapon());
+}
+
+void APlayerControls::SpawnEmitter(FHitResult result)
+{
 }
 
 float APlayerControls::GetInputDegree()

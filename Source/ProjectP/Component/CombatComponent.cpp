@@ -75,6 +75,11 @@ void UCombatComponent::EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleCompo
 	capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+void UCombatComponent::RotateToHittedActor(const AActor* hittedActor)
+{
+
+}
+
 void UCombatComponent::InterpActorLocation()
 {
 	if((mKnockBackDirection - GetOwner()->GetActorLocation()).Size() < 0.01f)

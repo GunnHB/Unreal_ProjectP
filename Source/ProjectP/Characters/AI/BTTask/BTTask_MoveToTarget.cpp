@@ -109,7 +109,7 @@ void UBTTask_MoveToTarget::SetMovementSpeed(UFloatingPawnMovement* movement, flo
 	if(!IsValid(movement))
 		return;
 
-	float speed = IsValid(mTargetActor) ? GameValue::GetChaseSpeed() : GameValue::GetWalkSpeed();
+	float speed = IsValid(mTargetActor) ? GameValue::GetJogSpeed() : GameValue::GetWalkSpeed();
 	
 	float distance = FVector::Dist(mActorLocationForDistance, mCurrentTargetLocation);
 	float targetSpeed = distance > GameValue::GetMoveToTargetLimitAmount() ? speed : 0.f;

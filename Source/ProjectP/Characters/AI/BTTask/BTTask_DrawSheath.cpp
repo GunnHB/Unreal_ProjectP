@@ -3,6 +3,10 @@
 
 #include "BTTask_DrawSheath.h"
 
+#include "../EnemyPawn.h"
+#include "../../../Component/CombatComponent.h"
+#include "ProjectP/Inventory/Item/Weapon/WeaponBase.h"
+
 EBTNodeResult::Type UBTTask_DrawSheath::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type result = Super::ExecuteTask(OwnerComp, NodeMemory);
@@ -11,7 +15,14 @@ EBTNodeResult::Type UBTTask_DrawSheath::ExecuteTask(UBehaviorTreeComponent& Owne
 
 	if(!IsValid(blackboardComp))
 		return EBTNodeResult::Aborted;
+	
+	bool drawSheathFlag = blackboardComp->GetValueAsBool(GameValue::GetDrawSheathFName());
+	AEnemyPawn* enemyPawn = OwnerComp.GetAIOwner()->GetPawn<AEnemyPawn>();
 
+	if(IsValid(enemyPawn))
+		enemyPawn->TryDrawSheath(drawSheathFlag);
+
+	blackboardComp->SetValueAsBool(GameValue::GetDrawSheathFName(), !drawSheathFlag);
 
 	return result;
 }

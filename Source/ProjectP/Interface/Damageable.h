@@ -24,6 +24,8 @@ class PROJECTP_API IDamageable
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void TakeDamage(APawn* hitterPawn) = 0;
+	virtual void SpawnEmitter(FHitResult result) = 0;
+	virtual void CameraShake() = 0;
 	virtual void StartHitStop(const float time) = 0;
 	virtual void EndHitStop() = 0;
 };

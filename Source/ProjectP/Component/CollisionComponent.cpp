@@ -68,7 +68,10 @@ void UCollisionComponent::CollisionTrace()
 			IDamageable* takerDamageable = Cast<IDamageable>(hit.GetActor());
 
 			if(takerDamageable != nullptr)
+			{
 				takerDamageable->TakeDamage(Cast<APawn>(mOwnerActor));
+				takerDamageable->SpawnEmitter(hit);
+			}
 		}
 	}
 }

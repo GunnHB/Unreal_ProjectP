@@ -21,3 +21,17 @@ void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 }
+
+void UEnemyAnimInstance::PlayDrawSheathMontage(const bool isEquipped)
+{
+	UAnimMontage* tempMontage = isEquipped ? mSheathMontage : mDrawMontage;
+
+	if(!IsValid(tempMontage))
+		return;
+
+	if(!Montage_IsPlaying(tempMontage))
+	{
+		Montage_SetPosition(tempMontage, 0.f);
+		Montage_Play(tempMontage);
+	}
+}

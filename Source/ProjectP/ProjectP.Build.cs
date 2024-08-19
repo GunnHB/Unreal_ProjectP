@@ -16,7 +16,8 @@ public class ProjectP : ModuleRules
 			"InputCore", 
 			"EnhancedInput",
 			"AIModule",
-			"UMG"
+			"UMG",
+			"GameplayCameras",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

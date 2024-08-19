@@ -21,9 +21,12 @@ protected:
 	UPROPERTY(EditAnywhere) TArray<class AAIPatrolPoint*> mPatrolPointArray;
 	
 	TObjectPtr<class UEnemyAnimInstance> mAnimInstance = nullptr;
+	TObjectPtr<UParticleSystem> mDamageParticle = nullptr;
 	
 	FEnemy mEnemyData;
 	TObjectPtr<UEnemyStat> mEnemyStat = nullptr;
+
+	FTimerHandle mHitStopTimeHandle;
 
 	// ICombatable pure function
 	virtual void ContinueAttack() override;
@@ -37,6 +40,8 @@ protected:
 
 	// IDamageable pure function
 	virtual void TakeDamage(APawn* hitterPawn) override;
+	virtual void SpawnEmitter(FHitResult result) override;
+	virtual void CameraShake() override;
 	virtual void StartHitStop(const float time) override;
 	virtual void EndHitStop() override;
 
@@ -45,12 +50,13 @@ public:
 
 	// getter
 	TArray<AAIPatrolPoint*> GetPatrolPointArray() const {return mPatrolPointArray;}
-	
+
+	void TryDrawSheath(const bool isEquipped) const;
 
 protected:
 	virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void PossessedBy(AController* NewController) override;
 
-	void SpawnWeapon();
+	void InitWeapon();
 };
