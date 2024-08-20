@@ -52,8 +52,13 @@ public:
 
 	// 지금은 사용하지 않아서 우선 주석 처리
 	// void TryDrawSheath(const bool isEquipped) const;
-	void TryGuard();
+
+	// for guard
+	void PerformGuard();
 	void ReleaseGuard();
+
+	// for focus
+	void SetAimOffsetDegree(const float value);
 
 protected:
 	virtual void BeginPlay() override;

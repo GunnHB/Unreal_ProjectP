@@ -14,5 +14,7 @@ UCLASS()
 class PROJECTP_API UBTTask_WaitToCombatPatrol : public UBTTask_Wait
 {
 	GENERATED_BODY()
-	
+
+public:
+	UBTTask_WaitToCombatPatrol();
 };

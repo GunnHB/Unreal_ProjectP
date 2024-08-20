@@ -54,6 +54,11 @@ void AEnemyController::OnUnPossess()
 	Super::OnUnPossess();
 }
 
+void AEnemyController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+}
+
 void AEnemyController::OnTargetDetect(AActor* target, FAIStimulus stimulus)
 {
 	if(stimulus.WasSuccessfullySensed())
@@ -73,12 +78,16 @@ void AEnemyController::OnTargetDetect(AActor* target, FAIStimulus stimulus)
 		UE_LOG(ProjectP, Warning, TEXT("Sense Fail"));
 		
 		Blackboard->SetValueAsObject(GameValue::GetTargetFName(), nullptr);
+
+		Blackboard->SetValueAsBool(GameValue::GetEnableToCombatFName(), false);
 		Blackboard->SetValueAsBool(GameValue::GetKeepEnemyInCheckFName(), true);
 	}
 }
 
 void AEnemyController::OnTargetForget(AActor* target)
 {
+	UE_LOG(ProjectP, Warning, TEXT("Target Forget"));
+	
 	GetBlackboardComponent()->SetValueAsObject(GameValue::GetTargetFName(), nullptr);
 }
 

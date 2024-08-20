@@ -44,6 +44,7 @@ private:
 	static FName KeepEnemyInCheckFName;
 	static FName WasDrawFName;
 	static FName AbleToAttackFName;
+	static FName CombatPatrolLocationFName;
 
 	static FString BTTaskMoveToTargetFString;
 	static FString BTTaskWaitToKeepEnemyInCheckFString;
@@ -83,6 +84,7 @@ public:
 	static FName GetKeepEnemyInCheckFName() {return KeepEnemyInCheckFName;}
 	static FName GetWasDrawFName() {return WasDrawFName;}
 	static FName GetAbleToAttack() {return AbleToAttackFName;}
+	static FName GetCombatPatrolLocationFName() {return CombatPatrolLocationFName;}
 
 	static FString GetBTTaskMoveToTargetFName() {return BTTaskMoveToTargetFString;}
 	static FString GetBTTaskWaitToKeepEnemyInCheckFString() {return BTTaskWaitToKeepEnemyInCheckFString;}

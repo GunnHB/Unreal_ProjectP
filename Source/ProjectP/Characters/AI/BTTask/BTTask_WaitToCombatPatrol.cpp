@@ -3,3 +3,7 @@
 
 #include "BTTask_WaitToCombatPatrol.h"
 
+UBTTask_WaitToCombatPatrol::UBTTask_WaitToCombatPatrol()
+{
+	NodeName = "WaitToCombatPatrol";
+}

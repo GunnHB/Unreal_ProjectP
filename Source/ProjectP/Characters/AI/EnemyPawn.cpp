@@ -53,7 +53,7 @@ AEnemyPawn::AEnemyPawn()
 // 	mAnimInstance->PlayDrawSheathMontage(isEquipped);
 // }
 
-void AEnemyPawn::TryGuard()
+void AEnemyPawn::PerformGuard()
 {
 	if(mAnimInstance->GetIsGuardingFlag())
 		return;
@@ -67,6 +67,11 @@ void AEnemyPawn::ReleaseGuard()
 		return;
 	
 	mAnimInstance->SetIsGuardingFlag(false);
+}
+
+void AEnemyPawn::SetAimOffsetDegree(const float value)
+{
+	mAnimInstance->SetAimOffsetDegree(value);
 }
 
 void AEnemyPawn::BeginPlay()
@@ -154,7 +159,6 @@ void AEnemyPawn::InitWeapon()
 			spawnShield->OnUnequip();
 		
 			mCombat->SetSubWeapon(spawnShield);
-			// mCombat->SetCombatEnable(false);
 		}
 	}
 

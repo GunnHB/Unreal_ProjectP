@@ -3,6 +3,8 @@
 
 #include "BTTask_WaitToKeepEnemyInCheck.h"
 
+#include "../../../Characters/AI/EnemyPawn.h"
+
 UBTTask_WaitToKeepEnemyInCheck::UBTTask_WaitToKeepEnemyInCheck()
 {
 	NodeName = GameValue::GetBTTaskWaitToKeepEnemyInCheckFString();
@@ -19,15 +21,10 @@ EBTNodeResult::Type UBTTask_WaitToKeepEnemyInCheck::ExecuteTask(UBehaviorTreeCom
 	if(IsValid(blackBoardComp))
 		blackBoardComp->SetValueAsBool(GameValue::GetKeepEnemyInCheckFName(), false);
 
+	AEnemyPawn* enemyPawn = OwnerComp.GetAIOwner()->GetPawn<AEnemyPawn>();
+
+	if(IsValid(enemyPawn))
+		enemyPawn->ReleaseGuard();
+
 	return result;
 }
-
-// void UBTTask_WaitToKeepEnemyInCheck::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
-// {
-// 	Super::OnTaskFinished(OwnerComp, NodeMemory, TaskResult);
-//
-// 	UBlackboardComponent* blackBoardComp = OwnerComp.GetBlackboardComponent();
-//
-// 	if(IsValid(blackBoardComp))
-// 		blackBoardComp->SetValueAsBool(GameValue::GetKeepEnemyInCheckFName(), false);
-// }

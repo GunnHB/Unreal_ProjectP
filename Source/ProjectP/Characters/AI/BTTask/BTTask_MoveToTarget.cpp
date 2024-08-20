@@ -68,13 +68,13 @@ void UBTTask_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	}
 
 	UBlackboardComponent* blackBoardComp = OwnerComp.GetBlackboardComponent();
-
+	
 	if(IsValid(blackBoardComp) && IsValid(mTargetActor))
 	{
 		SetGuarding(ownerPawn, blackBoardComp);
 		
-		float distance = FVector::Dist(ownerPawn->GetActorLocation(), mTargetActor->GetActorLocation());
-		blackBoardComp->SetValueAsBool(GameValue::GetEnableToCombatFName(), distance < GameValue::GetEnemyCombatPatrolDistance());
+		// float distance = FVector::Dist(ownerPawn->GetActorLocation(), mTargetActor->GetActorLocation());
+		// blackBoardComp->SetValueAsBool(GameValue::GetEnableToCombatFName(), distance < GameValue::GetEnemyCombatPatrolDistance());
 	}
 }
 
@@ -152,7 +152,7 @@ void UBTTask_MoveToTarget::SetGuarding(APawn* pawn, const UBlackboardComponent* 
 	if(distance < GameValue::GetEnemyReadyToCombatPatrolDistance())
 	{
 		if(IsValid(enemyPawn))
-			enemyPawn->TryGuard();
+			enemyPawn->PerformGuard();
 	}
 	else
 	{

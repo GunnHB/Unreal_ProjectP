@@ -25,7 +25,7 @@ protected:
 
 	// base variables
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mSpeed = 0.f;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mDegree = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mAimOffsetDegree = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mTakeDamageDegree = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bTakeDamage = false;
@@ -41,4 +41,5 @@ public:
 	void SetTakeDamageDegree(const float value) {mTakeDamageDegree = value;}
 	void SetTakeDamageFlag(const bool value) {bTakeDamage = value;}
 	void SetIsGuardingFlag(const bool value) {bIsGuarding = value;}
+	void SetAimOffsetDegree(const float value) {mAimOffsetDegree = value;}
 };
