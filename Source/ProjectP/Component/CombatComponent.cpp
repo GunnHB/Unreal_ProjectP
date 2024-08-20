@@ -70,33 +70,9 @@ void UCombatComponent::EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleCompo
 	mesh->SetCollisionProfileName(TEXT("Ragdoll"));
 	mesh->SetSimulatePhysics(true);
 	
-	// mesh->AddImpulse(mKnockBackDirection * 1000.f);
+	mesh->AddImpulse(mKnockBackDirection * 5.f);
 	
 	capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-}
-
-void UCombatComponent::RotateToHittedActor(const AActor* hittedActor) const
-{
-	APawn* ownerPawn = GetOwner<APawn>();
-
-	if(!IsValid(ownerPawn))
-		return;
-
-	FVector targetVector = hittedActor->GetActorLocation() - ownerPawn->GetActorLocation();
-
-	float deltaYaw = 0.f;
-
-	if(targetVector.Normalize())
-	{
-		float dotProduct = FVector::DotProduct(ownerPawn->GetActorForwardVector(), targetVector);
-		FVector crossProduct = FVector::CrossProduct(ownerPawn->GetActorForwardVector(), targetVector);
-
-		float angle = FMath::RadiansToDegrees(FMath::Acos(dotProduct));
-
-		deltaYaw = angle * (crossProduct.Z > 0 ? 1.f : -1.f);
-	}
-
-	ownerPawn->SetActorRelativeRotation(FRotator(0.f, deltaYaw, 0.f));
 }
 
 void UCombatComponent::InterpActorLocation()

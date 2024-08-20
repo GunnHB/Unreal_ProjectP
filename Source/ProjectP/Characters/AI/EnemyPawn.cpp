@@ -47,9 +47,26 @@ AEnemyPawn::AEnemyPawn()
 	AIControllerClass = AEnemyController::StaticClass();
 }
 
-void AEnemyPawn::TryDrawSheath(const bool isEquipped) const
+// 지금은 사용하지 않아서 우선 주석 처리
+// void AEnemyPawn::TryDrawSheath(const bool isEquipped) const
+// {
+// 	mAnimInstance->PlayDrawSheathMontage(isEquipped);
+// }
+
+void AEnemyPawn::TryGuard()
 {
-	mAnimInstance->PlayDrawSheathMontage(isEquipped);
+	if(mAnimInstance->GetIsGuardingFlag())
+		return;
+	
+	mAnimInstance->SetIsGuardingFlag(true);
+}
+
+void AEnemyPawn::ReleaseGuard()
+{
+	if(!mAnimInstance->GetIsGuardingFlag())
+		return;
+	
+	mAnimInstance->SetIsGuardingFlag(false);
 }
 
 void AEnemyPawn::BeginPlay()
@@ -94,19 +111,25 @@ void AEnemyPawn::PossessedBy(AController* NewController)
 
 void AEnemyPawn::InitWeapon()
 {
-	FItem* itemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(TEXT("Item_Weapon_004"), "");
+	FItem* swordItemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(TEXT("Item_Weapon_004"), "");
+	FItem* shieldItemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(TEXT("Item_Weapon_007"), "");
 
-	if(itemData == nullptr)
+	if(swordItemData == nullptr || shieldItemData == nullptr)
 		return;
 
-	AWeaponBase* spawnWeapon = GetWorld()->SpawnActor<AWeaponBase>(itemData->item_class);
+	AWeaponBase* spawnSword = GetWorld()->SpawnActor<AWeaponBase>(swordItemData->item_class);
+	AWeaponBase* spawnShield = GetWorld()->SpawnActor<AWeaponBase>(shieldItemData->item_class);
 
-	if(IsValid(spawnWeapon))
-		spawnWeapon->SetData(itemData, false);
+	if(IsValid(spawnSword))
+		spawnSword->SetData(swordItemData, false);
 
-	IEquippable* equippable = Cast<IEquippable>(spawnWeapon);
+	if(IsValid(spawnShield))
+		spawnShield->SetData(shieldItemData, false);
 
-	if(equippable != nullptr)
+	IEquippable* swordEquippable = Cast<IEquippable>(spawnSword);
+	IEquippable* shieldEquippable = Cast<IEquippable>(spawnShield);
+
+	if(swordEquippable != nullptr && shieldEquippable != nullptr)
 	{
 		if(!IsValid(mCombat))
 			return;
@@ -114,16 +137,29 @@ void AEnemyPawn::InitWeapon()
 		if(IsValid(mCombat->GetMainWeapon()))
 			mCombat->GetMainWeapon()->Destroy();
 		
-		if(IsValid(spawnWeapon))
+		if(IsValid(spawnSword))
 		{
-			spawnWeapon->SetOwner(this);
-			spawnWeapon->SetSkeletalMesh(mMesh);
-			spawnWeapon->OnUnequip();
+			spawnSword->SetOwner(this);
+			spawnSword->SetSkeletalMesh(mMesh);
+			spawnSword->OnUnequip();
 		
-			mCombat->SetMainWeapon(spawnWeapon);
-			mCombat->SetCombatEnable(false);
+			mCombat->SetMainWeapon(spawnSword);
+			// mCombat->SetCombatEnable(false);
+		}
+
+		if(IsValid(spawnShield))
+		{
+			spawnShield->SetOwner(this);
+			spawnShield->SetSkeletalMesh(mMesh);
+			spawnShield->OnUnequip();
+		
+			mCombat->SetSubWeapon(spawnShield);
+			// mCombat->SetCombatEnable(false);
 		}
 	}
+
+	spawnSword->OnEquip();
+	spawnShield->OnEquip();
 }
 
 void AEnemyPawn::SetTakeDamage(const APawn* hitter)

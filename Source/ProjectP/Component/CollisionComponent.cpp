@@ -28,6 +28,25 @@ void UCollisionComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
+void UCollisionComponent::RotateToTarget(const AActor* hittedActor)
+{
+	FVector targetVector = hittedActor->GetActorLocation() - mOwnerActor->GetActorLocation();
+
+	float currentYaw = mOwnerActor->GetActorRotation().Yaw;
+	float deltaYaw = 0.f;
+
+	if(targetVector.Normalize())
+	{
+		float dot = FVector::DotProduct(mOwnerActor->GetActorForwardVector(), targetVector);
+		float angle = FMath::RadiansToDegrees(FMath::Acos(dot));
+		float deltaSeconds = GetWorld()->GetDeltaSeconds();
+
+		deltaYaw = angle * (FVector::CrossProduct(mOwnerActor->GetActorForwardVector(), targetVector).Z > 0 ? deltaSeconds : -deltaSeconds);
+	}
+
+	mOwnerActor->SetActorRelativeRotation(FRotator(0.f, currentYaw + deltaYaw, 0.f));
+}
+
 void UCollisionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -78,11 +97,15 @@ void UCollisionComponent::CollisionTrace()
 				takerDamageable->TakeDamage(Cast<APawn>(mOwnerActor));
 				takerDamageable->SpawnEmitter(hit);
 
+				// 카메라 흔들흔들
 				if(IsValid(mCameraShakeClass))
 					GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(mCameraShakeClass);
 			}
 		}
 	}
+	
+	if(mHitActorArray.Num() != 0 && mHitActorArray[0] != nullptr)
+		RotateToTarget(mHitActorArray[0]);
 }
 
 void UCollisionComponent::ClearHitActors()

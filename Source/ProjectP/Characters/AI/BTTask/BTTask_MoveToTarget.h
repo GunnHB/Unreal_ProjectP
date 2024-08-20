@@ -34,4 +34,5 @@ private:
 	void SetCurrentActorLocation(APawn* pawn);
 	void SetCurrentActorRotation(APawn* pawn, float deltaSeconds);
 	void SetMovementSpeed(class UFloatingPawnMovement* movement, float deltaSeconds) const;
+	void SetGuarding(APawn* pawn, const UBlackboardComponent* blackBoardComp) const;
 };

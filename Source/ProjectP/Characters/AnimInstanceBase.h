@@ -29,12 +29,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mTakeDamageDegree = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bTakeDamage = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsGuarding = false;
 
 	// override by UAnimInstance
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 public:
+	bool GetIsGuardingFlag() const {return bIsGuarding;}
+	
 	void SetTakeDamageDegree(const float value) {mTakeDamageDegree = value;}
 	void SetTakeDamageFlag(const bool value) {bTakeDamage = value;}
+	void SetIsGuardingFlag(const bool value) {bIsGuarding = value;}
 };

@@ -25,6 +25,9 @@ private:
 	static float EnemySightRadius;
 	static float EnemyLoseSightRadius;
 	static float EnemyVisionAngleDegree;
+
+	static float EnemyReadyToCombatPatrolDistance;
+	static float EnemyCombatPatrolDistance;
 	
 	static FName CollisionStartSocketFName;
 	static FName CollisionEndSocketFName;
@@ -37,8 +40,10 @@ private:
 	static FName PatrolIndexFName;
 	static FName TargetLocationFName;
 	static FName TargetFName;
+	static FName EnableToCombatFName;
 	static FName KeepEnemyInCheckFName;
-	static FName DrawSheathFName;
+	static FName WasDrawFName;
+	static FName AbleToAttackFName;
 
 	static FString BTTaskMoveToTargetFString;
 	static FString BTTaskWaitToKeepEnemyInCheckFString;
@@ -60,6 +65,9 @@ public:
 	static float GetEnemyLoseSightRadius() {return EnemyLoseSightRadius;}
 	static float GetEnemyVisionAngleDegree() {return EnemyVisionAngleDegree;}
 	
+	static float GetEnemyReadyToCombatPatrolDistance() {return EnemyReadyToCombatPatrolDistance;}
+	static float GetEnemyCombatPatrolDistance() {return EnemyCombatPatrolDistance;}
+	
 	static FName GetCollisionStartSocketName() {return CollisionStartSocketFName;}
 	static FName GetCollisionEndSocketName() {return CollisionEndSocketFName;}
 	static FName GetPelvisSocketName() {return PelvisSocketFName;}
@@ -71,8 +79,10 @@ public:
 	static FName GetPatrolIndexFName() {return PatrolIndexFName;}
 	static FName GetTargetLocationFName() {return TargetLocationFName;}
 	static FName GetTargetFName() {return TargetFName;}
+	static FName GetEnableToCombatFName() {return EnableToCombatFName;}
 	static FName GetKeepEnemyInCheckFName() {return KeepEnemyInCheckFName;}
-	static FName GetDrawSheathFName() {return DrawSheathFName;}
+	static FName GetWasDrawFName() {return WasDrawFName;}
+	static FName GetAbleToAttack() {return AbleToAttackFName;}
 
 	static FString GetBTTaskMoveToTargetFName() {return BTTaskMoveToTargetFString;}
 	static FString GetBTTaskWaitToKeepEnemyInCheckFString() {return BTTaskWaitToKeepEnemyInCheckFString;}
@@ -105,6 +115,7 @@ enum class ECharacterAction : int8
 	ChargeAttack,
 	Dodge,
 	Roll,
+	Guard,
 };
 
 UENUM()

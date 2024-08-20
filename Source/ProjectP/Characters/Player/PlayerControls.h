@@ -133,7 +133,8 @@ private:
 	void AdjustActorRotation();												// 캐릭터 회전 조정
 	
 	void TraceForInteractable();
-	
+
+	// 액션을 실행할 수 있는지 판단하기 위한 플래그 함수
 	bool CanPerformMove();
 	bool CanPerformAttack();
 	bool CanPerformDodge();

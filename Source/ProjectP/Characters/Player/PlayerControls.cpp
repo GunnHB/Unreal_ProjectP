@@ -245,25 +245,28 @@ void APlayerControls::LightAttackAction(const FInputActionValue& value)
 
 void APlayerControls::HeavyAttackAction(const FInputActionValue& value)
 {
-	// if(!IsValid(mStateManage))
-	// 	return;
-	//
-	// if(mStateManage->IsCurrentStateEqual(ECharacterState::Attack))
-	// {
-	// 	mCombat->SetIsAttackSaved(true);
-	// 	return;	
-	// }
-	//
-	// TryAttack();
+
 }
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
+	if(IsValid(mStateManage))
+	{
+		mStateManage->ResetState();
+		mStateManage->SetAction(ECharacterAction::Guard);
+	}
+	
 	bIsFocusing = true;
 }
 
 void APlayerControls::CancelFocusAction(const FInputActionValue& value)
 {
+	if(IsValid(mStateManage))
+	{
+		mStateManage->ResetState();
+		mStateManage->SetAction(ECharacterAction::General);
+	}
+	
 	bIsFocusing = false;
 }
 

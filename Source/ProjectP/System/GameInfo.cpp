@@ -17,7 +17,10 @@ float GameValue::KeepEnemyInCheckTime = 8.f;
 
 float GameValue::EnemySightRadius = 3000.f;
 float GameValue::EnemyLoseSightRadius = 3500.f;
-float GameValue::EnemyVisionAngleDegree = 65.f;
+float GameValue::EnemyVisionAngleDegree = 80.f;
+
+float GameValue::EnemyReadyToCombatPatrolDistance = 800.f;
+float GameValue::EnemyCombatPatrolDistance = 500.f;
 
 FName GameValue::CollisionStartSocketFName = "CollisionStart";
 FName GameValue::CollisionEndSocketFName = "CollisionEnd";
@@ -30,8 +33,10 @@ FName GameValue::ItemFName = "Item";
 FName GameValue::PatrolIndexFName = "PatrolIndex";
 FName GameValue::TargetLocationFName = "TargetLocation";
 FName GameValue::TargetFName = "Target";
+FName GameValue::EnableToCombatFName = "EnableToCombat";
 FName GameValue::KeepEnemyInCheckFName = "KeepEnemyInCheck";
-FName GameValue::DrawSheathFName = "DrawSheath";
+FName GameValue::WasDrawFName = "WasDraw";
+FName GameValue::AbleToAttackFName = "AbleToAttack";
 
 FString GameValue::BTTaskMoveToTargetFString = "MoveToTarget";
 FString GameValue::BTTaskWaitToKeepEnemyInCheckFString = "WaitToKeepEnemyInCheck";

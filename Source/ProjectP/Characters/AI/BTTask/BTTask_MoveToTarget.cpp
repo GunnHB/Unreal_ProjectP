@@ -4,6 +4,7 @@
 #include "BTTask_MoveToTarget.h"
 
 #include "../AIPawn.h"
+#include "../EnemyPawn.h"
 
 UBTTask_MoveToTarget::UBTTask_MoveToTarget()
 {
@@ -65,6 +66,16 @@ void UBTTask_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 		SetCurrentActorRotation(ownerPawn, DeltaSeconds);
 		SetMovementSpeed(movement, DeltaSeconds);
 	}
+
+	UBlackboardComponent* blackBoardComp = OwnerComp.GetBlackboardComponent();
+
+	if(IsValid(blackBoardComp) && IsValid(mTargetActor))
+	{
+		SetGuarding(ownerPawn, blackBoardComp);
+		
+		float distance = FVector::Dist(ownerPawn->GetActorLocation(), mTargetActor->GetActorLocation());
+		blackBoardComp->SetValueAsBool(GameValue::GetEnableToCombatFName(), distance < GameValue::GetEnemyCombatPatrolDistance());
+	}
 }
 
 void UBTTask_MoveToTarget::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
@@ -109,14 +120,45 @@ void UBTTask_MoveToTarget::SetMovementSpeed(UFloatingPawnMovement* movement, flo
 	if(!IsValid(movement))
 		return;
 
-	float speed = IsValid(mTargetActor) ? GameValue::GetJogSpeed() : GameValue::GetWalkSpeed();
+	float speed = GameValue::GetWalkSpeed();
+
+	if(IsValid(mTargetActor))
+	{
+		float distance = FVector::Dist(movement->GetOwner()->GetActorLocation(), mTargetActor->GetActorLocation());
+
+		if(distance > GameValue::GetEnemyReadyToCombatPatrolDistance())
+			speed = GameValue::GetJogSpeed();
+	}
 	
 	float distance = FVector::Dist(mActorLocationForDistance, mCurrentTargetLocation);
 	float targetSpeed = distance > GameValue::GetMoveToTargetLimitAmount() ? speed : 0.f;
 
-	// 약간 하드코딩인디...
 	if(IsValid(movement))
 		movement->MaxSpeed = FMath::FInterpTo(movement->MaxSpeed, targetSpeed, deltaSeconds, 5.f);
+}
+
+void UBTTask_MoveToTarget::SetGuarding(APawn* pawn, const UBlackboardComponent* blackBoardComp) const
+{
+	if(!IsValid(pawn) || !IsValid(blackBoardComp))
+		return;
+
+	AEnemyPawn* enemyPawn = Cast<AEnemyPawn>(pawn);
+
+	if(!IsValid(enemyPawn))
+		return;
+
+	float distance = FVector::Dist(enemyPawn->GetActorLocation(), mTargetActor->GetActorLocation());
+
+	if(distance < GameValue::GetEnemyReadyToCombatPatrolDistance())
+	{
+		if(IsValid(enemyPawn))
+			enemyPawn->TryGuard();
+	}
+	else
+	{
+		if(IsValid(enemyPawn))
+			enemyPawn->ReleaseGuard();
+	}
 }
 
 void UBTTask_MoveToTarget::SetCurrentActorRotation(APawn* pawn, float deltaSeconds)

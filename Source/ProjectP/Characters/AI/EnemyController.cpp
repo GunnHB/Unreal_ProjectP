@@ -79,8 +79,6 @@ void AEnemyController::OnTargetDetect(AActor* target, FAIStimulus stimulus)
 
 void AEnemyController::OnTargetForget(AActor* target)
 {
-	UE_LOG(ProjectP, Warning, TEXT("%s misssssssss!"), *target->GetName());
-	
 	GetBlackboardComponent()->SetValueAsObject(GameValue::GetTargetFName(), nullptr);
 }
 

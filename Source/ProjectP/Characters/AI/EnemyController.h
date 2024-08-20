@@ -22,6 +22,7 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UAIPerceptionComponent> mPerceptionComp = nullptr;
 	TObjectPtr<UAISenseConfig_Sight> mSightConfig = nullptr;
+	TObjectPtr<UAISenseConfig_Damage> mDamageConfig = nullptr;
 	
 	TObjectPtr<UBlackboardData> mBlackboard = nullptr;
 	TObjectPtr<UBehaviorTree> mBehaviorTree = nullptr;

@@ -14,15 +14,20 @@ EBTNodeResult::Type UBTTask_WaitToKeepEnemyInCheck::ExecuteTask(UBehaviorTreeCom
 
 	WaitTime = GameValue::GetKeepEnemyInCheckTime();
 
-	return result;
-}
-
-void UBTTask_WaitToKeepEnemyInCheck::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
-{
-	Super::OnTaskFinished(OwnerComp, NodeMemory, TaskResult);
-
 	UBlackboardComponent* blackBoardComp = OwnerComp.GetBlackboardComponent();
 
 	if(IsValid(blackBoardComp))
 		blackBoardComp->SetValueAsBool(GameValue::GetKeepEnemyInCheckFName(), false);
+
+	return result;
 }
+
+// void UBTTask_WaitToKeepEnemyInCheck::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
+// {
+// 	Super::OnTaskFinished(OwnerComp, NodeMemory, TaskResult);
+//
+// 	UBlackboardComponent* blackBoardComp = OwnerComp.GetBlackboardComponent();
+//
+// 	if(IsValid(blackBoardComp))
+// 		blackBoardComp->SetValueAsBool(GameValue::GetKeepEnemyInCheckFName(), false);
+// }

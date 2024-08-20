@@ -50,7 +50,10 @@ public:
 	// getter
 	TArray<AAIPatrolPoint*> GetPatrolPointArray() const {return mPatrolPointArray;}
 
-	void TryDrawSheath(const bool isEquipped) const;
+	// 지금은 사용하지 않아서 우선 주석 처리
+	// void TryDrawSheath(const bool isEquipped) const;
+	void TryGuard();
+	void ReleaseGuard();
 
 protected:
 	virtual void BeginPlay() override;

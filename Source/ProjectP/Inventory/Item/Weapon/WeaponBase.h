@@ -41,6 +41,8 @@ public:
 	virtual void SetOwner(AActor* actor) override;
 	virtual void OnEquip() override;
 	virtual void OnUnequip() override;
+	
+	
 
 protected:
 	// interface

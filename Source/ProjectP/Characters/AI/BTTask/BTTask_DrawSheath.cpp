@@ -16,13 +16,14 @@ EBTNodeResult::Type UBTTask_DrawSheath::ExecuteTask(UBehaviorTreeComponent& Owne
 	if(!IsValid(blackboardComp))
 		return EBTNodeResult::Aborted;
 	
-	bool drawSheathFlag = blackboardComp->GetValueAsBool(GameValue::GetDrawSheathFName());
+	bool drawSheathFlag = blackboardComp->GetValueAsBool(GameValue::GetWasDrawFName());
 	AEnemyPawn* enemyPawn = OwnerComp.GetAIOwner()->GetPawn<AEnemyPawn>();
 
-	if(IsValid(enemyPawn))
-		enemyPawn->TryDrawSheath(drawSheathFlag);
+	// 지금은 사용하지 않아서 우선 주석 처리
+	// if(IsValid(enemyPawn))
+	// 	enemyPawn->TryDrawSheath(drawSheathFlag);
 
-	blackboardComp->SetValueAsBool(GameValue::GetDrawSheathFName(), !drawSheathFlag);
+	blackboardComp->SetValueAsBool(GameValue::GetWasDrawFName(), !drawSheathFlag);
 
 	return result;
 }
