@@ -14,7 +14,7 @@ class PROJECTP_API UCharacterStat : public UObject
 	GENERATED_BODY()
 
 private:
-	float mCharacterHealth = 20.f;
+	float mCharacterHealth = 88.f;
 	float mCharacterStamina = 100.f;
 
 public:

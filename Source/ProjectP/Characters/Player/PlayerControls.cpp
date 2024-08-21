@@ -474,6 +474,19 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex, const 
 	mCombat->IncreaseAttackCount();
 }
 
+void APlayerControls::StartAttackRotate()
+{
+	GetWorld()->GetTimerManager().SetTimer(mAttackTimeHandle, this, &APlayerControls::EndAttackRotate, GetWorld()->GetDeltaSeconds(), true);
+}
+
+void APlayerControls::EndAttackRotate()
+{
+	FVector camForward = mCamera->GetForwardVector();
+	FVector pawnForward = GetActorForwardVector();
+
+	FVector targetVector = pawnForward - camForward;
+}
+
 void APlayerControls::TryDodge()
 {
 	if(!IsValid(mStateManage))

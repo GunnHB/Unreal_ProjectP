@@ -54,6 +54,7 @@ private:
 	float mDamageDegree = 0.f;
 	
 	FTimerHandle mHitStopTimeHandle;
+	FTimerHandle mAttackTimeHandle;
 
 public:
 	APlayerControls();
@@ -148,6 +149,8 @@ private:
 
 	void TryAttack();
 	void PerformAttack(int32 montageIndex, bool randomIndex, const ECharacterAction attackType);
+	void StartAttackRotate();
+	void EndAttackRotate();
 
 	void TryDodge();
 	void PerformDodge();

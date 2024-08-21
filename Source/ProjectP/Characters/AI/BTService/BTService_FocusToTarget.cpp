@@ -19,14 +19,17 @@ void UBTService_FocusToTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	{
 		FVector targetLocation = Cast<AActor>(blackBoardComp->GetValueAsObject(GameValue::GetTargetFName()))->GetActorLocation();
 
-		FVector targetVector = pawn->GetActorLocation() - targetLocation;
+		FVector pawnLocation = FVector(pawn->GetActorLocation().X, pawn->GetActorLocation().Y, 0.f);
+		targetLocation = FVector(targetLocation.X, targetLocation.Y, 0.f);
+
+		FVector targetVector = targetLocation - pawnLocation;
 
 		if(targetVector.Normalize())
 		{
 			float dotProduct = FVector::DotProduct(pawn->GetActorForwardVector(), targetVector);
 			float angle = FMath::RadiansToDegrees(FMath::Acos(dotProduct));
 
-			angle *= FVector::CrossProduct(pawn->GetActorForwardVector(), targetVector).Z > 0 ? 1 : -1;
+			angle *= FVector::CrossProduct(pawn->GetActorForwardVector(), targetVector).Z > 0 ? 1.f : -1.f;
 			
 			pawn->SetAimOffsetDegree(angle);
 

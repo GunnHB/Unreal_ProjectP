@@ -30,20 +30,21 @@ void UCollisionComponent::BeginPlay()
 
 void UCollisionComponent::RotateToTarget(const AActor* hittedActor)
 {
-	FVector targetVector = hittedActor->GetActorLocation() - mOwnerActor->GetActorLocation();
-
+	FVector targetVector = (hittedActor->GetActorLocation() - mOwnerActor->GetActorLocation()) * FVector(1.f, 1.f, 0.f);
+	
 	float currentYaw = mOwnerActor->GetActorRotation().Yaw;
 	float deltaYaw = 0.f;
-
+	
 	if(targetVector.Normalize())
 	{
 		float dot = FVector::DotProduct(mOwnerActor->GetActorForwardVector(), targetVector);
 		float angle = FMath::RadiansToDegrees(FMath::Acos(dot));
 		float deltaSeconds = GetWorld()->GetDeltaSeconds();
-
+		
 		deltaYaw = angle * (FVector::CrossProduct(mOwnerActor->GetActorForwardVector(), targetVector).Z > 0 ? deltaSeconds : -deltaSeconds);
+		
 	}
-
+	
 	mOwnerActor->SetActorRelativeRotation(FRotator(0.f, currentYaw + deltaYaw, 0.f));
 }
 
@@ -103,9 +104,6 @@ void UCollisionComponent::CollisionTrace()
 			}
 		}
 	}
-	
-	if(mHitActorArray.Num() != 0 && mHitActorArray[0] != nullptr)
-		RotateToTarget(mHitActorArray[0]);
 }
 
 void UCollisionComponent::ClearHitActors()

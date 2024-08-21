@@ -45,8 +45,11 @@ void UCombatComponent::KnockBack(const AActor* hitter)
 {
 	if(!IsValid(hitter))
 		return;
+
+	FVector hitterLocation = FVector(hitter->GetActorLocation().X, hitter->GetActorLocation().Y, 0.f);
+	FVector ownerLocation = FVector(GetOwner()->GetActorLocation().X, GetOwner()->GetActorLocation().Y, 0.f);
 	
-	FVector direction = GetOwner()->GetActorLocation() - hitter->GetActorLocation();
+	FVector direction = ownerLocation - hitterLocation;
 
 	if(direction.Normalize())
 	{
