@@ -10,6 +10,7 @@ AAIPawn::AAIPawn()
 
 	mCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CAPSULE"));
 	mMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MESH"));
+	mRotate = CreateDefaultSubobject<URotateComponent>(TEXT("ROTATE"));
 
 	SetRootComponent(mCapsule);
 	mMesh->SetupAttachment(mCapsule);

@@ -13,12 +13,6 @@ class PROJECTP_API UGuardComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	UGuardComponent();
-
-protected:
-	virtual void BeginPlay() override;
-
-private:
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 };

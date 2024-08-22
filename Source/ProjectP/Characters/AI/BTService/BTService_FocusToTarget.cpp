@@ -17,23 +17,10 @@ void UBTService_FocusToTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 	if(blackBoardComp->GetValueAsObject(GameValue::GetTargetFName()) != nullptr)
 	{
-		FVector targetLocation = Cast<AActor>(blackBoardComp->GetValueAsObject(GameValue::GetTargetFName()))->GetActorLocation();
+		URotateComponent* rotateComp = pawn->FindComponentByClass<URotateComponent>();
+		AActor* targetActor = Cast<AActor>(blackBoardComp->GetValueAsObject(GameValue::GetTargetFName()));
 
-		FVector pawnLocation = FVector(pawn->GetActorLocation().X, pawn->GetActorLocation().Y, 0.f);
-		targetLocation = FVector(targetLocation.X, targetLocation.Y, 0.f);
-
-		FVector targetVector = targetLocation - pawnLocation;
-
-		if(targetVector.Normalize())
-		{
-			float dotProduct = FVector::DotProduct(pawn->GetActorForwardVector(), targetVector);
-			float angle = FMath::RadiansToDegrees(FMath::Acos(dotProduct));
-
-			angle *= FVector::CrossProduct(pawn->GetActorForwardVector(), targetVector).Z > 0 ? 1.f : -1.f;
-			
-			pawn->SetAimOffsetDegree(angle);
-
-			UE_LOG(ProjectP, Warning, TEXT("%f"), angle);
-		}
+		if(IsValid(rotateComp) && IsValid(targetActor))
+			pawn->SetAimOffsetDegree(rotateComp->GetAngle(targetActor));
 	}
 }

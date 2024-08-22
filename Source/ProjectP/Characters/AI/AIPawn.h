@@ -5,6 +5,8 @@
 #include "../../System/GameInfo.h"
 #include "../../System/AIInfo.h"
 
+#include "../../Component/RotateComponent.h"
+
 #include "GameFramework/Pawn.h"
 #include "AIPawn.generated.h"
 
@@ -16,6 +18,7 @@ class PROJECTP_API AAIPawn : public APawn
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UCapsuleComponent> mCapsule = nullptr;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<USkeletalMeshComponent> mMesh = nullptr;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<URotateComponent> mRotate = nullptr;
 
 public:
 	// Sets default values for this pawn's properties

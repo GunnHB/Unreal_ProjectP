@@ -9,12 +9,12 @@
 #include "../../InputData/PlayerInputData.h"
 
 #include "../../Inventory/Widget/InventoryWidget.h"
-#include "../../Inventory/Item/Weapon/WeaponSword.h"
 
 #include "../../Data/PlayerStat.h"
 
 #include "../../Component/CombatComponent.h"
 #include "../../Component/StateManageComponent.h"
+#include "../../Component/RotateComponent.h"
 
 APlayerControls::APlayerControls()
 {
@@ -24,6 +24,7 @@ APlayerControls::APlayerControls()
 	mCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
 	mCombat = CreateDefaultSubobject<UCombatComponent>(TEXT("COMBAT"));
 	mStateManage = CreateDefaultSubobject<UStateManageComponent>(TEXT("STATE_MANAGE"));
+	mRotate = CreateDefaultSubobject<URotateComponent>(TEXT("ROTATE"));
 
 	InitAssets();
 	InitComponentsValue();
@@ -481,10 +482,6 @@ void APlayerControls::StartAttackRotate()
 
 void APlayerControls::EndAttackRotate()
 {
-	FVector camForward = mCamera->GetForwardVector();
-	FVector pawnForward = GetActorForwardVector();
-
-	FVector targetVector = pawnForward - camForward;
 }
 
 void APlayerControls::TryDodge()
@@ -551,7 +548,7 @@ void APlayerControls::PerformAction(const ECharacterState state, const ECharacte
 	}
 }
 
-float APlayerControls::GetDegree(const FVector& vector)
+float APlayerControls::GetDegree(const FVector& vector) const
 {
 	if(!bIsFocusing)
 		return 0.f;
@@ -559,16 +556,13 @@ float APlayerControls::GetDegree(const FVector& vector)
 	FVector forwardVector = GetActorForwardVector() * vector.Y;
 	FVector rightVector = GetActorRightVector() * vector.X;
 	FVector targetVector = rightVector + forwardVector;
-	
-	return GetForwardToTargetAngle(targetVector);
+
+	return mRotate->GetAngleToTargetForward(targetVector);
 }
 
 void APlayerControls::SetDamageDegree(const AActor* hitter)
 {
-	FVector targetDirection = hitter->GetActorLocation() - GetActorLocation();
-	
-	if(targetDirection.Normalize())
-		mDamageDegree = GetForwardToTargetAngle(targetDirection);
+	mDamageDegree = mRotate->GetAngle(hitter);
 }
 
 void APlayerControls::SetCurrentMovementType(const ECharacterMovementType type)
@@ -751,40 +745,22 @@ void APlayerControls::SpawnEmitter(FHitResult result)
 {
 }
 
-float APlayerControls::GetInputDegree()
+float APlayerControls::GetInputDegree() const
 {
 	return GetDegree(mInputVector);
 }
 
-float APlayerControls::GetLastDegree()
+float APlayerControls::GetLastDegree() const
 {
 	return GetDegree(mLastInputVector);
 }
 
-float APlayerControls::GetAnimOffsetX()
+float APlayerControls::GetAnimOffsetX() const
 {
 	if(!bIsFocusing)
 		return 0.f;
 
-	FVector camForward = FVector(mCamera->GetForwardVector().X, mCamera->GetForwardVector().Y, 0);
-	return GetForwardToTargetAngle(camForward);
-}
-
-float APlayerControls::GetForwardToTargetAngle(FVector& target)
-{
-	float angle = 0.f;
-	FVector forward = GetActorForwardVector();
-	
-	if(target.Normalize() && forward.Normalize())
-	{
-		float dot = FVector::DotProduct(forward, target);
-		angle = FMath::RadiansToDegrees(FMath::Acos(dot));
-
-		// z축 기준 좌측이면 음수 우측이면 양수
-		angle *= (FVector::CrossProduct(forward, target).Z > 0 ? 1 : -1);
-	}
-
-	return angle;
+	return mRotate->GetAngleToTargetForward(mCamera->GetForwardVector());
 }
 
 #if ENABLE_DRAW_DEBUG

@@ -63,19 +63,14 @@ void UBTTask_MoveToTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	if(IsValid(movement))
 	{
 		SetCurrentActorLocation(ownerPawn);
-		SetCurrentActorRotation(ownerPawn, DeltaSeconds);
+		SetCurrentActorRotation(ownerPawn);
 		SetMovementSpeed(movement, DeltaSeconds);
 	}
 
 	UBlackboardComponent* blackBoardComp = OwnerComp.GetBlackboardComponent();
 	
 	if(IsValid(blackBoardComp) && IsValid(mTargetActor))
-	{
 		SetGuarding(ownerPawn, blackBoardComp);
-		
-		// float distance = FVector::Dist(ownerPawn->GetActorLocation(), mTargetActor->GetActorLocation());
-		// blackBoardComp->SetValueAsBool(GameValue::GetEnableToCombatFName(), distance < GameValue::GetEnemyCombatPatrolDistance());
-	}
 }
 
 void UBTTask_MoveToTarget::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
@@ -161,28 +156,16 @@ void UBTTask_MoveToTarget::SetGuarding(APawn* pawn, const UBlackboardComponent* 
 	}
 }
 
-void UBTTask_MoveToTarget::SetCurrentActorRotation(APawn* pawn, float deltaSeconds)
+void UBTTask_MoveToTarget::SetCurrentActorRotation(APawn* pawn)
 {
-	if (!IsValid(pawn))
+	if(!IsValid(pawn))
 		return;
 
-	if (mTargetActor != nullptr)
+	if(mTargetActor != nullptr)
 		mCurrentTargetLocation = mTargetActor->GetActorLocation();
 
-	FVector targetVector = mCurrentTargetLocation - pawn->GetActorLocation();
+	URotateComponent* rotate = pawn->FindComponentByClass<URotateComponent>();
 
-	float currentYaw = pawn->GetActorRotation().Yaw;
-	float deltaYaw = 0.f;
-
-	if (targetVector.Normalize())
-	{
-		float dotProduct = FVector::DotProduct(pawn->GetActorForwardVector(), targetVector);
-		FVector crossProduct = FVector::CrossProduct(pawn->GetActorForwardVector(), targetVector);
-
-		float angle = FMath::RadiansToDegrees(FMath::Acos(dotProduct));
-
-		deltaYaw = angle * deltaSeconds * 5.f * (crossProduct.Z > 0 ? 1 : -1);
-	}
-
-	pawn->SetActorRelativeRotation(FRotator(0.f, currentYaw + deltaYaw, 0.f));
+	if(IsValid(rotate))
+		rotate->SetOwnerRotationByDelta(mCurrentTargetLocation);
 }

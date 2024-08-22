@@ -25,6 +25,7 @@ protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UCameraComponent> mCamera;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UCombatComponent> mCombat;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UStateManageComponent> mStateManage;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<class URotateComponent> mRotate;
 	
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 	
@@ -71,9 +72,9 @@ public:
 	FVector GetInputVector() const {return mInputVector;}
 	UPlayerStat* GetThisPlayerStat() const {return mPlayerStat;}
 	
-	float GetInputDegree();
-	float GetLastDegree();
-	float GetAnimOffsetX();
+	float GetInputDegree() const;
+	float GetLastDegree() const;
+	float GetAnimOffsetX() const;
 
 	float GetDamageDegree() const {return mDamageDegree;}
 
@@ -163,8 +164,7 @@ private:
 
 	void PerformAction(const ECharacterState state, const ECharacterAction action) const;
 
-	float GetDegree(const FVector& vector);
-	float GetForwardToTargetAngle(FVector& target);
+	float GetDegree(const FVector& vector) const;
 
 #if ENABLE_DRAW_DEBUG
 	// 디버깅용
