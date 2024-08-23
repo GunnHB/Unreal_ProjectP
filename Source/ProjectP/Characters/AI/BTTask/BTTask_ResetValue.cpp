@@ -23,6 +23,7 @@ EBTNodeResult::Type UBTTask_ResetValue::ExecuteTask(UBehaviorTreeComponent& Owne
 		return EBTNodeResult::Failed;
 
 	enemyPawn->SetAimOffsetDegree(0.f);
+	enemyPawn->SetMovementDegree(0.f);
 
 	return EBTNodeResult::Succeeded;
 }

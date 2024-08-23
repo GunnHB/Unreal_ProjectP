@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../System/GameInfo.h"
+
 #include "Components/ActorComponent.h"
 #include "CollisionComponent.generated.h"
 

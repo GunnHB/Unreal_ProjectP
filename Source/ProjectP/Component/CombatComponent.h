@@ -53,4 +53,6 @@ public:
 	void EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleComponent* capsule) const;
 	
 	void InterpActorLocation();
+
+	void PerformAttack(class UAnimInstanceBase* animInstance);
 };

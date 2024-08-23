@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EnemyPawn.h"
 
 #include "../../Component/EnemyMovementComponent.h"
 #include "../../Component/CombatComponent.h"
+#include "../../Component/FocusComponent.h"
 
-#include "EnemyAnimInstance.h"
 #include "EnemyController.h"
+#include "EnemyAnimInstance.h"
 
 #include "../../Inventory/Item/Weapon/WeaponSword.h"
 
@@ -15,6 +15,7 @@ AEnemyPawn::AEnemyPawn()
 {
 	mMovement = CreateDefaultSubobject<UEnemyMovementComponent>(TEXT("MOVEMENT"));
 	mCombat = CreateDefaultSubobject<UCombatComponent>(TEXT("COMBAT"));
+	mFocus = CreateDefaultSubobject<UFocusComponent>(TEXT("FOCUS"));
 
 	mCapsule->SetCapsuleHalfHeight(89.f);
 	mCapsule->SetCapsuleRadius(22.f);
@@ -53,25 +54,32 @@ AEnemyPawn::AEnemyPawn()
 // 	mAnimInstance->PlayDrawSheathMontage(isEquipped);
 // }
 
-void AEnemyPawn::PerformGuard()
+void AEnemyPawn::PerformGuard() const
 {
-	if(mAnimInstance->GetIsGuardingFlag())
+	if(!IsValid(mAnimInstance) || mAnimInstance->GetIsGuardingFlag())
 		return;
 	
 	mAnimInstance->SetIsGuardingFlag(true);
 }
 
-void AEnemyPawn::ReleaseGuard()
+void AEnemyPawn::ReleaseGuard() const
 {
-	if(!mAnimInstance->GetIsGuardingFlag())
+	if(!IsValid(mAnimInstance) || !mAnimInstance->GetIsGuardingFlag())
 		return;
 	
 	mAnimInstance->SetIsGuardingFlag(false);
 }
 
-void AEnemyPawn::SetAimOffsetDegree(const float value)
+void AEnemyPawn::SetAimOffsetDegree(const float value) const
 {
-	mAnimInstance->SetAimOffsetDegree(value);
+	if(IsValid(mAnimInstance))
+		mAnimInstance->SetAimOffsetDegree(value);
+}
+
+void AEnemyPawn::SetMovementDegree(const float value) const
+{
+	if(IsValid(mAnimInstance))
+		mAnimInstance->SetMovementDegree(value);
 }
 
 void AEnemyPawn::BeginPlay()

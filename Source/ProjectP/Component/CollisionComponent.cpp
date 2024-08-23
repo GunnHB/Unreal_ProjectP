@@ -6,6 +6,8 @@
 #include "../Interface/CollisionEnable.h"
 #include "../Interface/Damageable.h"
 
+#include "RotateComponent.h"
+
 UCollisionComponent::UCollisionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -62,7 +64,7 @@ void UCollisionComponent::CollisionTrace()
 	if(collision != nullptr)
 		mDebugQuat = collision->GetQuat();
 	
-	DrawDebugCapsule(GetWorld(), (mStartLocation + mEndLocation) * .5f, mHalfHeight, 7.f, mDebugQuat, drawColor, false, -1.f);
+	DrawDebugCapsule(GetWorld(), (mStartLocation + mEndLocation) * .5f, mHalfHeight, 7.f, mDebugQuat, drawColor, false, .018f);
 #endif
 
 	for(FHitResult hit : mHitResultArray)

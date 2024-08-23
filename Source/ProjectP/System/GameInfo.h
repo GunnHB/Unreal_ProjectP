@@ -28,6 +28,9 @@ private:
 
 	static float EnemyReadyToCombatPatrolDistance;
 	static float EnemyCombatPatrolDistance;
+
+	static float EnableToFocusRange;
+	static float EnableToFocusRadius;
 	
 	static FName CollisionStartSocketFName;
 	static FName CollisionEndSocketFName;
@@ -68,6 +71,9 @@ public:
 	
 	static float GetEnemyReadyToCombatPatrolDistance() {return EnemyReadyToCombatPatrolDistance;}
 	static float GetEnemyCombatPatrolDistance() {return EnemyCombatPatrolDistance;}
+
+	static float GetEnableToFocusRange() {return EnableToFocusRange;}
+	static float GetEnableToFocusRadius() {return EnableToFocusRadius;}
 	
 	static FName GetCollisionStartSocketName() {return CollisionStartSocketFName;}
 	static FName GetCollisionEndSocketName() {return CollisionEndSocketFName;}

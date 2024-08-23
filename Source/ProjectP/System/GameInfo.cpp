@@ -15,12 +15,15 @@ float GameValue::MoveToTargetLimitAmount = 50.f;
 float GameValue::EnoughToCombatDistance = 250.f;
 float GameValue::KeepEnemyInCheckTime = 8.f;
 
-float GameValue::EnemySightRadius = 3000.f;
-float GameValue::EnemyLoseSightRadius = 3500.f;
-float GameValue::EnemyVisionAngleDegree = 80.f;
+float GameValue::EnemySightRadius = 2000.f;
+float GameValue::EnemyLoseSightRadius = 2500.f;
+float GameValue::EnemyVisionAngleDegree = 100.f;
 
 float GameValue::EnemyReadyToCombatPatrolDistance = 800.f;
-float GameValue::EnemyCombatPatrolDistance = 500.f;
+float GameValue::EnemyCombatPatrolDistance = 300.f;
+
+float GameValue::EnableToFocusRange = 1500.f;
+float GameValue::EnableToFocusRadius = 500.f;
 
 FName GameValue::CollisionStartSocketFName = "CollisionStart";
 FName GameValue::CollisionEndSocketFName = "CollisionEnd";

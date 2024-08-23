@@ -18,6 +18,8 @@ class PROJECTP_API AEnemyPawn : public AAIPawn, public ICombatable, public IDama
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UEnemyMovementComponent> mMovement = nullptr;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UCombatComponent> mCombat = nullptr;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<class UFocusComponent> mFocus = nullptr;
+	
 	UPROPERTY(EditAnywhere) TArray<class AAIPatrolPoint*> mPatrolPointArray;
 	
 	TObjectPtr<class UEnemyAnimInstance> mAnimInstance = nullptr;
@@ -49,16 +51,19 @@ public:
 
 	// getter
 	TArray<AAIPatrolPoint*> GetPatrolPointArray() const {return mPatrolPointArray;}
+	UCombatComponent* GetCombatComp() const {return mCombat;}
+	UEnemyAnimInstance* GetAnimInstance() const {return mAnimInstance;}
 
 	// 지금은 사용하지 않아서 우선 주석 처리
 	// void TryDrawSheath(const bool isEquipped) const;
 
 	// for guard
-	void PerformGuard();
-	void ReleaseGuard();
+	void PerformGuard() const;
+	void ReleaseGuard() const;
 
 	// for focus
-	void SetAimOffsetDegree(const float value);
+	void SetAimOffsetDegree(const float value) const;
+	void SetMovementDegree(const float value) const;
 
 protected:
 	virtual void BeginPlay() override;

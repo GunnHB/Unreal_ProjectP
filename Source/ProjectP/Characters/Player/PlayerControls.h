@@ -26,6 +26,7 @@ protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UCombatComponent> mCombat;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UStateManageComponent> mStateManage;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class URotateComponent> mRotate;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<class UFocusComponent> mFocus;
 	
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 	
@@ -74,7 +75,7 @@ public:
 	
 	float GetInputDegree() const;
 	float GetLastDegree() const;
-	float GetAnimOffsetX() const;
+	float GetAimOffsetX() const;
 
 	float GetDamageDegree() const {return mDamageDegree;}
 
@@ -150,8 +151,6 @@ private:
 
 	void TryAttack();
 	void PerformAttack(int32 montageIndex, bool randomIndex, const ECharacterAction attackType);
-	void StartAttackRotate();
-	void EndAttackRotate();
 
 	void TryDodge();
 	void PerformDodge();

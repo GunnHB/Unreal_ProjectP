@@ -17,5 +17,11 @@ class PROJECTP_API UBTService_FocusToTarget : public UBTService
 	GENERATED_BODY()
 
 protected:
+	
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+
+private:
+#if ENABLE_DRAW_DEBUG
+	void TryDrawDebugLine(UBlackboardComponent* blackBoardComp, AActor* owner);
+#endif
 };

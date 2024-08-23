@@ -26,10 +26,19 @@ public:
 	float GetAngleToTargetLocation(const FVector& targetLocation);
 	float GetAngleToTargetLocationByDelta(const FVector& targetLocation);
 	float GetAngleToTargetForward(const FVector& targetForward);
+	FVector GetForwardVectorByUnitAxis(USceneComponent* comp, EAxis::Type axisType);
+	
+	FVector GetNormalizedVector(const FVector& firstVector, const FVector& secondVector);
 
 	void SetOwnerRotationByDelta(const FVector& targetLocation);
+
+	void RotateComponent(USceneComponent* comp, const FVector& targetLocation);
+	void RotateOwner(FVector& inputVector, float yawValue = 0.f);
 
 private:
 	FVector GetVector(const FVector& firstVector, const FVector& secondVector) const;
 	float GetAngle(const FVector& forwardVector, FVector& targetVector);
+	
+	bool ClampAngle(float& angle);
+	void RotateToTargetRotation(const FRotator& targetRotation);
 };

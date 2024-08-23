@@ -4,6 +4,7 @@
 #include "CombatComponent.h"
 
 #include "CollisionComponent.h"
+#include "../Characters/AnimInstanceBase.h"
 #include "../Inventory/Item/Weapon/WeaponSword.h"
 
 void UCombatComponent::IncreaseAttackCount()
@@ -90,4 +91,15 @@ void UCombatComponent::InterpActorLocation()
 	
 	FVector knockBackLocation = FMath::VInterpTo(GetOwner()->GetActorLocation(), mKnockBackDirection, GetWorld()->GetDeltaSeconds(), 10.f);
 	GetOwner()->SetActorRelativeLocation(knockBackLocation);
+}
+
+void UCombatComponent::PerformAttack(UAnimInstanceBase* animInstance)
+{
+	if(IsValid(animInstance))
+	{
+		TArray<UAnimMontage*> montageArray = CItemManager::GetInstance()->mSwordTable->FindRow<FSword>(mMainWeapon->GetWeaponData()->ref_row_name, "")->montage_attack_array;
+
+		if(montageArray.Num() != 0)
+			animInstance->PlayAttackMontage(montageArray, 0, true);
+	}
 }

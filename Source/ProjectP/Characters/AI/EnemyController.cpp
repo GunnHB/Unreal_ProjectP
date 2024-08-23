@@ -34,6 +34,9 @@ void AEnemyController::BeginPlay()
 
 	mPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::OnTargetDetect);
 	mPerceptionComp->OnTargetPerceptionForgotten.AddDynamic(this, &AEnemyController::OnTargetForget);
+
+	// test
+	Blackboard->SetValueAsBool(GameValue::GetAttackableFName(), true);
 }
 
 void AEnemyController::OnPossess(APawn* InPawn)

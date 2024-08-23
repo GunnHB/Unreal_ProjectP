@@ -41,6 +41,9 @@ protected:
 	TObjectPtr<class UStateManageComponent> mStateManage = nullptr;
 
 public:
+	UPlayerAnimInstance();
+
+protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
@@ -49,6 +52,7 @@ public:
 
 	virtual void NativeBeginPlay() override;
 
+public:
 	// getter
 	bool GetIsInAir() const {return mIsInAir;}
 	bool GetIsLandingAnimEnd() const {return bIsLandingAnimEnd;}
@@ -62,6 +66,8 @@ public:
 	void SetTakeDamageDegree();
 	
 	void PerformStopAllMontages();
+
+	void ResetDegreeValue();
 
 private:
 	void PerformPlayMontage(UAnimMontage* montage);

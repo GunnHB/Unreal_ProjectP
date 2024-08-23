@@ -15,6 +15,8 @@
 #include "../../Component/CombatComponent.h"
 #include "../../Component/StateManageComponent.h"
 #include "../../Component/RotateComponent.h"
+#include "../../Component/FocusComponent.h"
+#include "../../Component/CollisionComponent.h"
 
 APlayerControls::APlayerControls()
 {
@@ -25,6 +27,7 @@ APlayerControls::APlayerControls()
 	mCombat = CreateDefaultSubobject<UCombatComponent>(TEXT("COMBAT"));
 	mStateManage = CreateDefaultSubobject<UStateManageComponent>(TEXT("STATE_MANAGE"));
 	mRotate = CreateDefaultSubobject<URotateComponent>(TEXT("ROTATE"));
+	mFocus = CreateDefaultSubobject<UFocusComponent>(TEXT("FOCUS"));
 
 	InitAssets();
 	InitComponentsValue();
@@ -50,7 +53,8 @@ void APlayerControls::Tick(float DeltaTime)
 #if ENABLE_DRAW_DEBUG
 	DrawArrow();
 #endif
-	GetAnimOffsetX();
+	
+	GetAimOffsetX();
 	TraceForInteractable();
 }
 
@@ -212,7 +216,7 @@ void APlayerControls::CancelMovementAction(const FInputActionValue& value)
 void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 {
 	FVector axis = value.Get<FVector>();
-
+	
 	float pitchDelta = axis.Y * 90.f * GetWorld()->GetDeltaSeconds();
 	float yawDelta = axis.X * 90.f * GetWorld()->GetDeltaSeconds();
 
@@ -226,8 +230,8 @@ void APlayerControls::CameraMovementAction(const FInputActionValue& value)
 
 void APlayerControls::JumpAction(const FInputActionValue& value)
 {
-	if (CanJump())
-		Jump();
+	// if (CanJump())
+	// 	Jump();
 }
 
 void APlayerControls::LightAttackAction(const FInputActionValue& value)
@@ -258,6 +262,9 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 	}
 	
 	bIsFocusing = true;
+
+	if(IsValid(mFocus))
+		mFocus->TryFocus(mRotate->GetForwardVectorByUnitAxis(mCamera, EAxis::X));
 }
 
 void APlayerControls::CancelFocusAction(const FInputActionValue& value)
@@ -269,6 +276,11 @@ void APlayerControls::CancelFocusAction(const FInputActionValue& value)
 	}
 	
 	bIsFocusing = false;
+
+	if(IsValid(mFocus))
+		mFocus->ResetTargetActor();
+
+	mAnimInstance->ResetDegreeValue();
 }
 
 void APlayerControls::DrawSheathAction(const FInputActionValue& value)
@@ -362,14 +374,6 @@ void APlayerControls::TraceForInteractable()
 #endif
 }
 
-// bool APlayerControls::CanPerformCombat()
-// {
-// 	if(!IsValid(mCombat))
-// 		return false;
-//
-// 	return mStateManage->IsCurrentStateEqual(ECharacterState::General);
-// }
-
 bool APlayerControls::CanPerformMove()
 {
 	if(!IsValid(mStateManage))
@@ -408,9 +412,6 @@ bool APlayerControls::CanPerformTakeDamage()
 
 void APlayerControls::TryMovement()
 {
-	if(!mStateManage->IsCurrentStateEqual(ECharacterState::General))
-		return;
-	
 	// 공중일 때 || 착지했을 때 회전 막기
 	if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
 		return;
@@ -421,7 +422,7 @@ void APlayerControls::TryMovement()
 void APlayerControls::PerformMovement()
 {
 	AdjustActorRotation();
-
+	
 	if(bIsFocusing)
 	{
 		AddMovementInput(GetActorForwardVector(), mInputVector.Y);
@@ -473,15 +474,6 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex, const 
 	mStateManage->SetAction(attackType);
 	
 	mCombat->IncreaseAttackCount();
-}
-
-void APlayerControls::StartAttackRotate()
-{
-	GetWorld()->GetTimerManager().SetTimer(mAttackTimeHandle, this, &APlayerControls::EndAttackRotate, GetWorld()->GetDeltaSeconds(), true);
-}
-
-void APlayerControls::EndAttackRotate()
-{
 }
 
 void APlayerControls::TryDodge()
@@ -755,12 +747,15 @@ float APlayerControls::GetLastDegree() const
 	return GetDegree(mLastInputVector);
 }
 
-float APlayerControls::GetAnimOffsetX() const
+float APlayerControls::GetAimOffsetX() const
 {
-	if(!bIsFocusing)
-		return 0.f;
+	if(bIsFocusing)
+	{
+		if(IsValid(mRotate))
+			return mRotate->GetAngleToTargetForward(mCamera->GetForwardVector());
+	}
 
-	return mRotate->GetAngleToTargetForward(mCamera->GetForwardVector());
+	return 0.f;
 }
 
 #if ENABLE_DRAW_DEBUG
@@ -771,12 +766,7 @@ void APlayerControls::DrawArrow() const
 	
 	DrawDebugDirectionalArrow(GetWorld(), startLocation, endLocation, 120.f, FColor::Red, false, -1.f, 0.f, 3.f);
 
-	FVector camForwardNormal = mCamera->GetForwardVector();
-
-	if(camForwardNormal.Normalize())
-	{
-		FVector camEndLocation = startLocation + FVector(camForwardNormal.X, camForwardNormal.Y, 0.f) * 150.f;
-		DrawDebugDirectionalArrow(GetWorld(), startLocation, camEndLocation, 120.f, FColor::Blue, false, -1.f, 0.f, 3.f);
-	}
+	FVector camEndLocation = startLocation + mRotate->GetForwardVectorByUnitAxis(mCamera, EAxis::X) * 150.f;
+	DrawDebugDirectionalArrow(GetWorld(), startLocation, camEndLocation, 120.f, FColor::Blue, false, -1.f, 0.f, 3.f);
 }
 #endif

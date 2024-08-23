@@ -21,6 +21,28 @@ void UBTService_FocusToTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		AActor* targetActor = Cast<AActor>(blackBoardComp->GetValueAsObject(GameValue::GetTargetFName()));
 
 		if(IsValid(rotateComp) && IsValid(targetActor))
-			pawn->SetAimOffsetDegree(rotateComp->GetAngle(targetActor));
+		{
+			float angle = rotateComp->GetAngle(targetActor);
+			
+			pawn->SetAimOffsetDegree(angle);
+			pawn->SetMovementDegree(angle);
+		}
 	}
+
+#if ENABLE_DRAW_DEBUG
+	TryDrawDebugLine(blackBoardComp, pawn);
+#endif
 }
+
+
+#if ENABLE_DRAW_DEBUG
+void UBTService_FocusToTarget::TryDrawDebugLine(UBlackboardComponent* blackBoardComp, AActor* owner)
+{
+	if(!IsValid(blackBoardComp))
+		return;
+
+	AActor* targetActor = Cast<AActor>(blackBoardComp->GetValueAsObject(GameValue::GetTargetFName()));
+
+	DrawDebugLine(GetWorld(), owner->GetActorLocation(), targetActor->GetActorLocation(), FColor::Cyan, false, .05f, 0, 1.f);
+}
+#endif

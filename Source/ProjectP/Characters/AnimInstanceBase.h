@@ -26,6 +26,7 @@ protected:
 	// base variables
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mSpeed = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mAimOffsetDegree = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mMovementDegree = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float mTakeDamageDegree = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bTakeDamage = false;
@@ -42,4 +43,7 @@ public:
 	void SetTakeDamageFlag(const bool value) {bTakeDamage = value;}
 	void SetIsGuardingFlag(const bool value) {bIsGuarding = value;}
 	void SetAimOffsetDegree(const float value) {mAimOffsetDegree = value;}
+	void SetMovementDegree(const float value) {mMovementDegree = value;}
+
+	void PlayAttackMontage(TArray<UAnimMontage*> montageArray, int32 attackIndex, bool randomAttack = false);
 };

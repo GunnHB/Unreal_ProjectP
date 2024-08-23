@@ -38,7 +38,7 @@ void UBTTask_MoveToCombatPatrol::TickTask(UBehaviorTreeComponent& OwnerComp, uin
 
 void UBTTask_MoveToCombatPatrol::SetCombatPatrolLocation(const bool value) const
 {
-	FVector combatPatrollLocation = mEnemyPawn->GetActorLocation() + FVector(0.f, 100.f * (value ? -1.f : 1.f), 0.f);
+	FVector combatPatrolLocation = mEnemyPawn->GetActorLocation() + FVector(0.f, 100.f * (value ? -1.f : 1.f), 0.f);
 	
-	mBlackboardComp->SetValueAsVector(GameValue::GetCombatPatrolLocationFName(), combatPatrollLocation);
+	mBlackboardComp->SetValueAsVector(GameValue::GetCombatPatrolLocationFName(), combatPatrolLocation);
 }

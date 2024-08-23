@@ -8,6 +8,10 @@
 #include "../../Component/StateManageComponent.h"
 #include "ProjectP/Inventory/Item/Weapon/WeaponSword.h"
 
+UPlayerAnimInstance::UPlayerAnimInstance()
+{
+}
+
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
@@ -33,7 +37,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	mLastDegree = mPlayer->GetLastDegree();
 	mDamageDegree = mPlayer->GetDamageDegree();
 	
-	mAimOffsetX = mPlayer->GetAnimOffsetX();
+	mAimOffsetX = mPlayer->GetAimOffsetX();
 	mSpeed = mPlayerMovement->Velocity.Size();
 	mAcceleration = mPlayerMovement->GetCurrentAcceleration().Length() > 0.f;
 	mIsInAir = mPlayerMovement->IsFalling();
@@ -165,6 +169,14 @@ void UPlayerAnimInstance::PerformPlayMontage(UAnimMontage* montage)
 void UPlayerAnimInstance::PerformStopAllMontages()
 {
 	StopAllMontages(.1f);
+}
+
+void UPlayerAnimInstance::ResetDegreeValue()
+{
+	mDegreee = 0.f;
+	mLastDegree = 0.f;
+	mDamageDegree = 0.f;
+	mAimOffsetX = 0.f;
 }
 
 void UPlayerAnimInstance::AnimNotify_LandEnd()
