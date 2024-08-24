@@ -44,3 +44,9 @@ FName GameValue::CombatPatrolLocationFName = "CombatPatrolLocation";
 
 FString GameValue::BTTaskMoveToTargetFString = "MoveToTarget";
 FString GameValue::BTTaskWaitToKeepEnemyInCheckFString = "WaitToKeepEnemyInCheck";
+
+FName GameValue::UIHealthBarFName = "UI_HealthBar";
+FName GameValue::UIStaminaFName = "UI_Stamina";
+FName GameValue::UIHeartImageFName = "Image_Heart";
+FName GameValue::UIStaminaImageFName = "Image_Stamina";
+FName GameValue::UIMoneyTextBlockFName = "TextBlock_Money";

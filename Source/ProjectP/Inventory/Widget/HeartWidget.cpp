@@ -6,4 +6,6 @@
 void UHeartWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	mHeartImage = Cast<UImage>(GetWidgetFromName(GameValue::GetUIHeartImageFName()));
 }

@@ -12,19 +12,28 @@ UCLASS()
 class PROJECTP_API UCharacterStat : public UObject
 {
 	GENERATED_BODY()
-
-private:
-	float mCharacterHealth = 88.f;
-	float mCharacterStamina = 100.f;
+	
+protected:
+	float mCurrCharacterHP;
+	float mCurrCharacterStamina;
+	
+	float mMaxCharacterHP;
+	float mMaxCharacterStamina;
 
 public:
+	virtual void InitStat(const APawn* owner);
+	
 	// getteer
-	float GetCharacterHealth() const {return mCharacterHealth;}
-	float GetCharacterStamina() const {return mCharacterStamina;}
+	float GetCurrCharacterHP() const {return mCurrCharacterHP;}
+	float GetCurrCharacterStamina() const {return mCurrCharacterStamina;}
+	float GetMaxCharacterHP() const {return mMaxCharacterHP;}
+	float GetMaxCharacterStamina() const {return mMaxCharacterStamina;}
 	
 	// setter
-	void SetCharacterHealth(float value) {mCharacterHealth = value;}
-	void SetCharacterStamina(float value) {mCharacterStamina = value;}
+	void SetCurrCharacterHP(const float value) {mCurrCharacterHP = value;}
+	void SetCurrCharacterStamina(const float value) {mCurrCharacterStamina = value;}
+	void SetMaxCharacterHP(const float value) {mMaxCharacterHP = value;}
+	void SetMaxCharacterStamina(const float value) {mMaxCharacterStamina = value;}
 	
-	bool IsCharacterDead() const {return mCharacterHealth <= 0;}
+	bool IsCharacterDead() const {return mCurrCharacterHP <= 0;}
 };

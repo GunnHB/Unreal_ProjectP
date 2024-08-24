@@ -52,6 +52,12 @@ private:
 	static FString BTTaskMoveToTargetFString;
 	static FString BTTaskWaitToKeepEnemyInCheckFString;
 
+	static FName UIHealthBarFName;
+	static FName UIStaminaFName;
+	static FName UIHeartImageFName;
+	static FName UIStaminaImageFName;
+	static FName UIMoneyTextBlockFName;
+
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
 
@@ -94,6 +100,12 @@ public:
 
 	static FString GetBTTaskMoveToTargetFName() {return BTTaskMoveToTargetFString;}
 	static FString GetBTTaskWaitToKeepEnemyInCheckFString() {return BTTaskWaitToKeepEnemyInCheckFString;}
+
+	static FName GetUIHealthBarFName() {return UIHealthBarFName;}
+	static FName GetUIStaminaFName() {return UIStaminaFName;}
+	static FName GetUIHeartImageFName() {return UIHeartImageFName;}
+	static FName GetUIStaminaImageFName() {return UIStaminaImageFName;}
+	static FName GetUIMoneyTextBlockFName() {return UIMoneyTextBlockFName;}
 };
 
 enum class ECharacterMovementType : int8

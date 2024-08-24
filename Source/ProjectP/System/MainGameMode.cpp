@@ -4,12 +4,14 @@
 #include "MainGameMode.h"
 
 #include "../Characters/Player/PlayerControls.h"
+#include "../Characters/Player/InGamePlayerController.h"
 
 #include "Manager/ItemManager.h"
 
 AMainGameMode::AMainGameMode()
 {
 	DefaultPawnClass = APlayerControls::StaticClass();
+	PlayerControllerClass = AInGamePlayerController::StaticClass();
 
 	CItemManager::GetInstance()->Init();
 }

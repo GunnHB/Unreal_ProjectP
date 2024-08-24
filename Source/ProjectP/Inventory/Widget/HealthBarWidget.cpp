@@ -3,3 +3,7 @@
 
 #include "HealthBarWidget.h"
 
+void UHealthBarWidget::SetHealthBar(const float value) const
+{
+	
+}

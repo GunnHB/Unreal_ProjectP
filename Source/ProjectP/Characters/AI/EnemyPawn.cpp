@@ -90,6 +90,9 @@ void AEnemyPawn::BeginPlay()
 	
 	if(IsValid(mMesh->GetAnimInstance()))
 		mAnimInstance = Cast<UEnemyAnimInstance>(mMesh->GetAnimInstance());
+
+	if(IsValid(mEnemyStat))
+		mEnemyStat->InitStat(this);
 	
 	InitWeapon();
 }
@@ -98,14 +101,14 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	float health = mEnemyStat->GetCharacterHealth() - DamageAmount;
-	mEnemyStat->SetCharacterHealth(health);
+	float health = mEnemyStat->GetCurrCharacterHP() - DamageAmount;
+	mEnemyStat->SetCurrCharacterHP(health);
 	
 	UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
 	
 	if(IsValid(mCombat))
 	{
-		if(mEnemyStat->GetCharacterHealth() <= 0)
+		if(mEnemyStat->GetCurrCharacterHP() <= 0)
 			mCombat->EnableRagdoll(mMesh, mCapsule);
 	}
 

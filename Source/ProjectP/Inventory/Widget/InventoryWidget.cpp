@@ -43,7 +43,7 @@ void UInventoryWidget::InitWidget()
 void UInventoryWidget::InitAssets()
 {
 	if(mMoneyText == nullptr)
-		mMoneyText = Cast<UTextBlock>(GetWidgetFromName(TEXT("TextBlock_Money")));
+		mMoneyText = Cast<UTextBlock>(GetWidgetFromName(GameValue::GetUIMoneyTextBlockFName()));
 }
 
 void UInventoryWidget::SetMoneyText()

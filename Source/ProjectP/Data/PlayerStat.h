@@ -13,10 +13,12 @@ class PROJECTP_API UPlayerStat : public UCharacterStat
 {
 	GENERATED_BODY()
 
-private:
+protected:
 	int32 mPlayerMoney = 0;
 
 public:
+	virtual void InitStat(const APawn* owner) override;
+	
 	// getter
 	int32 GetPlayerMoney() const {return mPlayerMoney;}
 

@@ -9,6 +9,7 @@
 #include "../../InputData/PlayerInputData.h"
 
 #include "../../Inventory/Widget/InventoryWidget.h"
+#include "../../Inventory/Widget/HealthBarWidget.h"
 
 #include "../../Data/PlayerStat.h"
 
@@ -39,6 +40,9 @@ void APlayerControls::BeginPlay()
 	
 	mAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 	mStateManage->SetState(ECharacterState::General);
+
+	if(IsValid(mPlayerStat))
+		mPlayerStat->InitStat(this);
 	
 	MappingContext();
 }
@@ -69,14 +73,14 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	float health = mPlayerStat->GetCharacterHealth() - DamageAmount;
-	mPlayerStat->SetCharacterHealth(health);
+	float health = mPlayerStat->GetCurrCharacterHP() - DamageAmount;
+	mPlayerStat->SetCurrCharacterHP(health);
 	
 	UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
 	
 	if(IsValid(mCombat))
 	{
-		if(mPlayerStat->GetCharacterHealth() <= 0)
+		if(mPlayerStat->GetCurrCharacterHP() <= 0)
 		{
 			if(IsValid(mStateManage))
 				mStateManage->SetState(ECharacterState::Dead);
@@ -117,11 +121,11 @@ void APlayerControls::InitAssets()
 
 	// inventory
 	static ConstructorHelpers::FClassFinder<UUserWidget>
-		invenAsset(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/04_Inventory/Widget/UI_Inventory.UI_Inventory_C'"));
+		invenAsset(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/03_UI/Widget/UI_Inventory.UI_Inventory_C'"));
 
 	if(invenAsset.Succeeded())
 		mInventoryWidgetClass = invenAsset.Class;
-
+	
 	// playerStat
 	mPlayerStat = NewObject<UPlayerStat>();
 }
@@ -451,7 +455,7 @@ void APlayerControls::PerformDrawSheath()
 void APlayerControls::TryAttack()
 {
 	if(IsValid(mCombat) && !mCombat->IsMainWeaponNull())
-		PerformAttack(mCombat->GetAttackCount(), false, ECharacterAction::LightAttack);
+		PerformAttack(mCombat->GetAttackIndex(), false, ECharacterAction::LightAttack);
 }
 
 void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex, const ECharacterAction attackType)
@@ -643,7 +647,7 @@ void APlayerControls::ResetAttack()
 		return;
 
 	mCombat->SetIsAttackSaved(false);
-	mCombat->SetAttackCount(0);
+	mCombat->SetAttackIndex(0);
 }
 
 void APlayerControls::ResetDodge()

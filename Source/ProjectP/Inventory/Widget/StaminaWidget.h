@@ -4,20 +4,23 @@
 
 #include "../../System/GameInfo.h"
 #include "../../System/UIInfo.h"
+
 #include "Blueprint/UserWidget.h"
-#include "HeartWidget.generated.h"
+#include "StaminaWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTP_API UHeartWidget : public UUserWidget
+class PROJECTP_API UStaminaWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 protected:
-	TObjectPtr<UImage> mHeartImage = nullptr;
+	TObjectPtr<UImage> mStaminaImage = nullptr;
 
-protected:
 	virtual void NativeConstruct() override;
+
+public:
+	void SetStamina(const float value) const;
 };
