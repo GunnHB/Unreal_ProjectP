@@ -15,6 +15,7 @@ EBTNodeResult::Type UBTTask_ResetValue::ExecuteTask(UBehaviorTreeComponent& Owne
 
 	blackboardComponent->SetValueAsBool(GameValue::GetEnableToCombatFName(), false);
 	blackboardComponent->SetValueAsBool(GameValue::GetAttackableFName(), false);
+	blackboardComponent->SetValueAsBool(GameValue::GetAttackableFName(), false);
 	blackboardComponent->SetValueAsObject(GameValue::GetTargetFName(), nullptr);
 
 	AEnemyPawn* enemyPawn = OwnerComp.GetAIOwner()->GetPawn<AEnemyPawn>();

@@ -20,10 +20,10 @@ void UCombatComponent::IncreaseAttackCount()
 	if(arraySize == 0)
 		return;
 		
-	++mAttackCount;
+	++mAttackIndex;
 
-	if(mAttackCount >= arraySize)
-		mAttackCount = 0;
+	if(mAttackIndex >= arraySize)
+		mAttackIndex = 0;
 }
 
 float UCombatComponent::GetMainWeaponAbilityValue() const
@@ -81,7 +81,8 @@ void UCombatComponent::EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleCompo
 
 void UCombatComponent::InterpActorLocation()
 {
-	if((mKnockBackDirection - GetOwner()->GetActorLocation()).Size() < 0.01f)
+	// 약간 보정
+	if((mKnockBackDirection - GetOwner()->GetActorLocation()).Size() <= 0.1f)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(mInterpTimeHandle);
 		mKnockBackDirection = FVector::ZeroVector;
@@ -100,6 +101,15 @@ void UCombatComponent::PerformAttack(UAnimInstanceBase* animInstance)
 		TArray<UAnimMontage*> montageArray = CItemManager::GetInstance()->mSwordTable->FindRow<FSword>(mMainWeapon->GetWeaponData()->ref_row_name, "")->montage_attack_array;
 
 		if(montageArray.Num() != 0)
-			animInstance->PlayAttackMontage(montageArray, 0, true);
+			animInstance->PlayAttackMontage(montageArray, mAttackIndex, bIsRandomAttack);
+	}
+}
+
+void UCombatComponent::PerformAttack(class UAnimInstanceBase* animInstance, const TArray<UAnimMontage*>& attackMontageArray)
+{
+	if(IsValid(animInstance))
+	{
+		if(attackMontageArray.Num() != 0)
+			animInstance->PlayAttackMontage(attackMontageArray, mAttackIndex, bIsRandomAttack);
 	}
 }

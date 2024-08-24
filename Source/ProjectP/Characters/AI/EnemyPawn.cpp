@@ -213,6 +213,7 @@ void AEnemyPawn::ResetAttack()
 
 void AEnemyPawn::ResetCombat()
 {
+	ResetTakeDamage();
 }
 
 void AEnemyPawn::ResetDodge()

@@ -22,7 +22,9 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	
 	if(IsValid(combat) && IsValid(animInstance))
 	{
-		combat->PerformAttack(animInstance);
+		combat->SetIsRandomAttack(true);
+		combat->PerformAttack(animInstance, mAttackMontage);
+		
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GameValue::GetAttackableFName(), false);	
 	}
 

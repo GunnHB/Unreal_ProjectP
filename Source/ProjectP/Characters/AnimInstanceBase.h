@@ -45,5 +45,5 @@ public:
 	void SetAimOffsetDegree(const float value) {mAimOffsetDegree = value;}
 	void SetMovementDegree(const float value) {mMovementDegree = value;}
 
-	void PlayAttackMontage(TArray<UAnimMontage*> montageArray, int32 attackIndex, bool randomAttack = false);
+	void PlayAttackMontage(const TArray<UAnimMontage*>& montageArray, int32 attackIndex, bool randomAttack = false);
 };

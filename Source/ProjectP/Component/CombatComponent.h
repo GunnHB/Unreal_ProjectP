@@ -17,13 +17,11 @@ protected:
 	TObjectPtr<class AWeaponBase> mMainWeapon = nullptr;
 	TObjectPtr<class AWeaponBase> mSubWeapon = nullptr;
 
-	// TSubclassOf<class AWeaponBase> mMainWeaponClass = nullptr;
-	// TSubclassOf<class AWeaponBase> mSubWeaponClass = nullptr;
-
 	// attack
 	bool bIsCombatEnable = false;
 	bool bIsAttackSaved = false;
-	int32 mAttackCount = 0;
+	bool bIsRandomAttack = false;
+	int32 mAttackIndex = 0;
 
 	FTimerHandle mInterpTimeHandle;
 	FVector mKnockBackDirection = FVector::ZeroVector;
@@ -34,14 +32,15 @@ public:
 	bool GetIsAttackSaved() const {return bIsAttackSaved;}
 	AWeaponBase* GetMainWeapon() const {return mMainWeapon;}
 	AWeaponBase* GetSubWeapon() const {return mSubWeapon;}
-	int32 GetAttackCount() const {return mAttackCount;}
+	int32 GetAttackIndex() const {return mAttackIndex;}
 	
 	// setter
 	void SetCombatEnable(bool value) {bIsCombatEnable = value;}
 	void SetIsAttackSaved(bool value) {bIsAttackSaved = value;}
 	void SetMainWeapon(AWeaponBase* value) {mMainWeapon = value;}
 	void SetSubWeapon(AWeaponBase* value) {mSubWeapon = value;}
-	void SetAttackCount(int32 value) {mAttackCount = value;}
+	void SetAttackIndex(int32 value) {mAttackIndex = value;}
+	void SetIsRandomAttack(bool value) {bIsRandomAttack = value;}
 
 	void IncreaseAttackCount();
 	bool IsMainWeaponNull() const {return mMainWeapon == nullptr;}
@@ -55,4 +54,5 @@ public:
 	void InterpActorLocation();
 
 	void PerformAttack(class UAnimInstanceBase* animInstance);
+	void PerformAttack(class UAnimInstanceBase* animInstance, const TArray<UAnimMontage*>& attackMontageArray);
 };

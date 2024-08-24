@@ -17,5 +17,8 @@ class PROJECTP_API UBTTask_Attack : public UBTTaskNode
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) TArray<UAnimMontage*> mAttackMontage;
+
+protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };
