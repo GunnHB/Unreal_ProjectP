@@ -23,8 +23,13 @@ void UMainWidget::SetPlayerHP(const float value) const
 		mHealthBarWidget->SetHealthBar(value);
 }
 
-void UMainWidget::SetPlayerStamina(const float value) const
+void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) const
 {
 	if(IsValid(mStaminaWidget))
+	{
 		mStaminaWidget->SetStamina(value);
+		mStaminaWidget->SetVisibility(value < 1.f ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+
+		mStaminaWidget->SetExhaust(isExhausted);
+	}
 }

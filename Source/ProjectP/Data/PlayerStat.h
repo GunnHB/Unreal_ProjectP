@@ -16,12 +16,16 @@ class PROJECTP_API UPlayerStat : public UCharacterStat
 protected:
 	int32 mPlayerMoney = 0;
 
+	bool bIsExhausted = false;
+
 public:
 	virtual void InitStat(const APawn* owner) override;
 	
 	// getter
 	int32 GetPlayerMoney() const {return mPlayerMoney;}
+	bool GetIsExhausted() const {return bIsExhausted;}
 
 	// setter
-	void SetPlayerMoney(int32 value) {mPlayerMoney = value;}
+	void SetPlayerMoney(const int32 value) {mPlayerMoney = value;}
+	void SetIsExhausted(const bool value)	{bIsExhausted = value;}
 };

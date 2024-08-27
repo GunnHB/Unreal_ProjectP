@@ -9,7 +9,6 @@
 #include "../../InputData/PlayerInputData.h"
 
 #include "../../Inventory/Widget/InventoryWidget.h"
-#include "../../Inventory/Widget/HealthBarWidget.h"
 
 #include "../../Data/PlayerStat.h"
 
@@ -17,7 +16,8 @@
 #include "../../Component/StateManageComponent.h"
 #include "../../Component/RotateComponent.h"
 #include "../../Component/FocusComponent.h"
-#include "../../Component/CollisionComponent.h"
+
+#include "InGamePlayerController.h"
 
 APlayerControls::APlayerControls()
 {
@@ -60,6 +60,8 @@ void APlayerControls::Tick(float DeltaTime)
 	
 	GetAimOffsetX();
 	TraceForInteractable();
+
+	CalcStaminaRecoveryTime(DeltaTime);
 }
 
 void APlayerControls::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -310,6 +312,8 @@ void APlayerControls::SprintAction(const FInputActionValue& value)
 void APlayerControls::CancelSprintAction(const FInputActionValue& value)
 {
 	SetCurrentMovementType(ECharacterMovementType::Jog);
+
+	bIsStaminaRecovery = true;
 }
 
 void APlayerControls::InventoryAction(const FInputActionValue& value)
@@ -516,7 +520,21 @@ void APlayerControls::TrySprint()
 	if(mInputVector == FVector::ZeroVector)
 		return;
 
+	if(mPlayerStat->GetIsExhausted())
+		return;
+	
+	if(mPlayerStat->GetStaminaPercentage() <= 0.f)
+	{
+		SetCurrentMovementType(ECharacterMovementType::Jog);
+		mPlayerStat->SetIsExhausted(true);
+		
+		return;
+	}
+	
 	SetCurrentMovementType(ECharacterMovementType::Sprint);
+	RefreshStaminaValue();
+	
+	bIsStaminaRecovery = false;
 }
 
 void APlayerControls::TryInteract()
@@ -554,6 +572,45 @@ float APlayerControls::GetDegree(const FVector& vector) const
 	FVector targetVector = rightVector + forwardVector;
 
 	return mRotate->GetAngleToTargetForward(targetVector);
+}
+
+void APlayerControls::CalcStaminaRecoveryTime(const float deltaTime)
+{
+	if(!bIsStaminaRecovery)
+	{
+		bCalcStaminaRecovery = true;
+		return;
+	}
+
+	float targetTime = mPlayerStat->GetIsExhausted() ? mExhaustRecoveryTime : mStaminaRecoveryTime;
+
+	if(mRecoveryElapsedTime < targetTime && bCalcStaminaRecovery)
+		mRecoveryElapsedTime += deltaTime;
+	else
+	{
+		bCalcStaminaRecovery = false;
+		mRecoveryElapsedTime = 0.f;
+		
+		RefreshStaminaValue(-1.f);
+	}
+}
+
+void APlayerControls::RefreshStaminaValue(const float decreaseValue)
+{
+	float currentStamina = mPlayerStat->GetCurrCharacterStamina();
+	currentStamina -= decreaseValue * .5f;
+
+	mPlayerStat->SetCurrCharacterStamina(currentStamina);
+	
+	AInGamePlayerController* playerController = Cast<AInGamePlayerController>(GetController());
+	
+	if(IsValid(playerController))
+		playerController->SetPlayerStamina(mPlayerStat->GetStaminaPercentage(), mPlayerStat->GetIsExhausted());
+	
+	bIsStaminaRecovery = mPlayerStat->GetStaminaPercentage() < 1.f;
+
+	if(mPlayerStat->GetIsExhausted())
+		mPlayerStat->SetIsExhausted(mPlayerStat->GetStaminaPercentage() < 1.f);
 }
 
 void APlayerControls::SetDamageDegree(const AActor* hitter)

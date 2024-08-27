@@ -51,12 +51,19 @@ private:
 	FCollisionQueryParams mQueryParam;
 	bool bEnableToInteract;
 	
-	bool bIsFocusing = false;				// focus 플래그
+	bool bIsFocusing = false;				// 락온 플래그
 
 	float mDamageDegree = 0.f;
 	
 	FTimerHandle mHitStopTimeHandle;
 	FTimerHandle mAttackTimeHandle;
+
+	// for stamina
+	bool bIsStaminaRecovery = false;			// 스태미나 회복 플래그
+	bool bCalcStaminaRecovery = false;			// 스태미나 회복 계산 플래그
+	float mStaminaRecoveryTime = .2f;			// 스태미나 회복 시작 시간
+	float mExhaustRecoveryTime = .75f;			// 탈진 상태 회복 시작 시간
+	float mRecoveryElapsedTime = 0.f;			// 걸린 시간
 
 public:
 	APlayerControls();
@@ -164,6 +171,9 @@ private:
 	void PerformAction(const ECharacterState state, const ECharacterAction action) const;
 
 	float GetDegree(const FVector& vector) const;
+	
+	void CalcStaminaRecoveryTime(const float deltaTime);
+	void RefreshStaminaValue(const float decreaseValue = 1.f);
 
 #if ENABLE_DRAW_DEBUG
 	// 디버깅용

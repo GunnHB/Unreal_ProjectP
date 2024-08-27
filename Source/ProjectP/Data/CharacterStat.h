@@ -28,6 +28,7 @@ public:
 	float GetCurrCharacterStamina() const {return mCurrCharacterStamina;}
 	float GetMaxCharacterHP() const {return mMaxCharacterHP;}
 	float GetMaxCharacterStamina() const {return mMaxCharacterStamina;}
+	float GetStaminaPercentage() const {return mCurrCharacterStamina / mMaxCharacterStamina;}
 	
 	// setter
 	void SetCurrCharacterHP(const float value) {mCurrCharacterHP = value;}

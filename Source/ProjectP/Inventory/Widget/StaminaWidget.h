@@ -23,4 +23,5 @@ protected:
 
 public:
 	void SetStamina(const float value) const;
+	void SetExhaust(const bool isExhaust) const;
 };

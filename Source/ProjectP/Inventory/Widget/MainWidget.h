@@ -23,5 +23,5 @@ protected:
 
 public:
 	void SetPlayerHP(const float value) const;
-	void SetPlayerStamina(const float value) const;
+	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
 };

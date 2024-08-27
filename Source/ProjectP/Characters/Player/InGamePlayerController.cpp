@@ -35,8 +35,8 @@ void AInGamePlayerController::SetPlayerHP(const float value) const
 		mMainWidget->SetPlayerHP(value);
 }
 
-void AInGamePlayerController::SetPlayerStamina(const float value) const
+void AInGamePlayerController::SetPlayerStamina(const float value, const bool isExhausted) const
 {
 	if(IsValid(mMainWidget))
-		mMainWidget->SetPlayerStamina(value);
+		mMainWidget->SetPlayerStamina(value, isExhausted);
 }
