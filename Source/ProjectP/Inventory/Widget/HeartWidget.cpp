@@ -9,3 +9,44 @@ void UHeartWidget::NativeConstruct()
 
 	mHeartImage = Cast<UImage>(GetWidgetFromName(GameValue::GetUIHeartImageFName()));
 }
+
+void UHeartWidget::SetHeart(const EHeartType::Type type)
+{
+	float value = 0.f;
+	
+	switch (type)
+	{
+	case EHeartType::Empty:
+		{
+			value = 0.f;
+			mHeartType = EHeartType::Empty;
+		}
+		break;
+	case EHeartType::OneQuarter:
+		{
+			value = .25f;
+			mHeartType = EHeartType::OneQuarter;
+		}
+		break;
+	case EHeartType::Half:
+		{
+			value = .5f;
+			mHeartType = EHeartType::Half;
+		}
+		break;
+	case EHeartType::ThreeQuarter:
+		{
+			value = .75f;
+			mHeartType = EHeartType::ThreeQuarter;
+		}
+	case EHeartType::Full:
+		{
+			value = 1.f;
+			mHeartType = EHeartType::Full;
+		}
+		break;
+	}
+	
+	if(IsValid(mHeartImage))
+		mHeartImage->GetDynamicMaterial()->SetScalarParameterValue(GameValue::GetUIHeartMaterialScalarParamFName(), value);
+}

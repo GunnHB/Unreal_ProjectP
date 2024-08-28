@@ -12,5 +12,7 @@ UCLASS()
 class PROJECTP_API UEnemyStat : public UCharacterStat
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void InitStat(const APawn* owner) override;
 };

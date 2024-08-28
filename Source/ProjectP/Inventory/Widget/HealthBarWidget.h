@@ -15,10 +15,16 @@ UCLASS()
 class PROJECTP_API UHealthBarWidget : public UUserWidget
 {
 	GENERATED_BODY()
-
+	
 protected:
-	TArray<class UHeartWidget*> mHeartArray;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) TSubclassOf<class UHeartWidget> mHeartWidgetClass = nullptr;
+
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UWrapBox> mHealthBarWrapBox = nullptr;
+	UPROPERTY(VisibleAnywhere) TArray<UHeartWidget*> mHeartArray;
+
+	virtual void NativeConstruct() override;
 
 public:
-	void SetHealthBar(const float value) const;
+	void SetHealthBar(const float value);
+	void SetCurrHP(const float value);
 };

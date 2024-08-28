@@ -21,6 +21,8 @@ protected:
 	bool bIsCombatEnable = false;
 	bool bIsAttackSaved = false;
 	bool bIsRandomAttack = false;
+	bool bIsKnockBack = false;
+	
 	int32 mAttackIndex = 0;
 
 	FTimerHandle mInterpTimeHandle;
@@ -33,6 +35,7 @@ public:
 	AWeaponBase* GetMainWeapon() const {return mMainWeapon;}
 	AWeaponBase* GetSubWeapon() const {return mSubWeapon;}
 	int32 GetAttackIndex() const {return mAttackIndex;}
+	bool GetIsKnockBack() const {return bIsKnockBack;}
 	
 	// setter
 	void SetCombatEnable(bool value) {bIsCombatEnable = value;}

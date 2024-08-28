@@ -38,6 +38,9 @@ protected:
 	UFUNCTION() void OnTargetDetect(AActor* target, FAIStimulus stimulus);
 	UFUNCTION() void OnTargetForget(AActor* target);
 
+public:
+	void SetEnemyHP(const float value);
+
 private:
 	void SetSightValue() const;
 };

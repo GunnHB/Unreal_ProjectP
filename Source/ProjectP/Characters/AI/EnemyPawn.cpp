@@ -9,6 +9,8 @@
 #include "EnemyController.h"
 #include "EnemyAnimInstance.h"
 
+#include "../../Data/EnemyStat.h"
+
 #include "../../Inventory/Item/Weapon/WeaponSword.h"
 
 AEnemyPawn::AEnemyPawn()
@@ -18,14 +20,12 @@ AEnemyPawn::AEnemyPawn()
 	mFocus = CreateDefaultSubobject<UFocusComponent>(TEXT("FOCUS"));
 
 	mCapsule->SetCapsuleHalfHeight(89.f);
-	mCapsule->SetCapsuleRadius(22.f);
+	mCapsule->SetCapsuleRadius(35.f);
 
 	mMesh->SetRelativeLocation(FVector(0.f, 0.f, -89.f));
 	mMesh->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 
 	mCapsule->SetCollisionProfileName(GameValue::GetEnemyFName());
-
-	mEnemyStat = NewObject<UEnemyStat>();
 	
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
 		meshAsset(TEXT("/Script/Engine.SkeletalMesh'/Game/EssentialAnimation/SwordShield/Demo/Mannequin/UE4_Mannequin/Mesh/SK_Mannequin.SK_Mannequin'"));
@@ -82,6 +82,14 @@ void AEnemyPawn::SetMovementDegree(const float value) const
 		mAnimInstance->SetMovementDegree(value);
 }
 
+bool AEnemyPawn::IsDead() const
+{
+	if(IsValid(mEnemyStat))
+		return mEnemyStat->IsCharacterDead();
+
+	return false;
+}
+
 void AEnemyPawn::BeginPlay()
 {
 	Super::BeginPlay();
@@ -90,11 +98,16 @@ void AEnemyPawn::BeginPlay()
 	
 	if(IsValid(mMesh->GetAnimInstance()))
 		mAnimInstance = Cast<UEnemyAnimInstance>(mMesh->GetAnimInstance());
-
-	if(IsValid(mEnemyStat))
-		mEnemyStat->InitStat(this);
 	
 	InitWeapon();
+	
+	if(!IsValid(mEnemyStat))
+	{
+		mEnemyStat = NewObject<UEnemyStat>();
+
+		if(IsValid(mEnemyStat))
+			mEnemyStat->InitStat(this);
+	}
 }
 
 float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -104,7 +117,7 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	float health = mEnemyStat->GetCurrCharacterHP() - DamageAmount;
 	mEnemyStat->SetCurrCharacterHP(health);
 	
-	UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
+	UE_LOG(ProjectP, Warning, TEXT("enemy health %f"), health);
 	
 	if(IsValid(mCombat))
 	{
@@ -123,6 +136,11 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 void AEnemyPawn::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+}
+
+FGenericTeamId AEnemyPawn::GetGenericTeamId() const
+{
+	return FGenericTeamId(mTeamID);
 }
 
 void AEnemyPawn::InitWeapon()

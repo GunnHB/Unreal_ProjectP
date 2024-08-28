@@ -5,13 +5,11 @@
 #include "../../Interface/Combatable.h"
 #include "../../Interface/Damageable.h"
 
-#include "../../Data/EnemyStat.h"
-
 #include "../AI/AIPawn.h"
 #include "EnemyPawn.generated.h"
 
 UCLASS()
-class PROJECTP_API AEnemyPawn : public AAIPawn, public ICombatable, public IDamageable
+class PROJECTP_API AEnemyPawn : public AAIPawn, public ICombatable, public IDamageable, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -26,7 +24,9 @@ protected:
 	TObjectPtr<UParticleSystem> mDamageParticle = nullptr;
 	
 	FEnemy mEnemyData;
-	TObjectPtr<UEnemyStat> mEnemyStat = nullptr;
+	uint8 mTeamID = 10;
+	
+	TObjectPtr<class UEnemyStat> mEnemyStat = nullptr;
 
 	FTimerHandle mHitStopTimeHandle;
 
@@ -53,6 +53,10 @@ public:
 	TArray<AAIPatrolPoint*> GetPatrolPointArray() const {return mPatrolPointArray;}
 	UCombatComponent* GetCombatComp() const {return mCombat;}
 	UEnemyAnimInstance* GetAnimInstance() const {return mAnimInstance;}
+	uint8 GetTeamID() const {return mTeamID;}
+	
+	// setter
+	void SetTeamID(const uint8 value) {mTeamID = value;}
 
 	// 지금은 사용하지 않아서 우선 주석 처리
 	// void TryDrawSheath(const bool isEquipped) const;
@@ -65,10 +69,13 @@ public:
 	void SetAimOffsetDegree(const float value) const;
 	void SetMovementDegree(const float value) const;
 
+	bool IsDead() const;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void PossessedBy(AController* NewController) override;
+	virtual FGenericTeamId GetGenericTeamId() const override;
 
 	void InitWeapon();
 

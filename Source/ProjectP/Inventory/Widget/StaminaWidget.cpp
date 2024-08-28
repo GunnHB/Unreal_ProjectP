@@ -12,10 +12,10 @@ void UStaminaWidget::NativeConstruct()
 void UStaminaWidget::SetStamina(const float value) const
 {
 	if(IsValid(mStaminaImage))
-		mStaminaImage->GetDynamicMaterial()->SetScalarParameterValue("Decimal", value);
+		mStaminaImage->GetDynamicMaterial()->SetScalarParameterValue(GameValue::GetUIStaminaMaterialScalarParamFName(), value);
 }
 
 void UStaminaWidget::SetExhaust(const bool isExhaust) const
 {
-	mStaminaImage->GetDynamicMaterial()->SetVectorParameterValue("BaseColor", isExhaust ? FColor::Red : FColor::Green);
+	mStaminaImage->GetDynamicMaterial()->SetVectorParameterValue(GameValue::GetUIStaminaMaterialColorParamFName(), isExhaust ? FColor::Red : FColor::Green);
 }

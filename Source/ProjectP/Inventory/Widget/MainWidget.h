@@ -22,6 +22,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	void SetPlayerHP(const float value) const;
+	void SetPlayerMaxHP(const float value) const;
+	void SetPlayerCurrHP(const float value) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
 };

@@ -94,6 +94,11 @@ void AEnemyController::OnTargetForget(AActor* target)
 	GetBlackboardComponent()->SetValueAsObject(GameValue::GetTargetFName(), nullptr);
 }
 
+void AEnemyController::SetEnemyHP(const float value)
+{
+	
+}
+
 void AEnemyController::SetSightValue() const
 {
 	mSightConfig->SightRadius = GameValue::GetEnemySightRadius();

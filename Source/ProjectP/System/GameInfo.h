@@ -3,6 +3,8 @@
 #include "EngineMinimal.h"
 #include "Engine.h"
 
+#include "GenericTeamAgentInterface.h"
+
 #include "GameInfo.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(ProjectP, Warning, All);
@@ -57,6 +59,10 @@ private:
 	static FName UIHeartImageFName;
 	static FName UIStaminaImageFName;
 	static FName UIMoneyTextBlockFName;
+	static FName UIHealthBarWrapBoxFName;
+	static FName UIHeartMaterialScalarParamFName;
+	static FName UIStaminaMaterialScalarParamFName;
+	static FName UIStaminaMaterialColorParamFName;
 
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
@@ -106,6 +112,10 @@ public:
 	static FName GetUIHeartImageFName() {return UIHeartImageFName;}
 	static FName GetUIStaminaImageFName() {return UIStaminaImageFName;}
 	static FName GetUIMoneyTextBlockFName() {return UIMoneyTextBlockFName;}
+	static FName GetUIHealthBarWrapBoxFName() {return UIHealthBarWrapBoxFName;}
+	static FName GetUIHeartMaterialScalarParamFName() {return UIHeartMaterialScalarParamFName;}
+	static FName GetUIStaminaMaterialScalarParamFName() {return UIStaminaMaterialScalarParamFName;}
+	static FName GetUIStaminaMaterialColorParamFName() {return UIStaminaMaterialColorParamFName;}
 };
 
 enum class ECharacterMovementType : int8

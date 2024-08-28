@@ -30,7 +30,8 @@ void UBTService_FocusToTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	}
 
 #if ENABLE_DRAW_DEBUG
-	TryDrawDebugLine(blackBoardComp, pawn);
+	if(!pawn->IsDead())
+		TryDrawDebugLine(blackBoardComp, pawn);
 #endif
 }
 

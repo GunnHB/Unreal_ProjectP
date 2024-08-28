@@ -16,7 +16,7 @@
 class AItemBase;
 
 UCLASS()
-class PROJECTP_API APlayerControls : public ACharacter, public ICombatable, public IDamageable, public IPickupEnable
+class PROJECTP_API APlayerControls : public ACharacter, public ICombatable, public IDamageable, public IPickupEnable, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -36,6 +36,7 @@ protected:
 	bool mInventoryOpen = false;								// ui 종료되고 바로 실행되는 현상 방지위한 플래그
 	
 	TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
+	uint8 mTeamID = 1;
 
 	ECharacterMovementType mCurrentMovementType = ECharacterMovementType::None;
 
@@ -75,6 +76,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual FGenericTeamId GetGenericTeamId() const override;
 	
 	// getter
 	FVector GetInputVector() const {return mInputVector;}

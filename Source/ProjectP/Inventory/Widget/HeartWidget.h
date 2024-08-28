@@ -4,12 +4,22 @@
 
 #include "../../System/GameInfo.h"
 #include "../../System/UIInfo.h"
+
 #include "Blueprint/UserWidget.h"
 #include "HeartWidget.generated.h"
 
-/**
- * 
- */
+namespace EHeartType
+{
+	enum Type : uint8
+	{
+		Empty,
+		OneQuarter,
+		Half,
+		ThreeQuarter,
+		Full,
+	};
+}
+
 UCLASS()
 class PROJECTP_API UHeartWidget : public UUserWidget
 {
@@ -17,7 +27,12 @@ class PROJECTP_API UHeartWidget : public UUserWidget
 
 protected:
 	TObjectPtr<UImage> mHeartImage = nullptr;
-
-protected:
+	EHeartType::Type mHeartType = EHeartType::Empty;
+	
 	virtual void NativeConstruct() override;
+
+public:
+	void SetHeart(const EHeartType::Type type);
+	
+	bool IsEmpty() const {return mHeartType == EHeartType::Empty;}
 };

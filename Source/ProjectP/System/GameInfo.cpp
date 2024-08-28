@@ -50,3 +50,7 @@ FName GameValue::UIStaminaFName = "UI_Stamina";
 FName GameValue::UIHeartImageFName = "Image_Heart";
 FName GameValue::UIStaminaImageFName = "Image_Stamina";
 FName GameValue::UIMoneyTextBlockFName = "TextBlock_Money";
+FName GameValue::UIHealthBarWrapBoxFName = "WrapBox_HealthBar";
+FName GameValue::UIHeartMaterialScalarParamFName = "Percent";
+FName GameValue::UIStaminaMaterialScalarParamFName = "Decimal";
+FName GameValue::UIStaminaMaterialColorParamFName = "BaseColor";

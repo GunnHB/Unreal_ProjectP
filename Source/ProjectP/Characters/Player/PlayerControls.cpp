@@ -78,7 +78,7 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	float health = mPlayerStat->GetCurrCharacterHP() - DamageAmount;
 	mPlayerStat->SetCurrCharacterHP(health);
 	
-	UE_LOG(ProjectP, Warning, TEXT("health %f"), health);
+	UE_LOG(ProjectP, Warning, TEXT("player health %f"), health);
 	
 	if(IsValid(mCombat))
 	{
@@ -101,8 +101,18 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	
 	SetDamageDegree(EventInstigator->GetPawn());
 	mCombat->KnockBack(EventInstigator->GetPawn());
+
+	AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
+
+	if(IsValid(controller))
+		controller->SetPlayerCurrHP(DamageAmount);
 	
 	return damage;
+}
+
+FGenericTeamId APlayerControls::GetGenericTeamId() const
+{
+	return FGenericTeamId(mTeamID);
 }
 
 void APlayerControls::InitAssets()
@@ -135,7 +145,7 @@ void APlayerControls::InitAssets()
 void APlayerControls::InitComponentsValue()
 {
 	GetCapsuleComponent()->SetCapsuleHalfHeight(89.f);
-	GetCapsuleComponent()->SetCapsuleRadius(25.f);
+	GetCapsuleComponent()->SetCapsuleRadius(35.f);
 
 	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -92.f));
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
@@ -301,7 +311,7 @@ void APlayerControls::InteractAction(const FInputActionValue& value)
 
 void APlayerControls::DodgeAction(const FInputActionValue& value)
 {
-	TryDodge();
+	// TryDodge();
 }
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
@@ -476,12 +486,27 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex, const 
 		return;
 	}
 
+	if(mCombat->GetIsKnockBack())
+		return;
+
+	if(mPlayerStat->GetIsExhausted())
+		return;
+
+	if(mPlayerStat->GetStaminaPercentage() <= 0.f)
+	{
+		mPlayerStat->SetIsExhausted(true);
+		return;
+	}
+
 	mAnimInstance->PlayAttackMontage(montageIndex, randomIndex);
 	
 	mStateManage->SetState(ECharacterState::Attack);
 	mStateManage->SetAction(attackType);
 	
 	mCombat->IncreaseAttackCount();
+
+	RefreshStaminaValue(30.f);
+	bIsStaminaRecovery = false;
 }
 
 void APlayerControls::TryDodge()
@@ -705,6 +730,8 @@ void APlayerControls::ResetAttack()
 
 	mCombat->SetIsAttackSaved(false);
 	mCombat->SetAttackIndex(0);
+
+	bIsStaminaRecovery = true;
 }
 
 void APlayerControls::ResetDodge()

@@ -54,6 +54,8 @@ void UCombatComponent::KnockBack(const AActor* hitter)
 
 	if(direction.Normalize())
 	{
+		bIsKnockBack = true;
+		
 		mKnockBackDirection = GetOwner()->GetActorLocation() + direction * GameValue::GetKnockBackAmount();
 		GetWorld()->GetTimerManager().SetTimer(mInterpTimeHandle, this, &UCombatComponent::InterpActorLocation, GetWorld()->GetDeltaSeconds(), true, -1);
 		
@@ -86,6 +88,8 @@ void UCombatComponent::InterpActorLocation()
 	{
 		GetWorld()->GetTimerManager().ClearTimer(mInterpTimeHandle);
 		mKnockBackDirection = FVector::ZeroVector;
+
+		bIsKnockBack = false;
 		
 		return;
 	}

@@ -77,8 +77,8 @@ void UCollisionComponent::CollisionTrace()
 
 			if(takerDamageable != nullptr)
 			{
-				takerDamageable->TakeDamage(Cast<APawn>(mOwnerActor));
 				takerDamageable->SpawnEmitter(hit);
+				takerDamageable->TakeDamage(Cast<APawn>(mOwnerActor));
 
 				// 카메라 흔들흔들
 				if(IsValid(mCameraShakeClass))
