@@ -54,3 +54,5 @@ FName GameValue::UIHealthBarWrapBoxFName = "WrapBox_HealthBar";
 FName GameValue::UIHeartMaterialScalarParamFName = "Percent";
 FName GameValue::UIStaminaMaterialScalarParamFName = "Decimal";
 FName GameValue::UIStaminaMaterialColorParamFName = "BaseColor";
+FName GameValue::UIItemImageFName = "Image_ItemImage";
+FName GameValue::UIItemAmountTextBlockFName = "TextBlock_ItemAmount";

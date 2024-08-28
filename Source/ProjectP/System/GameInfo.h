@@ -63,6 +63,8 @@ private:
 	static FName UIHeartMaterialScalarParamFName;
 	static FName UIStaminaMaterialScalarParamFName;
 	static FName UIStaminaMaterialColorParamFName;
+	static FName UIItemImageFName;
+	static FName UIItemAmountTextBlockFName;
 
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
@@ -116,6 +118,8 @@ public:
 	static FName GetUIHeartMaterialScalarParamFName() {return UIHeartMaterialScalarParamFName;}
 	static FName GetUIStaminaMaterialScalarParamFName() {return UIStaminaMaterialScalarParamFName;}
 	static FName GetUIStaminaMaterialColorParamFName() {return UIStaminaMaterialColorParamFName;}
+	static FName GetUIItemImageFName() {return UIItemImageFName;}
+	static FName GetUIItemAmountTextBlockFName() {return UIItemAmountTextBlockFName;}
 };
 
 enum class ECharacterMovementType : int8
