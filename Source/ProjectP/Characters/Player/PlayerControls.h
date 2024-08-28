@@ -35,10 +35,12 @@ protected:
 	TSubclassOf<UInventoryWidget> mInventoryWidgetClass;
 	bool mInventoryOpen = false;								// ui 종료되고 바로 실행되는 현상 방지위한 플래그
 	
-	TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
-	uint8 mTeamID = 1;
-
 	ECharacterMovementType mCurrentMovementType = ECharacterMovementType::None;
+	
+	TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
+	TObjectPtr<class UInventoryData> mPlayerInventory = nullptr;
+	
+	uint8 mTeamID = 1;
 
 private:
 	FVector mInputVector;

@@ -11,6 +11,7 @@
 #include "../../Inventory/Widget/InventoryWidget.h"
 
 #include "../../Data/PlayerStat.h"
+#include "../../Data/InventoryData.h"
 #include "../../Data/DataAsset/InventoryDataAsset.h"
 
 #include "../../Component/CombatComponent.h"
@@ -44,6 +45,9 @@ void APlayerControls::BeginPlay()
 
 	if(IsValid(mPlayerStat))
 		mPlayerStat->InitStat(this);
+
+	if(IsValid(mPlayerInventory))
+		mPlayerInventory->InitInventory(this);
 	
 	MappingContext();
 }
@@ -139,6 +143,9 @@ void APlayerControls::InitAssets()
 	
 	// playerStat
 	mPlayerStat = NewObject<UPlayerStat>();
+
+	// inventory data
+	mPlayerInventory = NewObject<UInventoryData>();
 }
 
 void APlayerControls::InitComponentsValue()

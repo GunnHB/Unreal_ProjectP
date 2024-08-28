@@ -22,5 +22,5 @@ protected:
 	UPROPERTY(EditAnywhere) TArray<FName> mPotionItemRowNameArray;
 
 public:
-	TArray<FName> GetMainItemRowNameArray() const {return mArmorItemRowNameArray;}
+	TArray<FName> GetMainItemRowNameArray() const {return mMainItemRowNameArray;}
 };
