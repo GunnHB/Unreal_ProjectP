@@ -21,19 +21,20 @@ public:
 	UPlayerInputData();
 
 public:
-	UInputMappingContext* mContext = nullptr;
+	TObjectPtr<UInputMappingContext> mContext = nullptr;
 
 public:
-	UInputAction* mInputToMovement = nullptr;
-	UInputAction* mInputToCameraMovement = nullptr;
-	UInputAction* mInputToLightAttack = nullptr;
-	UInputAction* mInputToHeavyAttack = nullptr;
-	UInputAction* mInputToJump = nullptr;
-	UInputAction* mInputToFocus = nullptr;
-	UInputAction* mInputToDrawSheath = nullptr;
-	UInputAction* mInputToInteract = nullptr;
-	UInputAction* mInputToDodge = nullptr;
-	UInputAction* mInputToSprint = nullptr;
+	TObjectPtr<UInputAction> mInputToMovement = nullptr;
+	TObjectPtr<UInputAction> mInputToCameraMovement = nullptr;
+	TObjectPtr<UInputAction> mInputToLightAttack = nullptr;
+	TObjectPtr<UInputAction> mInputToHeavyAttack = nullptr;
+	TObjectPtr<UInputAction> mInputToJump = nullptr;
+	TObjectPtr<UInputAction> mInputToFocus = nullptr;
+	TObjectPtr<UInputAction> mInputToDrawSheath = nullptr;
+	TObjectPtr<UInputAction> mInputToInteract = nullptr;
+	TObjectPtr<UInputAction> mInputToDodge = nullptr;
+	TObjectPtr<UInputAction> mInputToSprint = nullptr;
 
-	UInputAction* mInputToInventory = nullptr;
+	TObjectPtr<UInputAction> mInputToInventory = nullptr;
+	TObjectPtr<UInputAction> mInputToEquipment = nullptr;
 };

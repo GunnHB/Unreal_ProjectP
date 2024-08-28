@@ -112,4 +112,13 @@ UPlayerInputData::UPlayerInputData()
 		if (asset.Succeeded())
 			mInputToInventory = asset.Object;
 	}
+
+	// equipment
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_UI/IA_UI_Equipment.IA_UI_Equipment'"));
+
+		if (asset.Succeeded())
+			mInputToEquipment = asset.Object;
+	}
 }

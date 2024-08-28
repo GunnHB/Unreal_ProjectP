@@ -199,6 +199,8 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Completed, this, &APlayerControls::CancelSprintAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
+	inputComponent->BindAction(inputData->mInputToEquipment, ETriggerEvent::Triggered, this, &APlayerControls::EquipmentAction);
+	inputComponent->BindAction(inputData->mInputToEquipment, ETriggerEvent::Completed, this, &APlayerControls::CancelEquipmentAction);
 }
 
 void APlayerControls::MappingContext() const
@@ -338,6 +340,16 @@ void APlayerControls::InventoryAction(const FInputActionValue& value)
 
 		mInventoryWidget->AddToViewport();
 	}
+}
+
+void APlayerControls::EquipmentAction(const FInputActionValue& value)
+{
+	UE_LOG(ProjectP, Warning, TEXT("on!!"));
+}
+
+void APlayerControls::CancelEquipmentAction(const FInputActionValue& value)
+{
+	UE_LOG(ProjectP, Warning, TEXT("off!!"));
 }
 
 void APlayerControls::AdjustCameraRotation()
