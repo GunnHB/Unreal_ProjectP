@@ -14,6 +14,7 @@ void UPlayerStat::InitStat(const APawn* owner)
 
 		if(IsValid(controller))
 		{
+			controller->SetPlayerMaxHealthBar(mMaxCharacterHP);
 			controller->SetPlayerStamina(mCurrCharacterStamina);
 		}
 	}

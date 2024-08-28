@@ -23,4 +23,7 @@ protected:
 	UPROPERTY(VisibleAnywhere) TArray<UHeartWidget*> mHeartArray;
 
 	virtual void NativeConstruct() override;
+
+public:
+	void SetMaxHealthBar(const float maxHP);
 };

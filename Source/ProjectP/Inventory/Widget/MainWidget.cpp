@@ -17,6 +17,12 @@ void UMainWidget::NativeConstruct()
 		mStaminaWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
+void UMainWidget::SetPlayerMaxHealthBar(const float value) const
+{
+	if(IsValid(mHealthBarWidget))
+		mHealthBarWidget->SetMaxHealthBar(value);
+}
+
 void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) const
 {
 	if(IsValid(mStaminaWidget))

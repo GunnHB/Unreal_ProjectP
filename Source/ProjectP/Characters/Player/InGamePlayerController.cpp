@@ -13,6 +13,12 @@ AInGamePlayerController::AInGamePlayerController()
 		mMainWidgetClass = uiAsset.Class;
 }
 
+void AInGamePlayerController::SetPlayerMaxHealthBar(const float value) const
+{
+	if(IsValid(mMainWidget))
+		mMainWidget->SetPlayerMaxHealthBar(value);
+}
+
 void AInGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();

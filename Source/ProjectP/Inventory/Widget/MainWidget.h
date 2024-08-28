@@ -22,5 +22,6 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
+	void SetPlayerMaxHealthBar(const float value) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
 };

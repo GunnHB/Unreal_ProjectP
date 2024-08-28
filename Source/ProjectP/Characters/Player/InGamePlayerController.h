@@ -25,7 +25,8 @@ protected:
 
 public:
 	AInGamePlayerController();
-	
+
+	void SetPlayerMaxHealthBar(const float value) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
 
 protected:
