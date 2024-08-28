@@ -78,7 +78,10 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	float health = mPlayerStat->GetCurrCharacterHP() - DamageAmount;
 	mPlayerStat->SetCurrCharacterHP(health);
 	
-	UE_LOG(ProjectP, Warning, TEXT("player health %f"), health);
+	AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
+
+	if(IsValid(controller))
+		controller->StartHPTimer(DamageAmount);
 	
 	if(IsValid(mCombat))
 	{
@@ -88,7 +91,7 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 				mStateManage->SetState(ECharacterState::Dead);
 			
 			mCombat->EnableRagdoll(GetMesh(), GetCapsuleComponent());
-			mSpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameValue::GetPelvisSocketName());
+			// mSpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameValue::GetPelvisSocketName());
 			
 			return damage;
 		}
@@ -101,8 +104,6 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	
 	SetDamageDegree(EventInstigator->GetPawn());
 	mCombat->KnockBack(EventInstigator->GetPawn());
-
-	AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
 	
 	return damage;
 }

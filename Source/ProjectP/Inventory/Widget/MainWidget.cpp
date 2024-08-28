@@ -17,10 +17,10 @@ void UMainWidget::NativeConstruct()
 		mStaminaWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-void UMainWidget::SetPlayerMaxHealthBar(const float value) const
+void UMainWidget::InitPlayerHealthBar(const float maxValue, const float currValue) const
 {
 	if(IsValid(mHealthBarWidget))
-		mHealthBarWidget->SetMaxHealthBar(value);
+		mHealthBarWidget->InitHealthBar(maxValue, currValue);
 }
 
 void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) const
@@ -32,4 +32,10 @@ void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) co
 
 		mStaminaWidget->SetExhaust(isExhausted);
 	}
+}
+
+void UMainWidget::SetPlayerCurrHealthBar(const float damageValue)
+{
+	if(IsValid(mHealthBarWidget))
+		mHealthBarWidget->SetCurrHealthBar(damageValue);
 }

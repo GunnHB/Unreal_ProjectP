@@ -18,12 +18,14 @@ class PROJECTP_API UHealthBarWidget : public UUserWidget
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) TSubclassOf<class UHeartWidget> mHeartWidgetClass = nullptr;
-
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UWrapBox> mHealthBarWrapBox = nullptr;
-	UPROPERTY(VisibleAnywhere) TArray<UHeartWidget*> mHeartArray;
+	
+	TArray<UHeartWidget*> mHeartArray;
+	int8 mLastIndex = 0;
 
 	virtual void NativeConstruct() override;
 
 public:
-	void SetMaxHealthBar(const float maxHP);
+	void InitHealthBar(const float maxHP, const float currHP);
+	void SetCurrHealthBar(const float value);
 };

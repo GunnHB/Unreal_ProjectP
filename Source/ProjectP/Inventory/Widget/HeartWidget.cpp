@@ -8,6 +8,9 @@ void UHeartWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	mHeartImage = Cast<UImage>(GetWidgetFromName(GameValue::GetUIHeartImageFName()));
+
+	if(IsValid(mHeartImage))
+		SetHeart(EHeartType::Empty);
 }
 
 void UHeartWidget::SetHeart(EHeartType::Type type)
@@ -39,6 +42,7 @@ void UHeartWidget::SetHeart(EHeartType::Type type)
 			value = .75f;
 			mHeartType = EHeartType::ThreeQuarter;
 		}
+		break;
 	case EHeartType::Full:
 		{
 			value = 1.f;

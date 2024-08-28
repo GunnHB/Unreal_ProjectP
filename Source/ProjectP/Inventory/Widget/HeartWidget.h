@@ -12,7 +12,7 @@ namespace EHeartType
 {
 	enum Type : uint8
 	{
-		Empty,
+		Empty = 0,
 		OneQuarter,
 		Half,
 		ThreeQuarter,
@@ -33,6 +33,7 @@ protected:
 
 public:
 	void SetHeart(EHeartType::Type type);
+	EHeartType::Type GetHeartType() const {return mHeartType;}
 	
 	bool IsEmpty() const {return mHeartType == EHeartType::Empty;}
 };

@@ -12,9 +12,10 @@ void UHealthBarWidget::NativeConstruct()
 	mHealthBarWrapBox = Cast<UWrapBox>(GetWidgetFromName(GameValue::GetUIHealthBarWrapBoxFName()));
 }
 
-void UHealthBarWidget::SetMaxHealthBar(const float maxHP)
+void UHealthBarWidget::InitHealthBar(const float maxHP, const float currHP)
 {
 	uint8 heartCount = maxHP / 20;
+	int8 heartValue = currHP / heartCount;
 
 	if(IsValid(mHeartWidgetClass))
 	{
@@ -26,10 +27,36 @@ void UHealthBarWidget::SetMaxHealthBar(const float maxHP)
 			{
 				if(IsValid(mHealthBarWrapBox))
 					mHealthBarWrapBox->AddChild(heartWidget);
-				
+
+				if(heartValue >= 4)
+					heartWidget->SetHeart(EHeartType::Full);
+				else
+					heartWidget->SetHeart(static_cast<EHeartType::Type>(heartValue));
+
 				mHeartArray.Add(heartWidget);
-				heartWidget->SetHeart(EHeartType::Empty);
+
+				// 마지막으로 채워진 체력으로 갱신
+				if(!heartWidget->IsEmpty())
+					mLastIndex = index;
+
+				heartValue -= 4;
+
+				if(heartValue < 0)
+					heartValue = 0;
 			}
 		}
 	}
+}
+
+// value는 증감량
+void UHealthBarWidget::SetCurrHealthBar(const float value)
+{
+	if(mHeartArray[mLastIndex]->IsEmpty())
+		--mLastIndex;
+
+	mLastIndex = mLastIndex < 0 ? 0 : mLastIndex;
+
+	int8 heartValue = (mHeartArray[mLastIndex]->GetHeartType() - 1) < 0 ? 0 : mHeartArray[mLastIndex]->GetHeartType() - 1;
+	
+	mHeartArray[mLastIndex]->SetHeart(static_cast<EHeartType::Type>(heartValue));
 }

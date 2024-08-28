@@ -13,10 +13,10 @@ AInGamePlayerController::AInGamePlayerController()
 		mMainWidgetClass = uiAsset.Class;
 }
 
-void AInGamePlayerController::SetPlayerMaxHealthBar(const float value) const
+void AInGamePlayerController::InitPlayerHealthBar(const float maxValue, const float currValue) const
 {
 	if(IsValid(mMainWidget))
-		mMainWidget->SetPlayerMaxHealthBar(value);
+		mMainWidget->InitPlayerHealthBar(maxValue, currValue);
 }
 
 void AInGamePlayerController::BeginPlay()
@@ -35,11 +35,11 @@ void AInGamePlayerController::BeginPlay()
 	}
 }
 
-void AInGamePlayerController::StartHPTimer(const float damage)
+void AInGamePlayerController::StartHPTimer(const uint8 value)
 {
-	mLoopCount = (uint8)damage / 5;
+	mLoopCount = value / 5;
 	
-	GetWorld()->GetTimerManager().SetTimer(mHPTimer, this, &AInGamePlayerController::EndHPTimer, .2f, true);
+	GetWorld()->GetTimerManager().SetTimer(mHPTimer, this, &AInGamePlayerController::EndHPTimer, .05f, true);
 }
 
 void AInGamePlayerController::EndHPTimer()
@@ -49,7 +49,8 @@ void AInGamePlayerController::EndHPTimer()
 	if(mLoopCount <= 0)
 		GetWorld()->GetTimerManager().ClearTimer(mHPTimer);
 	
-	UE_LOG(ProjectP, Warning, TEXT("asdfasdf"));
+	if(IsValid(mMainWidget))
+		mMainWidget->SetPlayerCurrHealthBar(5);
 }
 
 void AInGamePlayerController::SetPlayerStamina(const float value, const bool isExhausted) const

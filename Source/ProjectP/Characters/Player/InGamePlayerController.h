@@ -26,11 +26,13 @@ protected:
 public:
 	AInGamePlayerController();
 
-	void SetPlayerMaxHealthBar(const float value) const;
+	void InitPlayerHealthBar(const float maxValue, const float currValue) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
-
+	
+	void StartHPTimer(const uint8 value);
+	
 protected:
 	virtual void BeginPlay() override;
-	void StartHPTimer(const float damage);
+
 	void EndHPTimer();
 };
