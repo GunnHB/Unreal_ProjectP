@@ -25,4 +25,7 @@ protected:
 	virtual void NativeConstruct() override;
 	
 	void InitSlots() const;
+
+public:
+	void InitMainItem(const FName& rowName) const;
 };

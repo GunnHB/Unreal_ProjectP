@@ -23,7 +23,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	void InitSlot(const FItem& itemData);
+	void InitSlot(const FItem* itemData);
 	void ClearSlot() const;
 
 private:

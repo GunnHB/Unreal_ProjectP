@@ -16,8 +16,10 @@ class PROJECTP_API AInGamePlayerController : public APlayerController
 	GENERATED_BODY()
 
 protected:
-	TObjectPtr<class UMainWidget> mMainWidget;
-	TSubclassOf<UMainWidget> mMainWidgetClass;
+	TObjectPtr<class UMainWidget> mMainWidget = nullptr;
+	TSubclassOf<UMainWidget> mMainWidgetClass = nullptr;
+
+	TObjectPtr<class UInventoryDataAsset> mDataAsset = nullptr;
 
 	FTimerHandle mHPTimer;
 
@@ -28,6 +30,7 @@ public:
 
 	void InitPlayerHealthBar(const float maxValue, const float currValue) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
+	void SetInventoryData() const;
 	
 	void StartHPTimer(const uint8 value);
 	

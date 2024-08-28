@@ -4,6 +4,7 @@
 #include "EquipmentWidget.h"
 
 #include "ItemSlotWidget.h"
+#include "../../System/Manager/ItemManager.h"
 
 void UEquipmentWidget::NativeConstruct()
 {
@@ -30,4 +31,12 @@ void UEquipmentWidget::InitSlots() const
 
 	if(IsValid(mPotionItemSlot))
 		mPotionItemSlot->ClearSlot();
+}
+
+void UEquipmentWidget::InitMainItem(const FName& rowName) const
+{
+	FItem* item = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(rowName, "");
+
+	if(item != nullptr)
+		mMainItemSlot->InitSlot(item);
 }

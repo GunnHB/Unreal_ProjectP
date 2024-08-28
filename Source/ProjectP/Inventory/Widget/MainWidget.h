@@ -25,6 +25,6 @@ protected:
 public:
 	void InitPlayerHealthBar(const float maxValue, const float currValue) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
-	void SetEquipmentWidget();
+	void SetEquipmentWidget(const class UInventoryDataAsset* dataAsset) const;
 	void SetPlayerCurrHealthBar(const float damageValue);
 };

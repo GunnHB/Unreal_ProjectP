@@ -3,6 +3,7 @@
 #include "InGamePlayerController.h"
 
 #include "../../Inventory/Widget/MainWidget.h"
+#include "../../Data/DataAsset/InventoryDataAsset.h"
 
 AInGamePlayerController::AInGamePlayerController()
 {
@@ -11,6 +12,12 @@ AInGamePlayerController::AInGamePlayerController()
 
 	if(uiAsset.Succeeded())
 		mMainWidgetClass = uiAsset.Class;
+	
+	static ConstructorHelpers::FObjectFinder<UDataAsset>
+		invenDataAsset(TEXT("/Script/ProjectP.InventoryDataAsset'/Game/09_DataAsset/DA_Inventory.DA_Inventory'"));
+
+	if(invenDataAsset.Succeeded())
+		mDataAsset = Cast<UInventoryDataAsset>(invenDataAsset.Object);
 }
 
 void AInGamePlayerController::InitPlayerHealthBar(const float maxValue, const float currValue) const
@@ -57,4 +64,10 @@ void AInGamePlayerController::SetPlayerStamina(const float value, const bool isE
 {
 	if(IsValid(mMainWidget))
 		mMainWidget->SetPlayerStamina(value, isExhausted);
+}
+
+void AInGamePlayerController::SetInventoryData() const
+{
+	if(IsValid(mDataAsset) && IsValid(mMainWidget))
+		mMainWidget->SetEquipmentWidget(mDataAsset);
 }

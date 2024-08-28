@@ -7,6 +7,8 @@
 #include "HealthBarWidget.h"
 #include "StaminaWidget.h"
 
+#include "../../Data/DataAsset/InventoryDataAsset.h"
+
 void UMainWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -36,8 +38,10 @@ void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) co
 	}
 }
 
-void UMainWidget::SetEquipmentWidget()
+void UMainWidget::SetEquipmentWidget(const UInventoryDataAsset* dataAsset) const
 {
+	if(dataAsset->GetMainItemRowNameArray().Num() > 0)
+		mEquipmentWidget->InitMainItem(dataAsset->GetMainItemRowNameArray()[0]);
 }
 
 void UMainWidget::SetPlayerCurrHealthBar(const float damageValue)

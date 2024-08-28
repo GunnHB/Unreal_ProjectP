@@ -11,6 +11,7 @@
 #include "../../Inventory/Widget/InventoryWidget.h"
 
 #include "../../Data/PlayerStat.h"
+#include "../../Data/DataAsset/InventoryDataAsset.h"
 
 #include "../../Component/CombatComponent.h"
 #include "../../Component/StateManageComponent.h"
