@@ -18,11 +18,13 @@ class PROJECTP_API UMainWidget : public UUserWidget
 protected:
 	TObjectPtr<class UHealthBarWidget> mHealthBarWidget = nullptr;
 	TObjectPtr<class UStaminaWidget> mStaminaWidget = nullptr;
+	TObjectPtr<class UEquipmentWidget> mEquipmentWidget = nullptr;
 
 	virtual void NativeConstruct() override;
 
 public:
 	void InitPlayerHealthBar(const float maxValue, const float currValue) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
+	void SetEquipmentWidget();
 	void SetPlayerCurrHealthBar(const float damageValue);
 };

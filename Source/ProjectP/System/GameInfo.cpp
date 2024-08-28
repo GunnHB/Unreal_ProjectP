@@ -47,6 +47,7 @@ FString GameValue::BTTaskWaitToKeepEnemyInCheckFString = "WaitToKeepEnemyInCheck
 
 FName GameValue::UIHealthBarFName = "UI_HealthBar";
 FName GameValue::UIStaminaFName = "UI_Stamina";
+FName GameValue::UIEquipmentFName = "UI_Equipment";
 FName GameValue::UIHeartImageFName = "Image_Heart";
 FName GameValue::UIStaminaImageFName = "Image_Stamina";
 FName GameValue::UIMoneyTextBlockFName = "TextBlock_Money";
@@ -54,5 +55,10 @@ FName GameValue::UIHealthBarWrapBoxFName = "WrapBox_HealthBar";
 FName GameValue::UIHeartMaterialScalarParamFName = "Percent";
 FName GameValue::UIStaminaMaterialScalarParamFName = "Decimal";
 FName GameValue::UIStaminaMaterialColorParamFName = "BaseColor";
+
 FName GameValue::UIItemImageFName = "Image_ItemImage";
 FName GameValue::UIItemAmountTextBlockFName = "TextBlock_ItemAmount";
+FName GameValue::UIMainItemSlotFName = "UI_ItemSlot_Main";
+FName GameValue::UISubItemSlotFName = "UI_ItemSlot_Sub";
+FName GameValue::UIArmorItemSlotFName = "UI_ItemSlot_Armor";
+FName GameValue::UIPotionItemSlotFName = "UI_ItemSlot_Potion";

@@ -17,5 +17,12 @@ class PROJECTP_API UEquipmentWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
+	TObjectPtr<class UItemSlotWidget> mMainItemSlot = nullptr;
+	TObjectPtr<UItemSlotWidget> mSubItemSlot = nullptr;
+	TObjectPtr<UItemSlotWidget> mArmorItemSlot = nullptr;
+	TObjectPtr<UItemSlotWidget> mPotionItemSlot = nullptr;
+	
 	virtual void NativeConstruct() override;
+	
+	void InitSlots() const;
 };

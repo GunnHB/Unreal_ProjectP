@@ -23,6 +23,10 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	void SetItemImage(UTexture2D* texture);
-	void SetItemAmount(const float amount);
+	void InitSlot(const FItem& itemData);
+	void ClearSlot() const;
+
+private:
+	void SetItemImage(UTexture2D* texture) const;
+	void SetItemAmount(const float amount) const;
 };

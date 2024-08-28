@@ -56,6 +56,7 @@ private:
 
 	static FName UIHealthBarFName;
 	static FName UIStaminaFName;
+	static FName UIEquipmentFName;
 	static FName UIHeartImageFName;
 	static FName UIStaminaImageFName;
 	static FName UIMoneyTextBlockFName;
@@ -63,8 +64,13 @@ private:
 	static FName UIHeartMaterialScalarParamFName;
 	static FName UIStaminaMaterialScalarParamFName;
 	static FName UIStaminaMaterialColorParamFName;
+	
 	static FName UIItemImageFName;
 	static FName UIItemAmountTextBlockFName;
+	static FName UIMainItemSlotFName;
+	static FName UISubItemSlotFName;
+	static FName UIArmorItemSlotFName;
+	static FName UIPotionItemSlotFName;
 
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
@@ -111,6 +117,7 @@ public:
 
 	static FName GetUIHealthBarFName() {return UIHealthBarFName;}
 	static FName GetUIStaminaFName() {return UIStaminaFName;}
+	static FName GetUIEquipmentFName() {return UIEquipmentFName;}
 	static FName GetUIHeartImageFName() {return UIHeartImageFName;}
 	static FName GetUIStaminaImageFName() {return UIStaminaImageFName;}
 	static FName GetUIMoneyTextBlockFName() {return UIMoneyTextBlockFName;}
@@ -118,8 +125,13 @@ public:
 	static FName GetUIHeartMaterialScalarParamFName() {return UIHeartMaterialScalarParamFName;}
 	static FName GetUIStaminaMaterialScalarParamFName() {return UIStaminaMaterialScalarParamFName;}
 	static FName GetUIStaminaMaterialColorParamFName() {return UIStaminaMaterialColorParamFName;}
+	
 	static FName GetUIItemImageFName() {return UIItemImageFName;}
 	static FName GetUIItemAmountTextBlockFName() {return UIItemAmountTextBlockFName;}
+	static FName GetUIMainItemSlotFName() {return UIMainItemSlotFName;}
+	static FName GetUISubItemSlotFName() {return UISubItemSlotFName;}
+	static FName GetUIArmorItemSlotFName() {return UIArmorItemSlotFName;}
+	static FName GetUIPotionItemSlotFName() {return UIPotionItemSlotFName;}
 };
 
 enum class ECharacterMovementType : int8
@@ -213,6 +225,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) UStaticMesh* mesh;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString item_name;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString item_desc;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) UTexture2D* item_texture;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool stackable;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float capsule_half_height;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float capsule_radius;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FTransform mesh_transform;

@@ -3,6 +3,7 @@
 
 #include "MainWidget.h"
 
+#include "EquipmentWidget.h"
 #include "HealthBarWidget.h"
 #include "StaminaWidget.h"
 
@@ -12,6 +13,7 @@ void UMainWidget::NativeConstruct()
 	
 	mHealthBarWidget = Cast<UHealthBarWidget>(GetWidgetFromName(GameValue::GetUIHealthBarFName()));
 	mStaminaWidget = Cast<UStaminaWidget>(GetWidgetFromName(GameValue::GetUIStaminaFName()));
+	mEquipmentWidget = Cast<UEquipmentWidget>(GetWidgetFromName(GameValue::GetUIEquipmentFName()));
 
 	if(IsValid(mStaminaWidget))
 		mStaminaWidget->SetVisibility(ESlateVisibility::Collapsed);
@@ -32,6 +34,10 @@ void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) co
 
 		mStaminaWidget->SetExhaust(isExhausted);
 	}
+}
+
+void UMainWidget::SetEquipmentWidget()
+{
 }
 
 void UMainWidget::SetPlayerCurrHealthBar(const float damageValue)
