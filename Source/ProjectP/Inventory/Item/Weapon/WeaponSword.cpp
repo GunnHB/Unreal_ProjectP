@@ -10,6 +10,18 @@ AWeaponSword::AWeaponSword()
 	mCapsule->SetRelativeRotation(FRotator(0.f,-90.f, 90.f));
 
 	mCollision = CreateDefaultSubobject<UCollisionComponent>(TEXT("COLLISION"));
+	mTrailParticleSystemComp = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("PARTICLE_SYSTEM"));
+
+	if(IsValid(mTrailParticleSystemComp))
+	{
+		mTrailParticleSystemComp->SetupAttachment(mStaticMesh);
+
+		static ConstructorHelpers::FObjectFinder<UParticleSystem>
+			particleAsset(TEXT("/Script/Engine.ParticleSystem'/Game/InfinityBladeEffects/Effects/FX_Monsters/FX_Monster_Ausar/P_AU_Sword_Proj_Trail_01.P_AU_Sword_Proj_Trail_01'"));
+
+		if(particleAsset.Succeeded())
+			mTrailParticleSystemComp->SetTemplate(particleAsset.Object);
+	}
 }
 
 void AWeaponSword::BeginPlay()
@@ -17,6 +29,8 @@ void AWeaponSword::BeginPlay()
 	Super::BeginPlay();
 
 	mAddActorDelegate.AddUObject(this, &AWeaponSword::AddIgnoreActor);
+
+	TrailEnd();
 }
 
 void AWeaponSword::SetData(FItem* itemData, bool relocate)
@@ -42,6 +56,18 @@ FQuat AWeaponSword::GetQuat()
 		result = FRotationMatrix::MakeFromZ(GetMesh()->GetRightVector()).ToQuat();
 	
 	return result;
+}
+
+void AWeaponSword::TrailBegin()
+{
+	if(IsValid(mTrailParticleSystemComp))
+		mTrailParticleSystemComp->BeginTrails(GameValue::GetCollisionStartSocketName(), GameValue::GetCollisionEndSocketName(), ETrailWidthMode_FromCentre, 1);
+}
+
+void AWeaponSword::TrailEnd()
+{
+	if(IsValid(mTrailParticleSystemComp))
+		mTrailParticleSystemComp->EndTrails();
 }
 
 void AWeaponSword::ResetTransform()

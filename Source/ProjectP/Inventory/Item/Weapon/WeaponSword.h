@@ -15,6 +15,7 @@ class PROJECTP_API AWeaponSword : public AWeaponBase, public ICollisionEnable
 
 protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UCollisionComponent> mCollision = nullptr;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UParticleSystemComponent> mTrailParticleSystemComp = nullptr;
 	
 	FSword* mSwordData = nullptr;
 
@@ -28,6 +29,8 @@ public:
 	// interface
 	virtual UStaticMeshComponent* GetMesh() override;
 	virtual FQuat GetQuat() override;
+	virtual void TrailBegin() override;
+	virtual void TrailEnd() override;
 	
 	void ResetTransform();
 

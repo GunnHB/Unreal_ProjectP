@@ -49,6 +49,8 @@ public:
 	UFUNCTION() void CollisionTrace();
 	UFUNCTION() void ClearHitActors();
 
+	
+
 	void AddIgnoreActor(AActor* actor);
 
 	// getter
