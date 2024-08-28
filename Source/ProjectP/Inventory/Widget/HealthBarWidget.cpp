@@ -11,8 +11,3 @@ void UHealthBarWidget::NativeConstruct()
 	
 	mHealthBarWrapBox = Cast<UWrapBox>(GetWidgetFromName(GameValue::GetUIHealthBarWrapBoxFName()));
 }
-
-void UHealthBarWidget::SetCurrHP(const float value)
-{
-	
-}

@@ -22,10 +22,5 @@ protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UWrapBox> mHealthBarWrapBox = nullptr;
 	UPROPERTY(VisibleAnywhere) TArray<UHeartWidget*> mHeartArray;
 
-	TObjectPtr<UHeartWidget> mLastHeart;
-
 	virtual void NativeConstruct() override;
-
-public:
-	void SetCurrHP(const float value);
 };
