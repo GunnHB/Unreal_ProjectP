@@ -26,10 +26,7 @@ protected:
 public:
 	AInGamePlayerController();
 	
-	void SetPlayerMaxHP(const float value) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
-
-	void SetPlayerCurrHP(const float value);
 
 protected:
 	virtual void BeginPlay() override;

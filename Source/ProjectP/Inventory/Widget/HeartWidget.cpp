@@ -10,7 +10,7 @@ void UHeartWidget::NativeConstruct()
 	mHeartImage = Cast<UImage>(GetWidgetFromName(GameValue::GetUIHeartImageFName()));
 }
 
-void UHeartWidget::SetHeart(const EHeartType::Type type)
+void UHeartWidget::SetHeart(EHeartType::Type type)
 {
 	float value = 0.f;
 	

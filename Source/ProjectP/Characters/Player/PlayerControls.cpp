@@ -103,9 +103,6 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	mCombat->KnockBack(EventInstigator->GetPawn());
 
 	AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
-
-	if(IsValid(controller))
-		controller->SetPlayerCurrHP(DamageAmount);
 	
 	return damage;
 }

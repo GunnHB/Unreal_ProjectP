@@ -44,24 +44,10 @@ void AInGamePlayerController::EndHPTimer()
 		GetWorld()->GetTimerManager().ClearTimer(mHPTimer);
 	
 	UE_LOG(ProjectP, Warning, TEXT("asdfasdf"));
-	
-	if(IsValid(mMainWidget))
-		mMainWidget->SetPlayerCurrHP(mLoopCount);
-}
-
-void AInGamePlayerController::SetPlayerMaxHP(const float value) const
-{
-	if(IsValid(mMainWidget))
-		mMainWidget->SetPlayerMaxHP(value);
 }
 
 void AInGamePlayerController::SetPlayerStamina(const float value, const bool isExhausted) const
 {
 	if(IsValid(mMainWidget))
 		mMainWidget->SetPlayerStamina(value, isExhausted);
-}
-
-void AInGamePlayerController::SetPlayerCurrHP(const float value)
-{
-	StartHPTimer(value);
 }

@@ -32,7 +32,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	void SetHeart(const EHeartType::Type type);
+	void SetHeart(EHeartType::Type type);
 	
 	bool IsEmpty() const {return mHeartType == EHeartType::Empty;}
 };
