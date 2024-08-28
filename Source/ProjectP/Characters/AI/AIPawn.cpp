@@ -17,6 +17,7 @@ AAIPawn::AAIPawn()
 
 	mMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	// 네비 무시
 	mCapsule->SetCanEverAffectNavigation(false);
 }
 
