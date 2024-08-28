@@ -57,7 +57,7 @@ void UCombatComponent::KnockBack(const AActor* hitter)
 		bIsKnockBack = true;
 		
 		mKnockBackDirection = GetOwner()->GetActorLocation() + direction * GameValue::GetKnockBackAmount();
-		GetWorld()->GetTimerManager().SetTimer(mInterpTimeHandle, this, &UCombatComponent::InterpActorLocation, GetWorld()->GetDeltaSeconds(), true, -1);
+		GetWorld()->GetTimerManager().SetTimer(mInterpTimeHandle, this, &UCombatComponent::InterpActorLocation, GetWorld()->GetDeltaSeconds(), true);
 		
 #if ENABLE_DRAW_DEBUG
 		FVector start = GetOwner()->GetActorLocation();
@@ -84,7 +84,7 @@ void UCombatComponent::EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleCompo
 void UCombatComponent::InterpActorLocation()
 {
 	// 약간 보정
-	if((mKnockBackDirection - GetOwner()->GetActorLocation()).Size() <= 0.1f)
+	if((mKnockBackDirection - GetOwner()->GetActorLocation()).Size() <= 0.3f)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(mInterpTimeHandle);
 		mKnockBackDirection = FVector::ZeroVector;
