@@ -56,6 +56,7 @@ public:
 	// getter
 	bool GetIsInAir() const {return mIsInAir;}
 	bool GetIsLandingAnimEnd() const {return bIsLandingAnimEnd;}
+	bool GetTakeDamage() const {return bTakeDamage;}
 
 	// play montage
 	void PlayDrawWeaponMontage();

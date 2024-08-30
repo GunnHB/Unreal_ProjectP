@@ -230,10 +230,20 @@ void AEnemyPawn::EnableCombat()
 
 void AEnemyPawn::ResetAttack()
 {
+	AEnemyController* controller = Cast<AEnemyController>(GetController());
+
+	if(IsValid(controller))
+	{
+		UBlackboardComponent* blackBoardComp = controller->GetBlackboardComponent();
+
+		if(IsValid(blackBoardComp))
+			blackBoardComp->SetValueAsBool(GameValue::GetIsAttackingFName(), false);
+	}
 }
 
 void AEnemyPawn::ResetCombat()
 {
+	ResetAttack();
 	ResetTakeDamage();
 }
 

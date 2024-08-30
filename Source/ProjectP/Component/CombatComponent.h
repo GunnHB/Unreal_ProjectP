@@ -22,6 +22,7 @@ protected:
 	bool bIsAttackSaved = false;
 	bool bIsRandomAttack = false;
 	bool bIsKnockBack = false;
+	uint8 mKnockBackCallCount = 0;
 	
 	int32 mAttackIndex = 0;
 

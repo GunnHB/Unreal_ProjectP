@@ -25,6 +25,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		combat->SetIsRandomAttack(true);
 		combat->PerformAttack(animInstance, mAttackMontage);
 		
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GameValue::GetIsAttackingFName(), true);
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GameValue::GetAttackableFName(), false);	
 	}
 

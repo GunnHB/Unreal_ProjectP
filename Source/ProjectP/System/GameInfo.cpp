@@ -41,6 +41,7 @@ FName GameValue::KeepEnemyInCheckFName = "KeepEnemyInCheck";
 FName GameValue::WasDrawFName = "WasDraw";
 FName GameValue::AttackableFName = "Attackable";
 FName GameValue::CombatPatrolLocationFName = "CombatPatrolLocation";
+FName GameValue::IsAttackingFName = "IsAttacking";
 
 FString GameValue::BTTaskMoveToTargetFString = "MoveToTarget";
 FString GameValue::BTTaskWaitToKeepEnemyInCheckFString = "WaitToKeepEnemyInCheck";

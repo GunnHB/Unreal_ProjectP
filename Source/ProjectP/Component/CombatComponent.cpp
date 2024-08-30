@@ -83,16 +83,19 @@ void UCombatComponent::EnableRagdoll(USkeletalMeshComponent* mesh, UCapsuleCompo
 
 void UCombatComponent::InterpActorLocation()
 {
-	// 약간 보정
-	if((mKnockBackDirection - GetOwner()->GetActorLocation()).Size() <= 0.3f)
+	// 임의
+	if(mKnockBackCallCount > 15)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(mInterpTimeHandle);
 		mKnockBackDirection = FVector::ZeroVector;
 
 		bIsKnockBack = false;
-		
+		mKnockBackCallCount = 0;
+
 		return;
 	}
+	
+	++mKnockBackCallCount;
 	
 	FVector knockBackLocation = FMath::VInterpTo(GetOwner()->GetActorLocation(), mKnockBackDirection, GetWorld()->GetDeltaSeconds(), 10.f);
 	GetOwner()->SetActorRelativeLocation(knockBackLocation);

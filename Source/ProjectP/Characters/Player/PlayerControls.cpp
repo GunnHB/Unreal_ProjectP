@@ -226,6 +226,9 @@ void APlayerControls::MappingContext() const
 
 void APlayerControls::MovementAction(const FInputActionValue& value)
 {
+	if(mAnimInstance->GetTakeDamage())
+		return;
+	
 	mInputVector = value.Get<FVector>();
 	mLastInputVector = mInputVector;
 
