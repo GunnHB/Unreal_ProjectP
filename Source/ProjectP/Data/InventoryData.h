@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../System/GameInfo.h"'
+#include "../System/GameInfo.h"
 
 #include "UObject/NoExportTypes.h"
 #include "InventoryData.generated.h"
