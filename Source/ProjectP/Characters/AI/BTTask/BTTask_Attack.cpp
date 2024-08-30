@@ -20,13 +20,14 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	UCombatComponent* combat = enemyPawn->GetCombatComp();
 	UEnemyAnimInstance* animInstance = enemyPawn->GetAnimInstance();
 	
-	if(IsValid(combat) && IsValid(animInstance))
+	if(IsValid(combat) && IsValid(animInstance) && !OwnerComp.GetBlackboardComponent()->GetValueAsBool(GameValue::GetIsAttackingFName()))
 	{
 		combat->SetIsRandomAttack(true);
 		combat->PerformAttack(animInstance, mAttackMontage);
 		
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GameValue::GetIsAttackingFName(), true);
-		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GameValue::GetAttackableFName(), false);	
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GameValue::GetAttackableFName(), false);
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GameValue::GetTargetLocationFName(), Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(GameValue::GetTargetFName()))->GetActorLocation());
 	}
 
 	return result;

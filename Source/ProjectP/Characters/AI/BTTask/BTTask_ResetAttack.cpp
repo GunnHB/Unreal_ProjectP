@@ -7,6 +7,7 @@ EBTNodeResult::Type UBTTask_ResetAttack::ExecuteTask(UBehaviorTreeComponent& Own
 	EBTNodeResult::Type result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(GameValue::GetAttackableFName(), true);
+	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GameValue::GetTargetLocationFName(), FVector::ZeroVector);
 
 	return result;
 }

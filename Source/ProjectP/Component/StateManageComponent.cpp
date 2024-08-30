@@ -3,6 +3,8 @@
 
 #include "StateManageComponent.h"
 
+#include "../Characters/Player/PlayerControls.h"
+
 // Sets default values for this component's properties
 UStateManageComponent::UStateManageComponent()
 {
@@ -74,7 +76,7 @@ void UStateManageComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	
 	// ...
 
-	// PrintCurrentState();
+	PrintCurrentState();
 }
 
 void UStateManageComponent::OnStateBegin(ECharacterState state)

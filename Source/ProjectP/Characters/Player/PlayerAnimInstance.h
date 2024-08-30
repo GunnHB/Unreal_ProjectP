@@ -67,7 +67,7 @@ public:
 	void SetTakeDamageDegree();
 	
 	void PerformStopAllMontages();
-
+	
 	void ResetDegreeValue();
 
 private:

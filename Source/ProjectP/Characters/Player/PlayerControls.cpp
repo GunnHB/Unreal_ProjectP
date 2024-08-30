@@ -282,12 +282,12 @@ void APlayerControls::HeavyAttackAction(const FInputActionValue& value)
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
-	if(IsValid(mStateManage))
-	{
-		mStateManage->ResetState();
-		mStateManage->SetAction(ECharacterAction::Guard);
-	}
-	
+	// if(IsValid(mStateManage))
+	// {
+	// 	mStateManage->ResetState();
+	// 	mStateManage->SetAction(ECharacterAction::Guard);
+	// }
+	//
 	bIsFocusing = true;
 
 	if(IsValid(mFocus))
@@ -296,11 +296,11 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 
 void APlayerControls::CancelFocusAction(const FInputActionValue& value)
 {
-	if(IsValid(mStateManage))
-	{
-		mStateManage->ResetState();
-		mStateManage->SetAction(ECharacterAction::General);
-	}
+	// if(IsValid(mStateManage))
+	// {
+	// 	mStateManage->ResetState();
+	// 	mStateManage->SetAction(ECharacterAction::General);
+	// }
 	
 	bIsFocusing = false;
 
@@ -322,7 +322,7 @@ void APlayerControls::InteractAction(const FInputActionValue& value)
 
 void APlayerControls::DodgeAction(const FInputActionValue& value)
 {
-	// TryDodge();
+	TryDodge();
 }
 
 void APlayerControls::SprintAction(const FInputActionValue& value)
