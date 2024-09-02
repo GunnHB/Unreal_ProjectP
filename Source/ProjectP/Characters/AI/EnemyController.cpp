@@ -4,6 +4,10 @@
 
 #include "Perception/AISenseConfig_Sight.h"
 
+#include "../../System/Manager/UIManager.h"
+#include "../../Inventory/Widget/MainWidget.h"
+#include "../../Data/EnemyStat.h"
+
 AEnemyController::AEnemyController()
 {
 	mPerceptionComp = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AI_PERCEPTION"));
@@ -34,9 +38,9 @@ void AEnemyController::BeginPlay()
 
 	mPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::OnTargetDetect);
 	mPerceptionComp->OnTargetPerceptionForgotten.AddDynamic(this, &AEnemyController::OnTargetForget);
-
-	// test
-	Blackboard->SetValueAsBool(GameValue::GetAttackableFName(), true);
+	
+	// // test
+	// Blackboard->SetValueAsBool(GameValue::GetAttackableFName(), true);
 }
 
 void AEnemyController::OnPossess(APawn* InPawn)
@@ -94,11 +98,6 @@ void AEnemyController::OnTargetForget(AActor* target)
 	GetBlackboardComponent()->SetValueAsObject(GameValue::GetTargetFName(), nullptr);
 }
 
-void AEnemyController::SetEnemyHP(const float value)
-{
-	
-}
-
 void AEnemyController::SetSightValue() const
 {
 	mSightConfig->SightRadius = GameValue::GetEnemySightRadius();
@@ -108,4 +107,10 @@ void AEnemyController::SetSightValue() const
 	mSightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	mSightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	mSightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+}
+
+void AEnemyController::InitEnemyHP(UEnemyStat* enemyStat) const
+{
+	if(IsValid(enemyStat))
+		CUIManager::GetInstance()->GetMainWidget()->InitEnemyHealthBar(enemyStat);
 }

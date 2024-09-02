@@ -8,12 +8,4 @@
 void UEnemyStat::InitStat(const APawn* owner)
 {
 	Super::InitStat(owner);
-
-	if(IsValid(owner))
-	{
-		AEnemyController* controller = owner->GetController<AEnemyController>();
-
-		if(IsValid(controller))
-			controller->SetEnemyHP(50.f);
-	}
 }

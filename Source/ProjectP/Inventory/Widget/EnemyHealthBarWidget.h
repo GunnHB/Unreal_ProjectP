@@ -22,5 +22,6 @@ protected:
 	
 	virtual void NativeConstruct() override;
 
-	void InitEnemyStat();
+public:
+	void InitEnemyHP(const class UEnemyStat* enemyStat);
 };

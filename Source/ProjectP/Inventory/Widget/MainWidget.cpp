@@ -3,9 +3,13 @@
 
 #include "MainWidget.h"
 
+#include "EnemyHealthBarWidget.h"
 #include "EquipmentWidget.h"
 #include "HealthBarWidget.h"
 #include "StaminaWidget.h"
+#include "EnemyHealthBarWidget.h"
+
+#include "../../Data/EnemyStat.h"
 
 #include "../../Data/DataAsset/InventoryDataAsset.h"
 
@@ -16,6 +20,7 @@ void UMainWidget::NativeConstruct()
 	mHealthBarWidget = Cast<UHealthBarWidget>(GetWidgetFromName(GameValue::GetUIHealthBarFName()));
 	mStaminaWidget = Cast<UStaminaWidget>(GetWidgetFromName(GameValue::GetUIStaminaFName()));
 	mEquipmentWidget = Cast<UEquipmentWidget>(GetWidgetFromName(GameValue::GetUIEquipmentFName()));
+	mEnemyHPWidget = Cast<UEnemyHealthBarWidget>(GetWidgetFromName(GameValue::GetUIEnemyStatFName()));
 
 	if(IsValid(mStaminaWidget))
 		mStaminaWidget->SetVisibility(ESlateVisibility::Collapsed);
@@ -25,6 +30,12 @@ void UMainWidget::InitPlayerHealthBar(const float maxValue, const float currValu
 {
 	if(IsValid(mHealthBarWidget))
 		mHealthBarWidget->InitHealthBar(maxValue, currValue);
+}
+
+void UMainWidget::InitEnemyHealthBar(class UEnemyStat* enemyStat) const
+{
+	if(IsValid(enemyStat))
+		mEnemyHPWidget->InitEnemyHP(enemyStat);
 }
 
 void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) const

@@ -106,7 +106,14 @@ void AEnemyPawn::BeginPlay()
 		mEnemyStat = NewObject<UEnemyStat>();
 
 		if(IsValid(mEnemyStat))
+		{
 			mEnemyStat->InitStat(this);
+
+			AEnemyController* controller = Cast<AEnemyController>(GetController());
+
+			if(IsValid(controller))
+				controller->InitEnemyHP(mEnemyStat);
+		}
 	}
 }
 

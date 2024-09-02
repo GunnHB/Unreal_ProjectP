@@ -73,6 +73,7 @@ private:
 	static FName UIArmorItemSlotFName;
 	static FName UIPotionItemSlotFName;
 
+	static FName UIEnemyStatFName;
 	static FName UIEnemyNameTextBlockFName;
 	static FName UIEnemyHPBarFName;
 
@@ -138,6 +139,7 @@ public:
 	static FName GetUIArmorItemSlotFName() {return UIArmorItemSlotFName;}
 	static FName GetUIPotionItemSlotFName() {return UIPotionItemSlotFName;}
 
+	static FName GetUIEnemyStatFName() {return UIEnemyStatFName;}
 	static FName GetUIEnemyNameTextBlockFName() {return UIEnemyNameTextBlockFName;}
 	static FName GetUIEnemyHPBarFName() {return UIEnemyHPBarFName;}
 };

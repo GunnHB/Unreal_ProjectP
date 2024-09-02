@@ -27,9 +27,6 @@ protected:
 	TObjectPtr<UBlackboardData> mBlackboard = nullptr;
 	TObjectPtr<UBehaviorTree> mBehaviorTree = nullptr;
 
-	TObjectPtr<class UMainWidget> mMainWidget = nullptr;
-	TObjectPtr<class UEnemyHealthBarWidget> mEnemyHPWidget = nullptr;
-
 	virtual void BeginPlay() override;
 
 	virtual void OnPossess(APawn* InPawn) override;
@@ -41,9 +38,9 @@ protected:
 	UFUNCTION() void OnTargetDetect(AActor* target, FAIStimulus stimulus);
 	UFUNCTION() void OnTargetForget(AActor* target);
 
-public:
-	void SetEnemyHP(const float value);
-
 private:
 	void SetSightValue() const;
+
+public:
+	void InitEnemyHP(class UEnemyStat* enemyStat) const;
 };
