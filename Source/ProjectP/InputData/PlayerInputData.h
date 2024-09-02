@@ -36,5 +36,5 @@ public:
 	TObjectPtr<UInputAction> mInputToSprint = nullptr;
 
 	TObjectPtr<UInputAction> mInputToInventory = nullptr;
-	TObjectPtr<UInputAction> mInputToEquipment = nullptr;
+	TObjectPtr<UInputAction> mInputToMainEquipment = nullptr;
 };

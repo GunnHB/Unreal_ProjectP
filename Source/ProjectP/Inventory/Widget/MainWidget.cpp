@@ -51,8 +51,8 @@ void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) co
 
 void UMainWidget::SetEquipmentWidget(const UInventoryDataAsset* dataAsset) const
 {
-	if(dataAsset->GetMainItemRowNameArray().Num() > 0)
-		mEquipmentWidget->InitMainItem(dataAsset->GetMainItemRowNameArray()[0]);
+	if(dataAsset->GetMainItemArray().Num() > 0)
+		mEquipmentWidget->InitMainItem(dataAsset->GetMainItemArray()[0]);
 }
 
 void UMainWidget::SetPlayerCurrHealthBar(const float damageValue)

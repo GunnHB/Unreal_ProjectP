@@ -33,10 +33,8 @@ void UEquipmentWidget::InitSlots() const
 		mPotionItemSlot->ClearSlot();
 }
 
-void UEquipmentWidget::InitMainItem(const FName& rowName) const
+void UEquipmentWidget::InitMainItem(const FItem* item) const
 {
-	FItem* item = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(rowName, "");
-
 	if(item != nullptr)
 		mMainItemSlot->InitSlot(item);
 }

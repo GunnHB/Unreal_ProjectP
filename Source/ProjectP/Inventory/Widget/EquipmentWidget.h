@@ -27,5 +27,5 @@ protected:
 	void InitSlots() const;
 
 public:
-	void InitMainItem(const FName& rowName) const;
+	void InitMainItem(const FItem* item) const;
 };

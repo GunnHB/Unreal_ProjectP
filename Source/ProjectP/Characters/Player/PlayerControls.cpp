@@ -207,8 +207,8 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Completed, this, &APlayerControls::CancelSprintAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
-	inputComponent->BindAction(inputData->mInputToEquipment, ETriggerEvent::Triggered, this, &APlayerControls::EquipmentAction);
-	inputComponent->BindAction(inputData->mInputToEquipment, ETriggerEvent::Completed, this, &APlayerControls::CancelEquipmentAction);
+	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Triggered, this, &APlayerControls::EquipmentAction);
+	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Completed, this, &APlayerControls::CancelEquipmentAction);
 }
 
 void APlayerControls::MappingContext() const

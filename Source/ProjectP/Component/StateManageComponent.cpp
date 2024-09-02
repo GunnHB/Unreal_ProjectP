@@ -76,7 +76,7 @@ void UStateManageComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	
 	// ...
 
-	PrintCurrentState();
+	// PrintCurrentState();
 }
 
 void UStateManageComponent::OnStateBegin(ECharacterState state)

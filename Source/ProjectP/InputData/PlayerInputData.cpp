@@ -116,9 +116,9 @@ UPlayerInputData::UPlayerInputData()
 	// equipment
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_UI/IA_UI_Equipment.IA_UI_Equipment'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_UI/IA_UI_MainEquipment.IA_UI_MainEquipment'"));
 
 		if (asset.Succeeded())
-			mInputToEquipment = asset.Object;
+			mInputToMainEquipment = asset.Object;
 	}
 }

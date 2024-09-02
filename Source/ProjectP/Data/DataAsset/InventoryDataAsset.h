@@ -16,11 +16,21 @@ class PROJECTP_API UInventoryDataAsset : public UDataAsset
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere) TArray<FName> mMainItemRowNameArray;
-	UPROPERTY(EditAnywhere) TArray<FName> mSubItemRowNameArray;
-	UPROPERTY(EditAnywhere) TArray<FName> mArmorItemRowNameArray;
-	UPROPERTY(EditAnywhere) TArray<FName> mPotionItemRowNameArray;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment") TArray<FName> mMainItemRowNameArray;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment") TArray<FName> mSubItemRowNameArray;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment") TArray<FName> mArmorItemRowNameArray;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment") TArray<FName> mPotionItemRowNameArray;
+
+	TArray<FItem*> mMainItemArray;
+	TArray<FItem*> mSubItemArray;
+	TArray<FItem*> mArmorItemArray;
+	TArray<FItem*> mPotionItemArray;
+
+	TObjectPtr<UDataTable> mDataTable = nullptr;
+	
+	void SetFItemByFNameArray(const TArray<FName>& rowNameArray, TArray<FItem*>& itemArray) const;
 
 public:
-	TArray<FName> GetMainItemRowNameArray() const {return mMainItemRowNameArray;}
+	void SetDataTable(UDataTable* dataTable);
+	TArray<FItem*> GetMainItemArray() const {return mMainItemArray;}
 };

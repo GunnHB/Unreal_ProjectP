@@ -12,7 +12,18 @@ AInGamePlayerController::AInGamePlayerController()
 		invenDataAsset(TEXT("/Script/ProjectP.InventoryDataAsset'/Game/09_DataAsset/DA_Inventory.DA_Inventory'"));
 
 	if(invenDataAsset.Succeeded())
+	{
 		mDataAsset = Cast<UInventoryDataAsset>(invenDataAsset.Object);
+
+		if(IsValid(mDataAsset))
+		{
+			static ConstructorHelpers::FObjectFinder<UDataTable>
+				dataTableAsset(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Item.DT_Item'"));
+
+			if(dataTableAsset.Succeeded())
+				mDataAsset->SetDataTable(dataTableAsset.Object);
+		}
+	}
 }
 
 void AInGamePlayerController::InitPlayerHealthBar(const float maxValue, const float currValue) const

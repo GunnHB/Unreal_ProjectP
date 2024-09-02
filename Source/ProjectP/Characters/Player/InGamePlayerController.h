@@ -16,10 +16,8 @@ class PROJECTP_API AInGamePlayerController : public APlayerController
 	GENERATED_BODY()
 
 protected:
-	// TObjectPtr<class UMainWidget> mMainWidget = nullptr;
-	// TSubclassOf<UMainWidget> mMainWidgetClass = nullptr;
-
 	TObjectPtr<class UInventoryDataAsset> mDataAsset = nullptr;
+	TObjectPtr<FItem> mMainItem = nullptr;
 
 	FTimerHandle mHPTimer;
 
