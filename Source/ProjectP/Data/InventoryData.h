@@ -16,8 +16,14 @@ class PROJECTP_API UInventoryData : public UObject
 	GENERATED_BODY()
 
 protected:
-	TArray<FItem> mMainItemArray;
+	TArray<FItem*> mMainItemArray;
+	TArray<FItem*> mPotionItemArray;
 
 public:
-	void InitInventory(const class APlayerControls* player);
+	void SetItemArray(const UDataTable* dataTable, const TArray<FName>& nameArray, TArray<FItem*>& itemArray);
+
+	TArray<FItem*>& GetMainItemArray() {return mMainItemArray;}
+	TArray<FItem*>& GetPotionItemArray() {return mPotionItemArray;}
+
+	void InitInventoryWidget(const class APlayerControls* player);
 };

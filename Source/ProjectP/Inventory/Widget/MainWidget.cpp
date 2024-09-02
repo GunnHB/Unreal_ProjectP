@@ -11,7 +11,7 @@
 
 #include "../../Data/EnemyStat.h"
 
-#include "../../Data/DataAsset/InventoryDataAsset.h"
+#include "../../Data/InventoryData.h"
 
 void UMainWidget::NativeConstruct()
 {
@@ -49,10 +49,16 @@ void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) co
 	}
 }
 
-void UMainWidget::SetEquipmentWidget(const UInventoryDataAsset* dataAsset) const
+// void UMainWidget::SetEquipmentWidget(const UInventoryDataAsset* dataAsset) const
+// {
+// 	// if(dataAsset->GetMainItemArray().Num() > 0)
+// 	// 	mEquipmentWidget->InitMainItem(dataAsset->GetMainItemArray()[0]);
+// }
+
+void UMainWidget::SetEquipmentWidget(UInventoryData* data) const
 {
-	if(dataAsset->GetMainItemArray().Num() > 0)
-		mEquipmentWidget->InitMainItem(dataAsset->GetMainItemArray()[0]);
+	if(IsValid(data))
+		mEquipmentWidget->InitMainItem(data->GetMainItemArray()[0]);
 }
 
 void UMainWidget::SetPlayerCurrHealthBar(const float damageValue)

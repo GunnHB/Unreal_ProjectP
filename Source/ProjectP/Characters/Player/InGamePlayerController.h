@@ -17,7 +17,7 @@ class PROJECTP_API AInGamePlayerController : public APlayerController
 
 protected:
 	TObjectPtr<class UInventoryDataAsset> mDataAsset = nullptr;
-	TObjectPtr<FItem> mMainItem = nullptr;
+	FItem* mMainItem = nullptr;
 
 	FTimerHandle mHPTimer;
 
@@ -28,9 +28,11 @@ public:
 
 	void InitPlayerHealthBar(const float maxValue, const float currValue) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
-	void SetInventoryData() const;
+	void SetInventoryData(class UInventoryData* data) const;
 	
 	void StartHPTimer(const uint8 value);
+
+	UInventoryDataAsset* GetDataAsset() const {return mDataAsset;}
 	
 protected:
 	virtual void BeginPlay() override;

@@ -47,7 +47,14 @@ void APlayerControls::BeginPlay()
 		mPlayerStat->InitStat(this);
 
 	if(IsValid(mPlayerInventory))
-		mPlayerInventory->InitInventory(this);
+	{
+		AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
+
+		if(IsValid(controller))
+			mPlayerInventory->SetItemArray(controller->GetDataAsset()->GetDataTable(), controller->GetDataAsset()->GetMainItemRowNameArray(), mPlayerInventory->GetMainItemArray());
+		
+		mPlayerInventory->InitInventoryWidget(this);
+	}
 	
 	MappingContext();
 }

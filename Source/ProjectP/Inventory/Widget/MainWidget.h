@@ -27,7 +27,8 @@ public:
 	void InitPlayerHealthBar(const float maxValue, const float currValue) const;
 	void InitEnemyHealthBar(class UEnemyStat* enemyStat) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
-	void SetEquipmentWidget(const class UInventoryDataAsset* dataAsset) const;
+	// void SetEquipmentWidget(const class UInventoryDataAsset* dataAsset) const;
+	void SetEquipmentWidget(class UInventoryData* data) const;
 	void SetPlayerCurrHealthBar(const float damageValue);
 
 	void ActiveEnemyHP(bool active) const;

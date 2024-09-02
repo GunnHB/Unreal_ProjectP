@@ -21,16 +21,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment") TArray<FName> mArmorItemRowNameArray;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment") TArray<FName> mPotionItemRowNameArray;
 
-	TArray<FItem*> mMainItemArray;
-	TArray<FItem*> mSubItemArray;
-	TArray<FItem*> mArmorItemArray;
-	TArray<FItem*> mPotionItemArray;
-
 	TObjectPtr<UDataTable> mDataTable = nullptr;
-	
-	void SetFItemByFNameArray(const TArray<FName>& rowNameArray, TArray<FItem*>& itemArray) const;
 
 public:
 	void SetDataTable(UDataTable* dataTable);
-	TArray<FItem*> GetMainItemArray() const {return mMainItemArray;}
+
+	TArray<FName> GetMainItemRowNameArray() const {return mMainItemRowNameArray;}
+	TArray<FName> GetSubItemRowNameArray() const {return mSubItemRowNameArray;}
+	TArray<FName> GetArmorItemRowNameArray() const {return mArmorItemRowNameArray;}
+	TArray<FName> GetPotionItemRowNameArray() const {return mPotionItemRowNameArray;}
+
+	UDataTable* GetDataTable() const {return mDataTable;}
 };

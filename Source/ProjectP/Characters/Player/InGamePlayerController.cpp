@@ -4,7 +4,9 @@
 
 #include "../../Inventory/Widget/MainWidget.h"
 #include "../../System/Manager/UIManager.h"
+
 #include "../../Data/DataAsset/InventoryDataAsset.h"
+#include "../../Data/InventoryData.h"
 
 AInGamePlayerController::AInGamePlayerController()
 {
@@ -61,8 +63,8 @@ void AInGamePlayerController::SetPlayerStamina(const float value, const bool isE
 		CUIManager::GetInstance()->GetMainWidget()->SetPlayerStamina(value, isExhausted);
 }
 
-void AInGamePlayerController::SetInventoryData() const
+void AInGamePlayerController::SetInventoryData(UInventoryData* data) const
 {
-	if(IsValid(mDataAsset) && IsValid(CUIManager::GetInstance()->GetMainWidget()))
-		CUIManager::GetInstance()->GetMainWidget()->SetEquipmentWidget(mDataAsset);
- }
+	if(IsValid(data) && IsValid(CUIManager::GetInstance()->GetMainWidget()))
+		CUIManager::GetInstance()->GetMainWidget()->SetEquipmentWidget(data);
+}
