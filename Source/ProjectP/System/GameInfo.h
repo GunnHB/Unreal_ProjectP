@@ -73,6 +73,9 @@ private:
 	static FName UIArmorItemSlotFName;
 	static FName UIPotionItemSlotFName;
 
+	static FName UIEnemyNameTextBlockFName;
+	static FName UIEnemyHPBarFName;
+
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
 
@@ -134,6 +137,9 @@ public:
 	static FName GetUISubItemSlotFName() {return UISubItemSlotFName;}
 	static FName GetUIArmorItemSlotFName() {return UIArmorItemSlotFName;}
 	static FName GetUIPotionItemSlotFName() {return UIPotionItemSlotFName;}
+
+	static FName GetUIEnemyNameTextBlockFName() {return UIEnemyNameTextBlockFName;}
+	static FName GetUIEnemyHPBarFName() {return UIEnemyHPBarFName;}
 };
 
 enum class ECharacterMovementType : int8

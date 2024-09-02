@@ -63,3 +63,6 @@ FName GameValue::UIMainItemSlotFName = "UI_ItemSlot_Main";
 FName GameValue::UISubItemSlotFName = "UI_ItemSlot_Sub";
 FName GameValue::UIArmorItemSlotFName = "UI_ItemSlot_Armor";
 FName GameValue::UIPotionItemSlotFName = "UI_ItemSlot_Potion";
+
+FName GameValue::UIEnemyNameTextBlockFName = "TextBlock_EnemyName";
+FName GameValue::UIEnemyHPBarFName = "ProgressBar_EnemyHPBar";

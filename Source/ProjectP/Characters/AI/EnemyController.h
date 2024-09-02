@@ -27,6 +27,9 @@ protected:
 	TObjectPtr<UBlackboardData> mBlackboard = nullptr;
 	TObjectPtr<UBehaviorTree> mBehaviorTree = nullptr;
 
+	TObjectPtr<class UMainWidget> mMainWidget = nullptr;
+	TObjectPtr<class UEnemyHealthBarWidget> mEnemyHPWidget = nullptr;
+
 	virtual void BeginPlay() override;
 
 	virtual void OnPossess(APawn* InPawn) override;

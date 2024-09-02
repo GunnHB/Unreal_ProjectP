@@ -17,5 +17,10 @@ class PROJECTP_API UEnemyHealthBarWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
+	TObjectPtr<UTextBlock> mEnemyNameTextBlock = nullptr;
+	TObjectPtr<UProgressBar> mEnemyHPBar = nullptr;
+	
 	virtual void NativeConstruct() override;
+
+	void InitEnemyStat();
 };
