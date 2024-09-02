@@ -29,4 +29,6 @@ public:
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
 	void SetEquipmentWidget(const class UInventoryDataAsset* dataAsset) const;
 	void SetPlayerCurrHealthBar(const float damageValue);
+
+	void ActiveEnemyHP(bool active) const;
 };

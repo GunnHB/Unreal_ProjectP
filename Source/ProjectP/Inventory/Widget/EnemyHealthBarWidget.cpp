@@ -12,7 +12,7 @@ void UEnemyHealthBarWidget::NativeConstruct()
 	mEnemyHPBar = Cast<UProgressBar>(GetWidgetFromName(GameValue::GetUIEnemyHPBarFName()));
 }
 
-void UEnemyHealthBarWidget::InitEnemyHP(const UEnemyStat* enemyStat)
+void UEnemyHealthBarWidget::SetEnemyHP(const UEnemyStat* enemyStat)
 {
 	mEnemyHPBar->SetPercent(enemyStat->GetCurrCharacterHP() / enemyStat->GetMaxCharacterHP());
 }

@@ -89,6 +89,9 @@ void AEnemyController::OnTargetDetect(AActor* target, FAIStimulus stimulus)
 		Blackboard->SetValueAsBool(GameValue::GetEnableToCombatFName(), false);
 		Blackboard->SetValueAsBool(GameValue::GetKeepEnemyInCheckFName(), true);
 	}
+	
+	if(IsValid(CUIManager::GetInstance()->GetMainWidget()))
+		CUIManager::GetInstance()->GetMainWidget()->ActiveEnemyHP(stimulus.WasSuccessfullySensed());
 }
 
 void AEnemyController::OnTargetForget(AActor* target)

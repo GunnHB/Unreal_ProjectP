@@ -123,6 +123,11 @@ float AEnemyPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 
 	float health = mEnemyStat->GetCurrCharacterHP() - DamageAmount;
 	mEnemyStat->SetCurrCharacterHP(health);
+
+	AEnemyController* controller = Cast<AEnemyController>(GetController());
+
+	if(IsValid(controller))
+		controller->InitEnemyHP(mEnemyStat);
 	
 	UE_LOG(ProjectP, Warning, TEXT("enemy health %f"), health);
 	

@@ -35,7 +35,7 @@ void UMainWidget::InitPlayerHealthBar(const float maxValue, const float currValu
 void UMainWidget::InitEnemyHealthBar(class UEnemyStat* enemyStat) const
 {
 	if(IsValid(enemyStat))
-		mEnemyHPWidget->InitEnemyHP(enemyStat);
+		mEnemyHPWidget->SetEnemyHP(enemyStat);
 }
 
 void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) const
@@ -59,4 +59,10 @@ void UMainWidget::SetPlayerCurrHealthBar(const float damageValue)
 {
 	if(IsValid(mHealthBarWidget))
 		mHealthBarWidget->SetCurrHealthBar(damageValue);
+}
+
+void UMainWidget::ActiveEnemyHP(bool active) const
+{
+	if(IsValid(mEnemyHPWidget))
+		mEnemyHPWidget->SetVisibility(active ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 }
