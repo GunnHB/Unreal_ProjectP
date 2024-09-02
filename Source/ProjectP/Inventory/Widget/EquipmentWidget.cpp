@@ -33,7 +33,7 @@ void UEquipmentWidget::InitSlots() const
 		mPotionItemSlot->ClearSlot();
 }
 
-void UEquipmentWidget::InitMainItem(const FItem* item) const
+void UEquipmentWidget::SetMainItem(const FItem* item) const
 {
 	if(item != nullptr)
 		mMainItemSlot->InitSlot(item);

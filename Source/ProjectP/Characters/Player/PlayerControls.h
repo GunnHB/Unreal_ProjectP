@@ -138,8 +138,9 @@ protected:
 	void CancelSprintAction(const FInputActionValue& value);				// 달리기 취소
 
 	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
-	void EquipmentAction(const FInputActionValue& value);					// 장비창 켜
-	void CancelEquipmentAction(const FInputActionValue& value);				// 장비창 꺼
+	void MainEquipmentAction(const FInputActionValue& value);				// 메인 장비창 켜
+	void CancelMainEquipmentAction(const FInputActionValue& value);			// 메인 장비창 꺼
+	void MainEquipmentTapAction(const FInputActionValue& value);			// 메인 아이템 바꿔
 
 private:
 	void BindInputActions(class UInputComponent* PlayerInputComponent);		// 액션 바인딩

@@ -5,6 +5,7 @@
 #include "../../System/GameInfo.h"
 
 #include "GameFramework/PlayerController.h"
+#include "ProjectP/Data/InventoryData.h"
 #include "InGamePlayerController.generated.h"
 
 /**

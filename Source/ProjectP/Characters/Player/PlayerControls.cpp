@@ -214,8 +214,9 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Completed, this, &APlayerControls::CancelSprintAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
-	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Triggered, this, &APlayerControls::EquipmentAction);
-	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Completed, this, &APlayerControls::CancelEquipmentAction);
+	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Triggered, this, &APlayerControls::MainEquipmentAction);
+	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Completed, this, &APlayerControls::CancelMainEquipmentAction);
+	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Started, this, &APlayerControls::MainEquipmentTapAction);
 }
 
 void APlayerControls::MappingContext() const
@@ -360,14 +361,18 @@ void APlayerControls::InventoryAction(const FInputActionValue& value)
 	}
 }
 
-void APlayerControls::EquipmentAction(const FInputActionValue& value)
+void APlayerControls::MainEquipmentAction(const FInputActionValue& value)
 {
-	UE_LOG(ProjectP, Warning, TEXT("on!!"));
 }
 
-void APlayerControls::CancelEquipmentAction(const FInputActionValue& value)
+void APlayerControls::CancelMainEquipmentAction(const FInputActionValue& value)
 {
-	UE_LOG(ProjectP, Warning, TEXT("off!!"));
+}
+
+void APlayerControls::MainEquipmentTapAction(const FInputActionValue& value)
+{
+	mPlayerInventory->IncreaseMainItemIndex();
+	mPlayerInventory->GetMainItemArray()[mPlayerInventory->GetMainItemIndex()];
 }
 
 void APlayerControls::AdjustCameraRotation()

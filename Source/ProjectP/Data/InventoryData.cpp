@@ -12,7 +12,22 @@ void UInventoryData::InitInventoryWidget(const APlayerControls* player)
 		AInGamePlayerController* playerController = Cast<AInGamePlayerController>(player->GetController());
 
 		if(IsValid(playerController))
+		{
+			mController = playerController;
 			playerController->SetInventoryData(this);
+		}
+	}
+}
+
+void UInventoryData::UpdateItemSlot(EEquipmentType::Type type)
+{
+	if(!IsValid(mController))
+		return;
+	
+	switch (type)
+	{
+	case EEquipmentType::Main:
+		break;
 	}
 }
 

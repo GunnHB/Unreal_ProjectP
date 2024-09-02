@@ -58,7 +58,12 @@ void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) co
 void UMainWidget::SetEquipmentWidget(UInventoryData* data) const
 {
 	if(IsValid(data))
-		mEquipmentWidget->InitMainItem(data->GetMainItemArray()[0]);
+		SetMainEquipmentWidget(data->GetMainItemArray()[0]);
+}
+
+void UMainWidget::SetMainEquipmentWidget(const FItem* item) const
+{
+	mEquipmentWidget->SetMainItem(item);
 }
 
 void UMainWidget::SetPlayerCurrHealthBar(const float damageValue)

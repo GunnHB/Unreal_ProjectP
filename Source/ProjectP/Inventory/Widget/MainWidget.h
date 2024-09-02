@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../../System/GameInfo.h"
 #include "../../System/UIInfo.h"
 
 #include "Blueprint/UserWidget.h"
@@ -27,8 +28,10 @@ public:
 	void InitPlayerHealthBar(const float maxValue, const float currValue) const;
 	void InitEnemyHealthBar(class UEnemyStat* enemyStat) const;
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
-	// void SetEquipmentWidget(const class UInventoryDataAsset* dataAsset) const;
+	
 	void SetEquipmentWidget(class UInventoryData* data) const;
+	void SetMainEquipmentWidget(const FItem* item) const;
+	
 	void SetPlayerCurrHealthBar(const float damageValue);
 
 	void ActiveEnemyHP(bool active) const;
