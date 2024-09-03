@@ -136,6 +136,7 @@ protected:
 	void DodgeAction(const FInputActionValue& value);						// 회피
 	void SprintAction(const FInputActionValue& value);						// 달리기
 	void CancelSprintAction(const FInputActionValue& value);				// 달리기 취소
+	void UseItemAction(const FInputActionValue& value);						// 아이템 사용
 
 	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
 	void MainEquipmentAction(const FInputActionValue& value);				// 메인 장비창 켜
@@ -181,6 +182,8 @@ private:
 	
 	void CalcStaminaRecoveryTime(const float deltaTime);
 	void RefreshStaminaValue(const float decreaseValue = 1.f);
+
+	void TryUseItem();
 
 #if ENABLE_DRAW_DEBUG
 	// 디버깅용

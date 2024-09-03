@@ -11,7 +11,7 @@ void UItemSlotWidget::NativeConstruct()
 	mItemAmountTextBlock = Cast<UTextBlock>(GetWidgetFromName(GameValue::GetUIItemAmountTextBlockFName()));
 }
 
-void UItemSlotWidget::InitSlot(const FItem* itemData)
+void UItemSlotWidget::InitSlot(const FItem* itemData, const int32 amount)
 {
 	if(itemData == nullptr)
 	{
@@ -22,8 +22,7 @@ void UItemSlotWidget::InitSlot(const FItem* itemData)
 	if(IsValid(itemData->item_texture))
 		SetItemImage(itemData->item_texture);
 
-	// if(itemData->stackable)
-	// 	SetItemAmount();
+	SetItemAmount(amount);
 }
 
 void UItemSlotWidget::ClearSlot() const

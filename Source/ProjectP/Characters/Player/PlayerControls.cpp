@@ -51,9 +51,13 @@ void APlayerControls::BeginPlay()
 		AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
 
 		if(IsValid(controller))
-			mPlayerInventory->SetItemArray(controller->GetDataAsset()->GetDataTable(), controller->GetDataAsset()->GetMainItemRowNameArray(), mPlayerInventory->GetMainItemArray());
+		{
+			mPlayerInventory->SetItem(controller->GetDataAsset()->GetDataTable(), controller->GetDataAsset()->GetMainItemRowNameArray(), mPlayerInventory->GetMainItemArray());
+			mPlayerInventory->SetItem(controller->GetDataAsset()->GetDataTable(), controller->GetDataAsset()->GetPotionItemRowNameArray(), mPlayerInventory->GetPotionItemArray(), false);
+			
+			mPlayerInventory->InitInventoryWidget(this);
+		}
 		
-		mPlayerInventory->InitInventoryWidget(this);
 	}
 	
 	MappingContext();
@@ -103,7 +107,6 @@ float APlayerControls::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 				mStateManage->SetState(ECharacterState::Dead);
 			
 			mCombat->EnableRagdoll(GetMesh(), GetCapsuleComponent());
-			// mSpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GameValue::GetPelvisSocketName());
 			
 			return damage;
 		}
@@ -212,6 +215,7 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToDodge, ETriggerEvent::Triggered, this, &APlayerControls::DodgeAction);
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Triggered, this, &APlayerControls::SprintAction);
 	inputComponent->BindAction(inputData->mInputToSprint, ETriggerEvent::Completed, this, &APlayerControls::CancelSprintAction);
+	inputComponent->BindAction(inputData->mInputToUseItem, ETriggerEvent::Triggered, this, &APlayerControls::UseItemAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
 	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Triggered, this, &APlayerControls::MainEquipmentAction);
@@ -290,12 +294,6 @@ void APlayerControls::HeavyAttackAction(const FInputActionValue& value)
 
 void APlayerControls::FocusAction(const FInputActionValue& value)
 {
-	// if(IsValid(mStateManage))
-	// {
-	// 	mStateManage->ResetState();
-	// 	mStateManage->SetAction(ECharacterAction::Guard);
-	// }
-	//
 	bIsFocusing = true;
 
 	if(IsValid(mFocus))
@@ -304,12 +302,6 @@ void APlayerControls::FocusAction(const FInputActionValue& value)
 
 void APlayerControls::CancelFocusAction(const FInputActionValue& value)
 {
-	// if(IsValid(mStateManage))
-	// {
-	// 	mStateManage->ResetState();
-	// 	mStateManage->SetAction(ECharacterAction::General);
-	// }
-	
 	bIsFocusing = false;
 
 	if(IsValid(mFocus))
@@ -343,6 +335,11 @@ void APlayerControls::CancelSprintAction(const FInputActionValue& value)
 	SetCurrentMovementType(ECharacterMovementType::Jog);
 
 	bIsStaminaRecovery = true;
+}
+
+void APlayerControls::UseItemAction(const FInputActionValue& value)
+{
+	TryUseItem();
 }
 
 void APlayerControls::InventoryAction(const FInputActionValue& value)
@@ -670,6 +667,14 @@ void APlayerControls::RefreshStaminaValue(const float decreaseValue)
 
 	if(mPlayerStat->GetIsExhausted())
 		mPlayerStat->SetIsExhausted(mPlayerStat->GetStaminaPercentage() < 1.f);
+}
+
+void APlayerControls::TryUseItem()
+{
+	if(mPlayerInventory->GetPotionItem() == nullptr)
+		return;
+
+	
 }
 
 void APlayerControls::SetDamageDegree(const AActor* hitter)

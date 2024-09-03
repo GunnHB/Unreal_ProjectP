@@ -10,8 +10,9 @@
 #include "EnemyHealthBarWidget.h"
 
 #include "../../Data/EnemyStat.h"
-
 #include "../../Data/InventoryData.h"
+
+#include "../../System/Manager/ItemManager.h"
 
 void UMainWidget::NativeConstruct()
 {
@@ -49,21 +50,24 @@ void UMainWidget::SetPlayerStamina(const float value, const bool isExhausted) co
 	}
 }
 
-// void UMainWidget::SetEquipmentWidget(const UInventoryDataAsset* dataAsset) const
-// {
-// 	// if(dataAsset->GetMainItemArray().Num() > 0)
-// 	// 	mEquipmentWidget->InitMainItem(dataAsset->GetMainItemArray()[0]);
-// }
-
-void UMainWidget::SetEquipmentWidget(UInventoryData* data) const
+void UMainWidget::InitEquipmentWidget(UInventoryData* data) const
 {
 	if(IsValid(data))
-		SetMainEquipmentWidget(data->GetMainItemArray()[0]);
-}
+	{
+		if(data->GetMainItemArray().Num() > 0)
+		{
+			FItem* item = data->GetMainItemArray()[0];
+			
+			mEquipmentWidget->SetMainItemSlot(item);
+		}
 
-void UMainWidget::SetMainEquipmentWidget(const FItem* item) const
-{
-	mEquipmentWidget->SetMainItem(item);
+		if(data->GetPotionItemArray().Num() > 0)
+		{
+			FItem* item = data->GetPotionItemArray()[0];
+
+			mEquipmentWidget->SetPotionItemSlot(item, 5);
+		}
+	}
 }
 
 void UMainWidget::SetPlayerCurrHealthBar(const float damageValue)

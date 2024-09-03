@@ -7,9 +7,12 @@
 
 #include "../System/Manager/UIManager.h"
 
+#include "../Data/DataAsset/ItemDataAsset.h"
+
 void UInventoryData::SetNextItem(EEquipmentType::Type type)
 {
-	FItem* item = nullptr;
+	if(!IsValid(mController))
+		return;
 	
 	switch(type)
 	{
@@ -21,14 +24,22 @@ void UInventoryData::SetNextItem(EEquipmentType::Type type)
 			if(mMainItemIndex >= static_cast<uint32>(mMainItemArray.Num()))
 				mMainItemIndex = 0;
 
-			mMainItem = mMainItemArray[mMainItemIndex];
-			item = mMainItem;
+			SetMainItem(mMainItemArray[mMainItemIndex]);
+			mController->RefreshItemSlotWidget(GetMainItem(), type);
 		}
 		break;
-	}
 
-	if(IsValid(mController))
-		mController->RefreshItemSlotWidget(item);
+	case EEquipmentType::Potion:
+		{
+			++mPotionItemIndex;
+
+			if(mPotionItemIndex >= static_cast<uint32>(mPotionItemArray.Num()))
+				mPotionItemIndex = 0;
+
+			SetPotionItem(mPotionItemArray[mPotionItemIndex]);
+			mController->RefreshItemSlotWidget(GetPotionItem(), type);
+		}
+	}
 }
 
 void UInventoryData::InitInventoryWidget(const APlayerControls* player)
@@ -45,7 +56,29 @@ void UInventoryData::InitInventoryWidget(const APlayerControls* player)
 	}
 }
 
-void UInventoryData::SetItemArray(const UDataTable* dataTable, const TArray<FName>& nameArray, TArray<FItem*>& itemArray)
+void UInventoryData::SetItemMap(const UDataTable* dataTable, const TMap<FName, int32>& nameMap, TMap<FItem*, int32>& itemMap, bool firstItemIsNull)
+{
+	if(!IsValid(dataTable))
+		return;
+
+	if(nameMap.Num() > 0)
+	{
+		itemMap.Empty();
+
+		if(firstItemIsNull)
+			itemMap.Add(nullptr, 0);
+
+		for (auto tuple : nameMap)
+		{
+			FItem* item = dataTable->FindRow<FItem>(tuple.Key, "");
+
+			if(item != nullptr)
+				itemMap.Add(item, tuple.Value);
+		}
+	}
+}
+
+void UInventoryData::SetItem(const UDataTable* dataTable, const TArray<FName>& nameArray, TArray<FItem*>& itemArray, bool firstItemIsNull)
 {
 	if(!IsValid(dataTable))
 		return;
@@ -54,9 +87,9 @@ void UInventoryData::SetItemArray(const UDataTable* dataTable, const TArray<FNam
 	{
 		itemArray.Empty();
 
-		// 빈 슬롯을 위한 공갈 데이터
-		itemArray.Add(nullptr);
-		
+		if(firstItemIsNull)
+			itemArray.Add(nullptr);
+
 		for (FName name : nameArray)
 		{
 			FItem* item = dataTable->FindRow<FItem>(name, "");

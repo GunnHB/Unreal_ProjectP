@@ -33,7 +33,7 @@ public:
 	
 	void StartHPTimer(const uint8 value);
 
-	void RefreshItemSlotWidget(const FItem* item);
+	void RefreshItemSlotWidget(const FItem* item, const EEquipmentType::Type type);
 
 	UInventoryDataAsset* GetDataAsset() const {return mDataAsset;}
 	

@@ -27,5 +27,6 @@ protected:
 	void InitSlots() const;
 
 public:
-	void SetMainItem(const FItem* item) const;
+	void SetMainItemSlot(const FItem* item) const;
+	void SetPotionItemSlot(const FItem* item, int32 amount) const;
 };

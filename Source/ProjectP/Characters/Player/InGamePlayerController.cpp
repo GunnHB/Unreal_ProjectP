@@ -9,6 +9,8 @@
 #include "../../Data/DataAsset/InventoryDataAsset.h"
 #include "../../Data/InventoryData.h"
 
+#include "../../Inventory/Item/Weapon/WeaponBase.h"
+
 AInGamePlayerController::AInGamePlayerController()
 {
 	static ConstructorHelpers::FObjectFinder<UDataAsset>
@@ -47,7 +49,7 @@ void AInGamePlayerController::StartHPTimer(const uint8 value)
 	GetWorld()->GetTimerManager().SetTimer(mHPTimer, this, &AInGamePlayerController::EndHPTimer, .05f, true);
 }
 
-void AInGamePlayerController::RefreshItemSlotWidget(const FItem* item)
+void AInGamePlayerController::RefreshItemSlotWidget(const FItem* item, const EEquipmentType::Type type)
 {
 	UMainWidget* mainWidget = CUIManager::GetInstance()->GetMainWidget();
 
@@ -65,14 +67,19 @@ void AInGamePlayerController::RefreshItemSlotWidget(const FItem* item)
 		return;
 	}
 
-	if(item == nullptr)
+	switch (type)
 	{
-		equipmentWidget->SetMainItem(nullptr);
-		return;	
-	}
+	case EEquipmentType::Main:
+		equipmentWidget->SetMainItemSlot(item);
+		break;
 	
-	if(item->type == EItemType::Weapon)
-		equipmentWidget->SetMainItem(item);
+	case EEquipmentType::Potion:
+		equipmentWidget->SetPotionItemSlot(item, 5);
+		break;
+		
+	default:
+		break;
+	}
 }
 
 void AInGamePlayerController::EndHPTimer()
@@ -95,5 +102,5 @@ void AInGamePlayerController::SetPlayerStamina(const float value, const bool isE
 void AInGamePlayerController::SetInventoryData(UInventoryData* data) const
 {
 	if(IsValid(data) && IsValid(CUIManager::GetInstance()->GetMainWidget()))
-		CUIManager::GetInstance()->GetMainWidget()->SetEquipmentWidget(data);
+		CUIManager::GetInstance()->GetMainWidget()->InitEquipmentWidget(data);
 }

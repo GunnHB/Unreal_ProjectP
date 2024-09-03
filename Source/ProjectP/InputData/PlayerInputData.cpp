@@ -121,4 +121,13 @@ UPlayerInputData::UPlayerInputData()
 		if (asset.Succeeded())
 			mInputToMainEquipment = asset.Object;
 	}
+	
+	// use item
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_UseItem.IA_PlayerControls_UseItem'"));
+
+		if (asset.Succeeded())
+			mInputToUseItem = asset.Object;
+	}
 }

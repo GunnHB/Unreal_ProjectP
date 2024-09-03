@@ -27,7 +27,7 @@ class PROJECTP_API UInventoryData : public UObject
 protected:
 	TArray<FItem*> mMainItemArray;
 	TArray<FItem*> mPotionItemArray;
-
+	
 	FItem* mMainItem = nullptr;
 	FItem* mPotionItem = nullptr;
 
@@ -37,7 +37,8 @@ protected:
 	TObjectPtr<class AInGamePlayerController> mController = nullptr;
 
 public:
-	void SetItemArray(const UDataTable* dataTable, const TArray<FName>& nameArray, TArray<FItem*>& itemArray);
+	void SetItemMap(const UDataTable* dataTable, const TMap<FName, int32>& nameMap, TMap<FItem*, int32>& itemMap, bool firstItemIsNull = true);
+	void SetItem(const UDataTable* dataTable, const TArray<FName>& nameArray, TArray<FItem*>& itemArray, bool firstItemIsNull = true);
 
 	TArray<FItem*>& GetMainItemArray() {return mMainItemArray;}
 	TArray<FItem*>& GetPotionItemArray() {return mPotionItemArray;}
@@ -50,6 +51,9 @@ public:
 
 	void SetMainItemIndex(uint32 value) {mMainItemIndex = value;}
 	void SetPotionItemIndex(uint32 value) {mPotionItemIndex = value;}
+
+	void SetMainItem(FItem* value) {mMainItem = value;}
+	void SetPotionItem(FItem* value) {mPotionItem = value;}
 
 	void SetNextItem(EEquipmentType::Type type);
 

@@ -34,6 +34,7 @@ public:
 	TObjectPtr<UInputAction> mInputToInteract = nullptr;
 	TObjectPtr<UInputAction> mInputToDodge = nullptr;
 	TObjectPtr<UInputAction> mInputToSprint = nullptr;
+	TObjectPtr<UInputAction> mInputToUseItem = nullptr;
 
 	TObjectPtr<UInputAction> mInputToInventory = nullptr;
 	TObjectPtr<UInputAction> mInputToMainEquipment = nullptr;
