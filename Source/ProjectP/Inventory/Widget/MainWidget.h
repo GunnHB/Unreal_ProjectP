@@ -34,5 +34,7 @@ public:
 	
 	void SetPlayerCurrHealthBar(const float damageValue);
 
+	UEquipmentWidget* GetEquipmentWidget() const {return mEquipmentWidget;}
+
 	void ActiveEnemyHP(bool active) const;
 };

@@ -3,6 +3,7 @@
 #include "InGamePlayerController.h"
 
 #include "../../Inventory/Widget/MainWidget.h"
+#include "../../Inventory/Widget/EquipmentWidget.h"
 #include "../../System/Manager/UIManager.h"
 
 #include "../../Data/DataAsset/InventoryDataAsset.h"
@@ -44,6 +45,34 @@ void AInGamePlayerController::StartHPTimer(const uint8 value)
 	mLoopCount = value / 5;
 	
 	GetWorld()->GetTimerManager().SetTimer(mHPTimer, this, &AInGamePlayerController::EndHPTimer, .05f, true);
+}
+
+void AInGamePlayerController::RefreshItemSlotWidget(const FItem* item)
+{
+	UMainWidget* mainWidget = CUIManager::GetInstance()->GetMainWidget();
+
+	if(!IsValid(mainWidget))
+	{
+		UE_LOG(ProjectP, Warning, TEXT("no main widget!!"));
+		return;
+	}
+
+	UEquipmentWidget* equipmentWidget = mainWidget->GetEquipmentWidget();
+
+	if(!IsValid(equipmentWidget))
+	{
+		UE_LOG(ProjectP, Warning, TEXT("no equipment widget!!"));
+		return;
+	}
+
+	if(item == nullptr)
+	{
+		equipmentWidget->SetMainItem(nullptr);
+		return;	
+	}
+	
+	if(item->type == EItemType::Weapon)
+		equipmentWidget->SetMainItem(item);
 }
 
 void AInGamePlayerController::EndHPTimer()

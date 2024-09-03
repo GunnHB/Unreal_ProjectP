@@ -133,7 +133,7 @@ void UCombatComponent::SetItem(FItem* item)
 		return;	
 	}
 
-	AItemBase* itemBase = Cast<AItemBase>(item->item_class.GetDefaultObject());
+	AItemBase* itemBase = Cast<AItemBase>(item->item_class->GetDefaultObject());
 
 	if(IsValid(itemBase))
 	{

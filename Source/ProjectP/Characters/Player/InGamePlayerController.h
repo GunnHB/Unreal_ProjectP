@@ -33,6 +33,8 @@ public:
 	
 	void StartHPTimer(const uint8 value);
 
+	void RefreshItemSlotWidget(const FItem* item);
+
 	UInventoryDataAsset* GetDataAsset() const {return mDataAsset;}
 	
 protected:

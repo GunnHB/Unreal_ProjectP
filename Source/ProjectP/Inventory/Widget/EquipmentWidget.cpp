@@ -35,6 +35,5 @@ void UEquipmentWidget::InitSlots() const
 
 void UEquipmentWidget::SetMainItem(const FItem* item) const
 {
-	if(item != nullptr)
-		mMainItemSlot->InitSlot(item);
+	mMainItemSlot->InitSlot(item);
 }

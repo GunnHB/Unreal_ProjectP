@@ -54,5 +54,4 @@ public:
 	void SetNextItem(EEquipmentType::Type type);
 
 	void InitInventoryWidget(const class APlayerControls* player);
-	void RefreshWidget(EEquipmentType::Type type);
 };

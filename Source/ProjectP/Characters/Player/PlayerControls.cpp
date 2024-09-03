@@ -539,7 +539,7 @@ void APlayerControls::PerformAttack(int32 montageIndex, bool randomIndex, const 
 	
 	mCombat->IncreaseAttackCount();
 
-	RefreshStaminaValue(30.f);
+	RefreshStaminaValue(mCombat->GetMainWeapon()->GetWeaponData()->ability_value * 5.f);
 	bIsStaminaRecovery = false;
 }
 

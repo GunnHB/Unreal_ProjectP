@@ -13,11 +13,17 @@ void UItemSlotWidget::NativeConstruct()
 
 void UItemSlotWidget::InitSlot(const FItem* itemData)
 {
+	if(itemData == nullptr)
+	{
+		ClearSlot();
+		return;	
+	}
+		
 	if(IsValid(itemData->item_texture))
 		SetItemImage(itemData->item_texture);
 
 	if(itemData->stackable)
-		SetItemAmount(11);
+		SetItemAmount();
 }
 
 void UItemSlotWidget::ClearSlot() const

@@ -5,8 +5,12 @@
 #include "../Characters/Player/PlayerControls.h"
 #include "../Characters/Player/InGamePlayerController.h"
 
+#include "../System/Manager/UIManager.h"
+
 void UInventoryData::SetNextItem(EEquipmentType::Type type)
 {
+	FItem* item = nullptr;
+	
 	switch(type)
 	{
 	case EEquipmentType::Main:
@@ -14,15 +18,17 @@ void UInventoryData::SetNextItem(EEquipmentType::Type type)
 			++mMainItemIndex;
 
 			// signed와 unsigned의 비교에서 에러가 발생해 캐스팅
-			if(mMainItemIndex >= static_cast<uint32>(mMainItemArray.Num() - 1))
+			if(mMainItemIndex >= static_cast<uint32>(mMainItemArray.Num()))
 				mMainItemIndex = 0;
 
 			mMainItem = mMainItemArray[mMainItemIndex];
-
-			RefreshWidget(EEquipmentType::Main);
+			item = mMainItem;
 		}
 		break;
 	}
+
+	if(IsValid(mController))
+		mController->RefreshItemSlotWidget(item);
 }
 
 void UInventoryData::InitInventoryWidget(const APlayerControls* player)
@@ -36,18 +42,6 @@ void UInventoryData::InitInventoryWidget(const APlayerControls* player)
 			mController = playerController;
 			playerController->SetInventoryData(this);
 		}
-	}
-}
-
-void UInventoryData::RefreshWidget(EEquipmentType::Type type)
-{
-	if(!IsValid(mController))
-		return;
-	
-	switch (type)
-	{
-	case EEquipmentType::Main:
-		break;
 	}
 }
 
