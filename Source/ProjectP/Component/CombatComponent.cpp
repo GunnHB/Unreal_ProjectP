@@ -107,7 +107,7 @@ void UCombatComponent::PerformAttack(UAnimInstanceBase* animInstance)
 {
 	if(IsValid(animInstance))
 	{
-		TArray<UAnimMontage*> montageArray = CItemManager::GetInstance()->mSwordTable->FindRow<FSword>(mMainWeapon->GetWeaponData()->ref_row_name, "")->montage_attack_array;
+		TArray<UAnimMontage*> montageArray = CItemManager::GetInstance()->GetSwordTable()->FindRow<FSword>(mMainWeapon->GetWeaponData()->ref_row_name, "")->montage_attack_array;
 
 		if(montageArray.Num() != 0)
 			animInstance->PlayAttackMontage(montageArray, mAttackIndex, bIsRandomAttack);

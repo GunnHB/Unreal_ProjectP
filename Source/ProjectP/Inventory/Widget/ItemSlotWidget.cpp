@@ -22,8 +22,8 @@ void UItemSlotWidget::InitSlot(const FItem* itemData)
 	if(IsValid(itemData->item_texture))
 		SetItemImage(itemData->item_texture);
 
-	if(itemData->stackable)
-		SetItemAmount();
+	// if(itemData->stackable)
+	// 	SetItemAmount();
 }
 
 void UItemSlotWidget::ClearSlot() const

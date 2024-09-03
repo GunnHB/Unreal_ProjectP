@@ -22,6 +22,12 @@ CItemManager::CItemManager()
 
 	if(swordTable.Succeeded())
 		mSwordTable = swordTable.Object;
+
+	static ConstructorHelpers::FObjectFinder<UDataTable>
+		potionTable(TEXT("/Script/Engine.DataTable'/Game/06_DataTable/Item/DT_Potion.DT_Potion'"));
+
+	if(potionTable.Succeeded())
+		mPotionTable = potionTable.Object;
 }
 
 CItemManager::~CItemManager()

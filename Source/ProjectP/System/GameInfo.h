@@ -212,6 +212,14 @@ enum class ESwordType : int8
 	TwoHand,
 };
 
+UENUM()
+enum class EPotionType : int8
+{
+	None = -1,
+	Health,
+	Stamina,
+};
+
 USTRUCT(BlueprintType)
 struct FMoney : public FTableRowBase
 {
@@ -271,6 +279,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) TArray<UAnimMontage*> montage_attack_array;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) UAnimMontage* montage_dodge;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) UAnimMontage* montage_roll;
+};
+
+USTRUCT()
+struct FPotion : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 id;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) EPotionType type;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) uint8 recovery_value;
 };
 
 USTRUCT()

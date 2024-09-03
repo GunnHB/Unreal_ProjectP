@@ -38,7 +38,7 @@ void AWeaponSword::SetData(FItem* itemData, bool relocate)
 	Super::SetData(itemData, relocate);
 	
 	if(mWeaponData != nullptr)
-		mSwordData = CItemManager::GetInstance()->mSwordTable->FindRow<FSword>(mWeaponData->ref_row_name, "");
+		mSwordData = CItemManager::GetInstance()->GetSwordTable()->FindRow<FSword>(mWeaponData->ref_row_name, "");
 }
 
 UStaticMeshComponent* AWeaponSword::GetMesh()

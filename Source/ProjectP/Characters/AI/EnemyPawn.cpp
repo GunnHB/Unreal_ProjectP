@@ -157,8 +157,8 @@ FGenericTeamId AEnemyPawn::GetGenericTeamId() const
 
 void AEnemyPawn::InitWeapon()
 {
-	FItem* swordItemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(TEXT("Item_Weapon_004"), "");
-	FItem* shieldItemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(TEXT("Item_Weapon_007"), "");
+	FItem* swordItemData = CItemManager::GetInstance()->GetItemTable()->FindRow<FItem>(TEXT("Item_Weapon_004"), "");
+	FItem* shieldItemData = CItemManager::GetInstance()->GetItemTable()->FindRow<FItem>(TEXT("Item_Weapon_007"), "");
 
 	if(swordItemData == nullptr || shieldItemData == nullptr)
 		return;

@@ -54,7 +54,7 @@ void AItemSpawner::SpawnItem() const
 	FActorSpawnParameters param;
 	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::Undefined;
 	
-	FItem* itemData = CItemManager::GetInstance()->mItemTable->FindRow<FItem>(mTableHandle.RowName, "");
+	FItem* itemData = CItemManager::GetInstance()->GetItemTable()->FindRow<FItem>(mTableHandle.RowName, "");
 
 	if(itemData == nullptr)
 		return;

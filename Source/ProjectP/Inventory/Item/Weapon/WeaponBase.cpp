@@ -13,7 +13,7 @@ void AWeaponBase::SetData(FItem* itemData, bool relocate)
 	Super::SetData(itemData, relocate);
 
 	if(itemData != nullptr)
-		mWeaponData = CItemManager::GetInstance()->mWeaponTable->FindRow<FWeapon>(itemData->ref_row_name, "");
+		mWeaponData = CItemManager::GetInstance()->GetWeaponTable()->FindRow<FWeapon>(itemData->ref_row_name, "");
 }
 
 void AWeaponBase::SetOwner(AActor* actor)
