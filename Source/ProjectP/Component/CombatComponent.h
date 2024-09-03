@@ -59,4 +59,6 @@ public:
 
 	void PerformAttack(class UAnimInstanceBase* animInstance);
 	void PerformAttack(class UAnimInstanceBase* animInstance, const TArray<UAnimMontage*>& attackMontageArray);
+
+	void SetItem(FItem* item);
 };

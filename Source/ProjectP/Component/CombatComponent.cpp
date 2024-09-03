@@ -7,6 +7,8 @@
 #include "../Characters/AnimInstanceBase.h"
 #include "../Inventory/Item/Weapon/WeaponSword.h"
 
+#include "../Interface/PickupEnable.h"
+
 void UCombatComponent::IncreaseAttackCount()
 {
 	if(!IsValid(mMainWeapon))
@@ -118,5 +120,28 @@ void UCombatComponent::PerformAttack(class UAnimInstanceBase* animInstance, cons
 	{
 		if(attackMontageArray.Num() != 0)
 			animInstance->PlayAttackMontage(attackMontageArray, mAttackIndex, bIsRandomAttack);
+	}
+}
+
+void UCombatComponent::SetItem(FItem* item)
+{
+	if(item == nullptr)
+	{
+		mMainWeapon->Destroy();
+		mMainWeapon = nullptr;
+		
+		return;	
+	}
+
+	AItemBase* itemBase = Cast<AItemBase>(item->item_class.GetDefaultObject());
+
+	if(IsValid(itemBase))
+	{
+		itemBase->SetData(item, false);
+		
+		IPickupEnable* pickup = Cast<IPickupEnable>(GetOwner());
+
+		if(pickup != nullptr)
+			pickup->PickUpItem(itemBase);
 	}
 }

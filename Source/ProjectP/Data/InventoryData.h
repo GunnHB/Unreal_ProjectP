@@ -28,6 +28,9 @@ protected:
 	TArray<FItem*> mMainItemArray;
 	TArray<FItem*> mPotionItemArray;
 
+	FItem* mMainItem = nullptr;
+	FItem* mPotionItem = nullptr;
+
 	uint32 mMainItemIndex = 0;
 	uint32 mPotionItemIndex = 0;
 
@@ -39,15 +42,17 @@ public:
 	TArray<FItem*>& GetMainItemArray() {return mMainItemArray;}
 	TArray<FItem*>& GetPotionItemArray() {return mPotionItemArray;}
 
+	FItem* GetMainItem() const {return mMainItem;}
+	FItem* GetPotionItem() const {return mPotionItem;}
+
 	uint32 GetMainItemIndex() const {return mMainItemIndex;}
 	uint32 GetPotionItemIndex() const {return mPotionItemIndex;}
 
 	void SetMainItemIndex(uint32 value) {mMainItemIndex = value;}
 	void SetPotionItemIndex(uint32 value) {mPotionItemIndex = value;}
 
-	void IncreaseMainItemIndex() {++mMainItemIndex;}
-	void IncreasePotionItemIndex() {++mPotionItemIndex;}
+	void SetNextItem(EEquipmentType::Type type);
 
 	void InitInventoryWidget(const class APlayerControls* player);
-	void UpdateItemSlot(EEquipmentType::Type type);
+	void RefreshWidget(EEquipmentType::Type type);
 };

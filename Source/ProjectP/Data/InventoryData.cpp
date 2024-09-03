@@ -5,6 +5,26 @@
 #include "../Characters/Player/PlayerControls.h"
 #include "../Characters/Player/InGamePlayerController.h"
 
+void UInventoryData::SetNextItem(EEquipmentType::Type type)
+{
+	switch(type)
+	{
+	case EEquipmentType::Main:
+		{
+			++mMainItemIndex;
+
+			// signed와 unsigned의 비교에서 에러가 발생해 캐스팅
+			if(mMainItemIndex >= static_cast<uint32>(mMainItemArray.Num() - 1))
+				mMainItemIndex = 0;
+
+			mMainItem = mMainItemArray[mMainItemIndex];
+
+			RefreshWidget(EEquipmentType::Main);
+		}
+		break;
+	}
+}
+
 void UInventoryData::InitInventoryWidget(const APlayerControls* player)
 {
 	if(IsValid(player))
@@ -19,7 +39,7 @@ void UInventoryData::InitInventoryWidget(const APlayerControls* player)
 	}
 }
 
-void UInventoryData::UpdateItemSlot(EEquipmentType::Type type)
+void UInventoryData::RefreshWidget(EEquipmentType::Type type)
 {
 	if(!IsValid(mController))
 		return;

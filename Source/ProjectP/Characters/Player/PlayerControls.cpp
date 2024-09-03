@@ -371,8 +371,9 @@ void APlayerControls::CancelMainEquipmentAction(const FInputActionValue& value)
 
 void APlayerControls::MainEquipmentTapAction(const FInputActionValue& value)
 {
-	mPlayerInventory->IncreaseMainItemIndex();
-	mPlayerInventory->GetMainItemArray()[mPlayerInventory->GetMainItemIndex()];
+	mPlayerInventory->SetNextItem(EEquipmentType::Main);
+
+	mCombat->SetItem(mPlayerInventory->GetMainItem());
 }
 
 void APlayerControls::AdjustCameraRotation()
@@ -808,28 +809,30 @@ void APlayerControls::ResetCombat()
 	ResetAttack();
 }
 
-void APlayerControls::PickUpItem(AItemBase* item)
+void APlayerControls::PickUpItem(AItemBase* itemBase)
 {
-	IEquippable* equippable = Cast<IEquippable>(item);
+	IEquippable* equippable = Cast<IEquippable>(itemBase);
 
-	if(equippable != nullptr)
+	if(equippable == nullptr)
+		return;
+
+	if(IsValid(mCombat->GetMainWeapon()))
+		mCombat->GetMainWeapon()->Destroy();
+
+	if(itemBase->GetThisItemData()->type == EItemType::Weapon)
 	{
-		if(!IsValid(mCombat))
-			return;
+		AWeaponBase* weapon = GetWorld()->SpawnActor<AWeaponBase>(itemBase->GetThisItemData()->item_class);
 
-		if(IsValid(mCombat->GetMainWeapon()))
-			mCombat->GetMainWeapon()->Destroy();
-
-		AWeaponBase* spawnWeapon = GetWorld()->SpawnActor<AWeaponBase>(item->GetThisItemData()->item_class);
-		
-		if(IsValid(spawnWeapon))
+		if(IsValid(weapon))
 		{
-			spawnWeapon->SetOwner(this);
-			spawnWeapon->SetData(item->GetThisItemData(), false);
-			spawnWeapon->SetSkeletalMesh(GetMesh());
-			spawnWeapon->OnUnequip();
-		
-			mCombat->SetMainWeapon(spawnWeapon);
+			weapon->SetOwner(this);
+			weapon->SetData(itemBase->GetThisItemData(), false);
+			weapon->SetSkeletalMesh(GetMesh());
+			weapon->OnUnequip();
+
+			if(weapon->GetWeaponData()->type == EWeaponType::Sword)
+				mCombat->SetMainWeapon(weapon);
+
 			mCombat->SetCombatEnable(false);
 		}
 	}

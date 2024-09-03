@@ -116,7 +116,7 @@ public:
 	virtual void EndHitStop() override;
 
 	// ipickupenable pure function
-	virtual void PickUpItem(AItemBase* item) override;
+	virtual void PickUpItem(AItemBase* itemBase) override;
 
 protected:
 	void InitAssets();														// 에셋 초기화
