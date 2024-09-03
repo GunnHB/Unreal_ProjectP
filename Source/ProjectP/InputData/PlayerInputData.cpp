@@ -103,7 +103,16 @@ UPlayerInputData::UPlayerInputData()
 		if (asset.Succeeded())
 			mInputToSprint = asset.Object;
 	}
+	
+	// use item
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction>
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_UseItem.IA_PlayerControls_UseItem'"));
 
+		if (asset.Succeeded())
+			mInputToUseItem = asset.Object;
+	}
+	
 	// inventory
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
@@ -113,21 +122,21 @@ UPlayerInputData::UPlayerInputData()
 			mInputToInventory = asset.Object;
 	}
 
-	// equipment
+	// change main item
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_UI/IA_UI_MainEquipment.IA_UI_MainEquipment'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_UI/IA_UI_ChangeItem_Main.IA_UI_ChangeItem_Main'"));
 
 		if (asset.Succeeded())
-			mInputToMainEquipment = asset.Object;
+			mInputToChangeMainItem = asset.Object;
 	}
-	
-	// use item
+
+	// change potion item
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction>
-			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_Control/IA_PlayerControls_UseItem.IA_PlayerControls_UseItem'"));
+			asset(TEXT("/Script/EnhancedInput.InputAction'/Game/01_InputDatas/InputAction_UI/IA_UI_ChangeItem_Potion.IA_UI_ChangeItem_Potion'"));
 
 		if (asset.Succeeded())
-			mInputToUseItem = asset.Object;
+			mInputToChangePotionItem = asset.Object;
 	}
 }

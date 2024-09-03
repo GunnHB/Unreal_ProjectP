@@ -54,6 +54,9 @@ void APlayerControls::BeginPlay()
 		{
 			mPlayerInventory->SetItem(controller->GetDataAsset()->GetDataTable(), controller->GetDataAsset()->GetMainItemRowNameArray(), mPlayerInventory->GetMainItemArray());
 			mPlayerInventory->SetItem(controller->GetDataAsset()->GetDataTable(), controller->GetDataAsset()->GetPotionItemRowNameArray(), mPlayerInventory->GetPotionItemArray(), false);
+
+			mPlayerInventory->SetMainItem(mPlayerInventory->GetMainItemArray().Top());
+			mPlayerInventory->SetPotionItem(mPlayerInventory->GetPotionItemArray().Top());
 			
 			mPlayerInventory->InitInventoryWidget(this);
 		}
@@ -218,9 +221,10 @@ void APlayerControls::BindInputActions(UInputComponent* PlayerInputComponent)
 	inputComponent->BindAction(inputData->mInputToUseItem, ETriggerEvent::Triggered, this, &APlayerControls::UseItemAction);
 
 	inputComponent->BindAction(inputData->mInputToInventory, ETriggerEvent::Triggered, this, &APlayerControls::InventoryAction);
-	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Triggered, this, &APlayerControls::MainEquipmentAction);
-	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Completed, this, &APlayerControls::CancelMainEquipmentAction);
-	inputComponent->BindAction(inputData->mInputToMainEquipment, ETriggerEvent::Started, this, &APlayerControls::MainEquipmentTapAction);
+	inputComponent->BindAction(inputData->mInputToChangeMainItem, ETriggerEvent::Triggered, this, &APlayerControls::MainEquipmentAction);
+	inputComponent->BindAction(inputData->mInputToChangeMainItem, ETriggerEvent::Completed, this, &APlayerControls::CancelMainEquipmentAction);
+	inputComponent->BindAction(inputData->mInputToChangeMainItem, ETriggerEvent::Started, this, &APlayerControls::ChangeMainItemAction);
+	inputComponent->BindAction(inputData->mInputToChangePotionItem, ETriggerEvent::Started, this, &APlayerControls::ChangePotionItemAction);
 }
 
 void APlayerControls::MappingContext() const
@@ -366,11 +370,16 @@ void APlayerControls::CancelMainEquipmentAction(const FInputActionValue& value)
 {
 }
 
-void APlayerControls::MainEquipmentTapAction(const FInputActionValue& value)
+void APlayerControls::ChangeMainItemAction(const FInputActionValue& value)
 {
 	mPlayerInventory->SetNextItem(EEquipmentType::Main);
 
 	mCombat->SetItem(mPlayerInventory->GetMainItem());
+}
+
+void APlayerControls::ChangePotionItemAction(const FInputActionValue& value)
+{
+	mPlayerInventory->SetNextItem(EEquipmentType::Potion);
 }
 
 void APlayerControls::AdjustCameraRotation()
@@ -669,12 +678,12 @@ void APlayerControls::RefreshStaminaValue(const float decreaseValue)
 		mPlayerStat->SetIsExhausted(mPlayerStat->GetStaminaPercentage() < 1.f);
 }
 
-void APlayerControls::TryUseItem()
+void APlayerControls::TryUseItem() const
 {
 	if(mPlayerInventory->GetPotionItem() == nullptr)
 		return;
 
-	
+	mAnimInstance->PlayPotionMontage(mPlayerInventory->GetPotionItem());
 }
 
 void APlayerControls::SetDamageDegree(const AActor* hitter)

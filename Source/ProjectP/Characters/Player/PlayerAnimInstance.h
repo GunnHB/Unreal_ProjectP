@@ -27,6 +27,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bIsDodge = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) bool bTakeDamage = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UAnimMontage> mPotionMontage = nullptr;
+	
 	// anim flag
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation Flag") bool bIsLandingAnimEnd = true;
 	
@@ -61,6 +63,7 @@ public:
 	// play montage
 	void PlayDrawWeaponMontage();
 	void PlaySheathWeaponMontage();
+	void PlayPotionMontage(const FItem* item);
 
 	void PlayAttackMontage(int32 attackIndex, bool randomIndex);
 

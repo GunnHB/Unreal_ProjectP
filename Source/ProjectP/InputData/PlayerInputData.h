@@ -37,5 +37,6 @@ public:
 	TObjectPtr<UInputAction> mInputToUseItem = nullptr;
 
 	TObjectPtr<UInputAction> mInputToInventory = nullptr;
-	TObjectPtr<UInputAction> mInputToMainEquipment = nullptr;
+	TObjectPtr<UInputAction> mInputToChangeMainItem = nullptr;
+	TObjectPtr<UInputAction> mInputToChangePotionItem = nullptr;
 };

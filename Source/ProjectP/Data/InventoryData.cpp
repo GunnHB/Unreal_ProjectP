@@ -7,8 +7,6 @@
 
 #include "../System/Manager/UIManager.h"
 
-#include "../Data/DataAsset/ItemDataAsset.h"
-
 void UInventoryData::SetNextItem(EEquipmentType::Type type)
 {
 	if(!IsValid(mController))

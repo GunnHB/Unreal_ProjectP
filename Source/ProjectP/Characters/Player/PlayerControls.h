@@ -141,7 +141,8 @@ protected:
 	void InventoryAction(const FInputActionValue& value);					// 인벤토리 on / off
 	void MainEquipmentAction(const FInputActionValue& value);				// 메인 장비창 켜
 	void CancelMainEquipmentAction(const FInputActionValue& value);			// 메인 장비창 꺼
-	void MainEquipmentTapAction(const FInputActionValue& value);			// 메인 아이템 바꿔
+	void ChangeMainItemAction(const FInputActionValue& value);				// 메인 아이템 바꿔
+	void ChangePotionItemAction(const FInputActionValue& value);			// 포션 아이템 바꿔
 
 private:
 	void BindInputActions(class UInputComponent* PlayerInputComponent);		// 액션 바인딩
@@ -183,7 +184,7 @@ private:
 	void CalcStaminaRecoveryTime(const float deltaTime);
 	void RefreshStaminaValue(const float decreaseValue = 1.f);
 
-	void TryUseItem();
+	void TryUseItem() const;
 
 #if ENABLE_DRAW_DEBUG
 	// 디버깅용

@@ -125,6 +125,18 @@ void UPlayerAnimInstance::PlaySheathWeaponMontage()
 	}
 }
 
+void UPlayerAnimInstance::PlayPotionMontage(const FItem* item)
+{
+	if(IsValid(mPotionMontage))
+	{
+		if(!Montage_IsPlaying(mPotionMontage))
+		{
+			Montage_SetPosition(mPotionMontage, 0);
+			Montage_Play(mPotionMontage);
+		}
+	}
+}
+
 void UPlayerAnimInstance::PlayAttackMontage(int32 attackIndex, bool randomIndex)
 {
 	if(mCombat->GetMainWeapon()->IsA(AWeaponSword::StaticClass()))
