@@ -7,6 +7,12 @@
 
 #include "../System/Manager/UIManager.h"
 
+void UInventoryData::UpdatePotionItemMap(const FItem* item, uint32 value)
+{
+	if(mPotionItemMap.Contains(item))
+		mPotionItemMap[item] = value;
+}
+
 void UInventoryData::SetNextItem(EEquipmentType::Type type)
 {
 	if(!IsValid(mController))
@@ -23,7 +29,7 @@ void UInventoryData::SetNextItem(EEquipmentType::Type type)
 				mMainItemIndex = 0;
 
 			SetMainItem(mMainItemArray[mMainItemIndex]);
-			mController->RefreshItemSlotWidget(GetMainItem(), type);
+			mController->RefreshItemSlotWidget(GetMainItem(), type, this);
 		}
 		break;
 
@@ -35,7 +41,7 @@ void UInventoryData::SetNextItem(EEquipmentType::Type type)
 				mPotionItemIndex = 0;
 
 			SetPotionItem(mPotionItemArray[mPotionItemIndex]);
-			mController->RefreshItemSlotWidget(GetPotionItem(), type);
+			mController->RefreshItemSlotWidget(GetPotionItem(), type, this);
 		}
 	}
 }
@@ -50,28 +56,6 @@ void UInventoryData::InitInventoryWidget(const APlayerControls* player)
 		{
 			mController = playerController;
 			playerController->SetInventoryData(this);
-		}
-	}
-}
-
-void UInventoryData::SetItemMap(const UDataTable* dataTable, const TMap<FName, int32>& nameMap, TMap<FItem*, int32>& itemMap, bool firstItemIsNull)
-{
-	if(!IsValid(dataTable))
-		return;
-
-	if(nameMap.Num() > 0)
-	{
-		itemMap.Empty();
-
-		if(firstItemIsNull)
-			itemMap.Add(nullptr, 0);
-
-		for (auto tuple : nameMap)
-		{
-			FItem* item = dataTable->FindRow<FItem>(tuple.Key, "");
-
-			if(item != nullptr)
-				itemMap.Add(item, tuple.Value);
 		}
 	}
 }
@@ -94,6 +78,9 @@ void UInventoryData::SetItem(const UDataTable* dataTable, const TArray<FName>& n
 
 			if(item != nullptr)
 				itemArray.Add(item);
+
+			if(item->type == EItemType::Consumption)
+				mPotionItemMap.Add(item, 5);
 		}
 	}
 }

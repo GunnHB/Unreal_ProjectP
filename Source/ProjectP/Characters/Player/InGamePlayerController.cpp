@@ -38,9 +38,25 @@ void AInGamePlayerController::InitPlayerHealthBar(const float maxValue, const fl
 		CUIManager::GetInstance()->GetMainWidget()->InitPlayerHealthBar(maxValue, currValue);
 }
 
+void AInGamePlayerController::SetGameOnly(UWidget* widget)
+{
+	FInputModeGameOnly inputMode;
+
+	SetInputMode(inputMode);
+	bShowMouseCursor = false;
+
+	widget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
 void AInGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FInputModeUIOnly inputMode;
+	inputMode.SetWidgetToFocus(CUIManager::GetInstance()->GetMainWidget()->GetCachedWidget());
+
+	SetInputMode(inputMode);
+	bShowMouseCursor = true;
 }
 
 void AInGamePlayerController::StartHPTimer(const uint8 value, bool heal)
@@ -59,7 +75,7 @@ void AInGamePlayerController::StartHPTimer(const uint8 value, bool heal)
 	}
 }
 
-void AInGamePlayerController::RefreshItemSlotWidget(const FItem* item, const EEquipmentType::Type type)
+void AInGamePlayerController::RefreshItemSlotWidget(const FItem* item, const EEquipmentType::Type type, UInventoryData* invenData)
 {
 	UMainWidget* mainWidget = CUIManager::GetInstance()->GetMainWidget();
 
@@ -84,7 +100,7 @@ void AInGamePlayerController::RefreshItemSlotWidget(const FItem* item, const EEq
 		break;
 	
 	case EEquipmentType::Potion:
-		equipmentWidget->SetPotionItemSlot(item, 5);
+		equipmentWidget->SetPotionItemSlot(item, invenData->GetPotionItemMap()[item]);
 		break;
 		
 	default:

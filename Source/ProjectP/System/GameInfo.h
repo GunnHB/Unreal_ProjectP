@@ -77,6 +77,8 @@ private:
 	static FName UIEnemyNameTextBlockFName;
 	static FName UIEnemyHPBarFName;
 
+	static FName UIStartButtonFName;
+
 public:
 	static int32 GetMaxMoney() { return MaxMoney; }
 
@@ -142,6 +144,8 @@ public:
 	static FName GetUIEnemyStatFName() {return UIEnemyStatFName;}
 	static FName GetUIEnemyNameTextBlockFName() {return UIEnemyNameTextBlockFName;}
 	static FName GetUIEnemyHPBarFName() {return UIEnemyHPBarFName;}
+
+	static FName GetUIStartButtonFName() {return UIStartButtonFName;}
 };
 
 enum class ECharacterMovementType : int8

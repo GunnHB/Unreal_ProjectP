@@ -36,8 +36,9 @@ protected:
 
 	TObjectPtr<class AInGamePlayerController> mController = nullptr;
 
+	TMap<FItem*, uint32> mPotionItemMap;
+
 public:
-	void SetItemMap(const UDataTable* dataTable, const TMap<FName, int32>& nameMap, TMap<FItem*, int32>& itemMap, bool firstItemIsNull = true);
 	void SetItem(const UDataTable* dataTable, const TArray<FName>& nameArray, TArray<FItem*>& itemArray, bool firstItemIsNull = true);
 
 	TArray<FItem*>& GetMainItemArray() {return mMainItemArray;}
@@ -48,6 +49,9 @@ public:
 
 	uint32 GetMainItemIndex() const {return mMainItemIndex;}
 	uint32 GetPotionItemIndex() const {return mPotionItemIndex;}
+
+	TMap<FItem*, uint32> GetPotionItemMap() {return mPotionItemMap;}
+	void UpdatePotionItemMap(const FItem* item, uint32 value);
 
 	void SetMainItemIndex(uint32 value) {mMainItemIndex = value;}
 	void SetPotionItemIndex(uint32 value) {mPotionItemIndex = value;}

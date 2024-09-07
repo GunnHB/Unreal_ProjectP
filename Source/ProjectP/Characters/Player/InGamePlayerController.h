@@ -34,9 +34,11 @@ public:
 	
 	void StartHPTimer(const uint8 value, bool heal = false);
 
-	void RefreshItemSlotWidget(const FItem* item, const EEquipmentType::Type type);
+	void RefreshItemSlotWidget(const FItem* item, const EEquipmentType::Type type, class UInventoryData* invenData);
 
 	UInventoryDataAsset* GetDataAsset() const {return mDataAsset;}
+
+	void SetGameOnly(class UWidget* widget);
 	
 protected:
 	virtual void BeginPlay() override;

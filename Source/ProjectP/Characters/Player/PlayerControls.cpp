@@ -889,6 +889,11 @@ void APlayerControls::Recovery()
 	{
 		if(potion->type == EPotionType::Health)
 		{
+			if(mPlayerInventory->GetPotionItemMap()[mPlayerInventory->GetPotionItem()] == 0)
+				return;
+			
+			mPlayerInventory->UpdatePotionItemMap(mPlayerInventory->GetPotionItem(), mPlayerInventory->GetPotionItemMap()[mPlayerInventory->GetPotionItem()] - 1);
+			
 			float health = mPlayerStat->GetCurrCharacterHP() + potion->recovery_value;
 			mPlayerStat->SetCurrCharacterHP(health);
 	
@@ -897,7 +902,9 @@ void APlayerControls::Recovery()
 			if(IsValid(controller))
 			{
 				controller->StartHPTimer(potion->recovery_value, true);
-				SpawnHealEmitter();	
+				SpawnHealEmitter();
+
+				controller->RefreshItemSlotWidget(mPlayerInventory->GetPotionItem(), EEquipmentType::Potion, mPlayerInventory);
 			}
 		}
 	}
