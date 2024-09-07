@@ -28,6 +28,7 @@ protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UStateManageComponent> mStateManage;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class URotateComponent> mRotate;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UFocusComponent> mFocus;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<class UParticleSystemComponent> mParticleSystemComp;
 	
 	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 	
@@ -40,6 +41,7 @@ protected:
 	
 	TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
 	TObjectPtr<class UInventoryData> mPlayerInventory = nullptr;
+	TObjectPtr<UParticleSystem> mHealParticle = nullptr;
 	
 	uint8 mTeamID = 1;
 
@@ -190,6 +192,9 @@ private:
 	void RefreshStaminaValue(const float decreaseValue = 1.f);
 
 	void TryUseItem() const;
+
+	void SpawnHealEmitter() const;
+	UFUNCTION() void FinishHealEmitter(UParticleSystemComponent* particleComp);
 
 #if ENABLE_DRAW_DEBUG
 	// 디버깅용

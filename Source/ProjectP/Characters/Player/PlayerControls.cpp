@@ -31,6 +31,7 @@ APlayerControls::APlayerControls()
 	mStateManage = CreateDefaultSubobject<UStateManageComponent>(TEXT("STATE_MANAGE"));
 	mRotate = CreateDefaultSubobject<URotateComponent>(TEXT("ROTATE"));
 	mFocus = CreateDefaultSubobject<UFocusComponent>(TEXT("FOCUS"));
+	mParticleSystemComp = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("PARTICLE_SYSTEM"));
 
 	InitAssets();
 	InitComponentsValue();
@@ -153,6 +154,12 @@ void APlayerControls::InitAssets()
 
 	if(invenAsset.Succeeded())
 		mInventoryWidgetClass = invenAsset.Class;
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystem>
+		particleAsset(TEXT("/Script/Engine.ParticleSystem'/Game/InfinityBladeEffects/Effects/FX_Ability/Heal/P_Health_Player_Buff_Ping_01.P_Health_Player_Buff_Ping_01'"));
+
+	if(particleAsset.Succeeded())
+		mHealParticle = particleAsset.Object;
 	
 	// playerStat
 	mPlayerStat = NewObject<UPlayerStat>();
@@ -180,6 +187,16 @@ void APlayerControls::InitComponentsValue()
 
 	mSpringArm->TargetArmLength = 300.f;
 	mSpringArm->bInheritYaw = false;
+
+	mParticleSystemComp->SetupAttachment(GetMesh());
+
+	if(IsValid(mHealParticle))
+	{
+		mParticleSystemComp->SetTemplate(mHealParticle);
+		mParticleSystemComp->bAutoActivate = false;
+
+		mParticleSystemComp->OnSystemFinished.AddDynamic(this, &APlayerControls::FinishHealEmitter);
+	}
 
 	// 컨트롤러의 회전에 영향을 받지 않도록
 	bUseControllerRotationYaw = false;
@@ -686,6 +703,18 @@ void APlayerControls::TryUseItem() const
 	mAnimInstance->PlayPotionMontage(mPlayerInventory->GetPotionItem());
 }
 
+void APlayerControls::SpawnHealEmitter() const
+{
+	if(IsValid(mParticleSystemComp))
+		mParticleSystemComp->SetActive(true);
+}
+
+void APlayerControls::FinishHealEmitter(UParticleSystemComponent* particleComp)
+{
+	if(IsValid(particleComp))
+		particleComp->SetActive(false, true);
+}
+
 void APlayerControls::SetDamageDegree(const AActor* hitter)
 {
 	mDamageDegree = mRotate->GetAngle(hitter);
@@ -866,7 +895,10 @@ void APlayerControls::Recovery()
 			AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
 
 			if(IsValid(controller))
+			{
 				controller->StartHPTimer(potion->recovery_value, true);
+				SpawnHealEmitter();	
+			}
 		}
 	}
 }
