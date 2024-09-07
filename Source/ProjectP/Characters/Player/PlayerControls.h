@@ -9,6 +9,7 @@
 #include "../../Interface/Combatable.h"
 #include "../../Interface/Damageable.h"
 #include "../../Interface/PickupEnable.h"
+#include "../../Interface/Recoverable.h"
 
 #include "GameFramework/Character.h"
 #include "PlayerControls.generated.h"
@@ -16,7 +17,7 @@
 class AItemBase;
 
 UCLASS()
-class PROJECTP_API APlayerControls : public ACharacter, public ICombatable, public IDamageable, public IPickupEnable, public IGenericTeamAgentInterface
+class PROJECTP_API APlayerControls : public ACharacter, public ICombatable, public IDamageable, public IPickupEnable, public IRecoverable, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -117,6 +118,9 @@ public:
 
 	// ipickupenable pure function
 	virtual void PickUpItem(AItemBase* itemBase) override;
+
+	// recoverable pure function
+	virtual void Recovery(const FItem& item) override;
 
 protected:
 	void InitAssets();														// 에셋 초기화

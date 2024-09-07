@@ -4,12 +4,13 @@
 
 #include "../../Interface/Combatable.h"
 #include "../../Interface/Damageable.h"
+#include "../../Interface/Recoverable.h"
 
 #include "../AI/AIPawn.h"
 #include "EnemyPawn.generated.h"
 
 UCLASS()
-class PROJECTP_API AEnemyPawn : public AAIPawn, public ICombatable, public IDamageable, public IGenericTeamAgentInterface
+class PROJECTP_API AEnemyPawn : public AAIPawn, public ICombatable, public IDamageable, public IRecoverable, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -45,6 +46,9 @@ protected:
 	virtual void SpawnEmitter(FHitResult result) override;
 	virtual void StartHitStop(const float time) override;
 	virtual void EndHitStop() override;
+
+	// IRecoverable pure function
+	virtual void Recovery(const FItem& item) override;
 
 public:
 	AEnemyPawn();

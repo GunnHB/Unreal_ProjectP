@@ -307,3 +307,7 @@ void AEnemyPawn::EndHitStop()
 	GetWorld()->GetTimerManager().ClearTimer(mHitStopTimeHandle);
 	GetWorldSettings()->SetTimeDilation(1.f);
 }
+
+void AEnemyPawn::Recovery(const FItem& item)
+{
+}

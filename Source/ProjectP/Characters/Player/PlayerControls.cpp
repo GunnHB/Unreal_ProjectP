@@ -852,6 +852,11 @@ void APlayerControls::PickUpItem(AItemBase* itemBase)
 	}
 }
 
+void APlayerControls::Recovery(const FItem& item)
+{
+	
+}
+
 void APlayerControls::TakeDamage(APawn* hitterPawn)
 {
 	if(mPlayerStat->IsCharacterDead())
