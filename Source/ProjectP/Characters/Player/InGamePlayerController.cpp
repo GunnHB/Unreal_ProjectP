@@ -43,7 +43,7 @@ void AInGamePlayerController::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AInGamePlayerController::StartHPTimer(const uint8 value)
+void AInGamePlayerController::StartHPTimer(const uint8 value, bool heal)
 {
 	APlayerControls* player = Cast<APlayerControls>(GetPawn());
 
@@ -52,7 +52,8 @@ void AInGamePlayerController::StartHPTimer(const uint8 value)
 		if(player->IsMaxHP())
 			return;
 		
-		mLoopCount = value / 5;
+		mHeal = heal; 
+		mLoopCount = FMath::Abs(value) / 5;
 		
 		GetWorld()->GetTimerManager().SetTimer(mHPTimer, this, &AInGamePlayerController::EndHPTimer, .05f, true);
 	}
@@ -99,7 +100,7 @@ void AInGamePlayerController::EndHPTimer()
 		GetWorld()->GetTimerManager().ClearTimer(mHPTimer);
 
 	if(IsValid(CUIManager::GetInstance()->GetMainWidget()))
-		CUIManager::GetInstance()->GetMainWidget()->SetPlayerCurrHealthBar(5);
+		CUIManager::GetInstance()->GetMainWidget()->SetPlayerCurrHealthBar(5 * (mHeal ? -1 : 1));
 }
 
 void AInGamePlayerController::SetPlayerStamina(const float value, const bool isExhausted) const

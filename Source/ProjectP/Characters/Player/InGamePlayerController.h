@@ -23,6 +23,7 @@ protected:
 	FTimerHandle mHPTimer;
 
 	uint8 mLoopCount = 0;
+	bool mHeal = false;
 
 public:
 	AInGamePlayerController();
@@ -31,7 +32,7 @@ public:
 	void SetPlayerStamina(const float value, const bool isExhausted = false) const;
 	void SetInventoryData(class UInventoryData* data) const;
 	
-	void StartHPTimer(const uint8 value);
+	void StartHPTimer(const uint8 value, bool heal = false);
 
 	void RefreshItemSlotWidget(const FItem* item, const EEquipmentType::Type type);
 

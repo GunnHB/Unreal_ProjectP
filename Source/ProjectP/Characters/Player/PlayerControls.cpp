@@ -866,7 +866,7 @@ void APlayerControls::Recovery()
 			AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
 
 			if(IsValid(controller))
-				controller->StartHPTimer(-potion->recovery_value);
+				controller->StartHPTimer(potion->recovery_value, true);
 		}
 	}
 }

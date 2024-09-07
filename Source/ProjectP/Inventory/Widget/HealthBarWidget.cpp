@@ -51,12 +51,28 @@ void UHealthBarWidget::InitHealthBar(const float maxHP, const float currHP)
 // value는 증감량
 void UHealthBarWidget::SetCurrHealthBar(const float value)
 {
-	if(mHeartArray[mLastIndex]->IsEmpty())
-		--mLastIndex;
+	if(value > 0)
+	{
+		if(mHeartArray[mLastIndex]->IsEmpty())
+			--mLastIndex;
 
-	mLastIndex = mLastIndex < 0 ? 0 : mLastIndex;
+		mLastIndex = mLastIndex < 0 ? 0 : mLastIndex;
 
-	int8 heartValue = (mHeartArray[mLastIndex]->GetHeartType() - 1) < 0 ? 0 : mHeartArray[mLastIndex]->GetHeartType() - 1;
-	
-	mHeartArray[mLastIndex]->SetHeart(static_cast<EHeartType::Type>(heartValue));
+		int8 heartValue = (mHeartArray[mLastIndex]->GetHeartType() - 1) < 0 ? 0 : mHeartArray[mLastIndex]->GetHeartType() - 1;
+		
+		mHeartArray[mLastIndex]->SetHeart(static_cast<EHeartType::Type>(heartValue));
+	}
+	else
+	{
+		if(mHeartArray[mLastIndex]->IsFull())
+			++mLastIndex;
+
+		if(mLastIndex > mHeartArray.Num() - 1)
+		{
+			mLastIndex = mHeartArray.Num() - 1;	
+			return;
+		}
+
+		mHeartArray[mLastIndex]->SetHeart(static_cast<EHeartType::Type>(mHeartArray[mLastIndex]->GetHeartType() + 1));
+	}
 }

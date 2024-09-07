@@ -36,4 +36,5 @@ public:
 	EHeartType::Type GetHeartType() const {return mHeartType;}
 	
 	bool IsEmpty() const {return mHeartType == EHeartType::Empty;}
+	bool IsFull() const {return mHeartType == EHeartType::Full;}
 };
