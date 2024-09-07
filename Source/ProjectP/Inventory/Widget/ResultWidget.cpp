@@ -1,5 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "ResultWidget.h"
 
-#include "Inventory/Widget/ResultWidget.h"
+void UResultWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
 
+	
+}
