@@ -2,6 +2,7 @@
 
 #include "InGamePlayerController.h"
 
+#include "PlayerControls.h"
 #include "../../Inventory/Widget/MainWidget.h"
 #include "../../Inventory/Widget/EquipmentWidget.h"
 #include "../../System/Manager/UIManager.h"
@@ -44,9 +45,17 @@ void AInGamePlayerController::BeginPlay()
 
 void AInGamePlayerController::StartHPTimer(const uint8 value)
 {
-	mLoopCount = value / 5;
-	
-	GetWorld()->GetTimerManager().SetTimer(mHPTimer, this, &AInGamePlayerController::EndHPTimer, .05f, true);
+	APlayerControls* player = Cast<APlayerControls>(GetPawn());
+
+	if(IsValid(player))
+	{
+		if(player->IsMaxHP())
+			return;
+		
+		mLoopCount = value / 5;
+		
+		GetWorld()->GetTimerManager().SetTimer(mHPTimer, this, &AInGamePlayerController::EndHPTimer, .05f, true);
+	}
 }
 
 void AInGamePlayerController::RefreshItemSlotWidget(const FItem* item, const EEquipmentType::Type type)

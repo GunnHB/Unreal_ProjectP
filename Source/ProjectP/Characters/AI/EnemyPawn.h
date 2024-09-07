@@ -48,7 +48,7 @@ protected:
 	virtual void EndHitStop() override;
 
 	// IRecoverable pure function
-	virtual void Recovery(const FItem& item) override;
+	virtual void Recovery() override;
 
 public:
 	AEnemyPawn();

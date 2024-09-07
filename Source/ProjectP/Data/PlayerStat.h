@@ -28,4 +28,6 @@ public:
 	// setter
 	void SetPlayerMoney(const int32 value) {mPlayerMoney = value;}
 	void SetIsExhausted(const bool value)	{bIsExhausted = value;}
+
+	bool IsMaxHP() const {return mCurrCharacterHP == mMaxCharacterHP;}
 };

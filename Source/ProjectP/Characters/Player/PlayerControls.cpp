@@ -55,8 +55,8 @@ void APlayerControls::BeginPlay()
 			mPlayerInventory->SetItem(controller->GetDataAsset()->GetDataTable(), controller->GetDataAsset()->GetMainItemRowNameArray(), mPlayerInventory->GetMainItemArray());
 			mPlayerInventory->SetItem(controller->GetDataAsset()->GetDataTable(), controller->GetDataAsset()->GetPotionItemRowNameArray(), mPlayerInventory->GetPotionItemArray(), false);
 
-			mPlayerInventory->SetMainItem(mPlayerInventory->GetMainItemArray().Top());
-			mPlayerInventory->SetPotionItem(mPlayerInventory->GetPotionItemArray().Top());
+			mPlayerInventory->SetMainItem(mPlayerInventory->GetMainItemArray()[0]);
+			mPlayerInventory->SetPotionItem(mPlayerInventory->GetPotionItemArray()[0]);
 			
 			mPlayerInventory->InitInventoryWidget(this);
 		}
@@ -764,7 +764,7 @@ void APlayerControls::DrawSheath()
 		return;
 	
 	ResetAttack();
-
+	
 	if(mCombat->GetMainWeapon()->GetIsEquipped())
 		mCombat->GetMainWeapon()->OnUnequip();
 	else
@@ -852,9 +852,23 @@ void APlayerControls::PickUpItem(AItemBase* itemBase)
 	}
 }
 
-void APlayerControls::Recovery(const FItem& item)
+void APlayerControls::Recovery()
 {
+	FPotion* potion = CItemManager::GetInstance()->GetPotionTable()->FindRow<FPotion>(mPlayerInventory->GetPotionItem()->ref_row_name, "");
+
+	if(potion != nullptr)
+	{
+		if(potion->type == EPotionType::Health)
+		{
+			float health = mPlayerStat->GetCurrCharacterHP() + potion->recovery_value;
+			mPlayerStat->SetCurrCharacterHP(health);
 	
+			AInGamePlayerController* controller = Cast<AInGamePlayerController>(GetController());
+
+			if(IsValid(controller))
+				controller->StartHPTimer(-potion->recovery_value);
+		}
+	}
 }
 
 void APlayerControls::TakeDamage(APawn* hitterPawn)
@@ -878,6 +892,14 @@ void APlayerControls::TakeDamage(APawn* hitterPawn)
 
 void APlayerControls::SpawnEmitter(FHitResult result)
 {
+}
+
+bool APlayerControls::IsMaxHP() const
+{
+	if(!IsValid(mPlayerStat))
+		return false;
+
+	return mPlayerStat->IsMaxHP();
 }
 
 float APlayerControls::GetInputDegree() const

@@ -308,6 +308,6 @@ void AEnemyPawn::EndHitStop()
 	GetWorldSettings()->SetTimeDilation(1.f);
 }
 
-void AEnemyPawn::Recovery(const FItem& item)
+void AEnemyPawn::Recovery()
 {
 }

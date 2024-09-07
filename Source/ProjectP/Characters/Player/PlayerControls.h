@@ -84,6 +84,7 @@ public:
 	// getter
 	FVector GetInputVector() const {return mInputVector;}
 	UPlayerStat* GetThisPlayerStat() const {return mPlayerStat;}
+	bool IsMaxHP() const;
 	
 	float GetInputDegree() const;
 	float GetLastDegree() const;
@@ -120,7 +121,7 @@ public:
 	virtual void PickUpItem(AItemBase* itemBase) override;
 
 	// recoverable pure function
-	virtual void Recovery(const FItem& item) override;
+	virtual void Recovery() override;
 
 protected:
 	void InitAssets();														// 에셋 초기화

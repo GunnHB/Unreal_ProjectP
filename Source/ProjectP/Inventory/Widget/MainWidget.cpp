@@ -56,14 +56,14 @@ void UMainWidget::InitEquipmentWidget(UInventoryData* data) const
 	{
 		if(data->GetMainItemArray().Num() > 0)
 		{
-			FItem* item = data->GetMainItemArray().Top();
+			FItem* item = data->GetMainItemArray()[0];
 			
 			mEquipmentWidget->SetMainItemSlot(item);
 		}
 
 		if(data->GetPotionItemArray().Num() > 0)
 		{
-			FItem* item = data->GetPotionItemArray().Top();
+			FItem* item = data->GetPotionItemArray()[0];
 
 			mEquipmentWidget->SetPotionItemSlot(item, 5);
 		}

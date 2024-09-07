@@ -19,5 +19,5 @@ class PROJECTP_API IRecoverable
 	GENERATED_BODY()
 	
 public:
-	virtual void Recovery(const FItem& item) = 0;
+	virtual void Recovery() = 0;
 };
