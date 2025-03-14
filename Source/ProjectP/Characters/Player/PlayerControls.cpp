@@ -72,11 +72,14 @@ void APlayerControls::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if(mPlayerStat->IsCharacterDead())
+	{
+		UE_LOG(ProjectP, Warning, TEXT("Dead"));
 		return;
+	}
 
-#if ENABLE_DRAW_DEBUG
-	DrawArrow();
-#endif
+// #if ENABLE_DRAW_DEBUG
+// 	DrawArrow();
+// #endif
 	
 	GetAimOffsetX();
 	TraceForInteractable();
@@ -439,14 +442,16 @@ void APlayerControls::TraceForInteractable()
 {
 	mTraceStartPoint = GetActorLocation() - FVector(0.f, 0.f, GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
 	mTraceEndPoint = mTraceStartPoint + GetActorForwardVector() * 120.f;
-	
-	bEnableToInteract = GetWorld()->SweepSingleByChannel(mHitResult, mTraceStartPoint, mTraceEndPoint, FQuat::Identity, ECC_GameTraceChannel3, FCollisionShape::MakeSphere(20.f), mQueryParam);
 
-#if ENABLE_DRAW_DEBUG
-	FColor drawColor = bEnableToInteract ? FColor::Red : FColor::Green;		// 감지되면 red 아니면 green
+	// 트레이스 채널을 통해 아이템과의 충돌 여부를 확인
+	bEnableToInteract = GetWorld()->SweepSingleByChannel(mHitResult, mTraceStartPoint, mTraceEndPoint,
+					FQuat::Identity, ECC_GameTraceChannel3, FCollisionShape::MakeSphere(20.f), mQueryParam);
 
-	DrawDebugCapsule(GetWorld(), (mTraceStartPoint + mTraceEndPoint) * .5f, 60.f, 20.f, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), drawColor, false, .02f);
-#endif
+// #if ENABLE_DRAW_DEBUG
+// 	FColor drawColor = bEnableToInteract ? FColor::Red : FColor::Green;		// 감지되면 red 아니면 green
+//
+// 	DrawDebugCapsule(GetWorld(), (mTraceStartPoint + mTraceEndPoint) * .5f, 60.f, 20.f, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), drawColor, false, .02f);
+// #endif
 }
 
 bool APlayerControls::CanPerformMove()
@@ -488,8 +493,11 @@ bool APlayerControls::CanPerformTakeDamage()
 void APlayerControls::TryMovement()
 {
 	// 공중일 때 || 착지했을 때 회전 막기
-	if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
-		return;
+	// if (mAnimInstance->GetIsInAir() || !mAnimInstance->GetIsLandingAnimEnd())
+	// {
+	// 	UE_LOG(ProjectP, Warning, TEXT("TryMovement"));
+	// 	return;
+	// }
 
 	PerformMovement();
 }
@@ -883,6 +891,15 @@ void APlayerControls::PickUpItem(AItemBase* itemBase)
 
 void APlayerControls::Recovery()
 {
+	if(IsValid(CItemManager::GetInstance()->GetPotionTable()) == false)
+		return;
+
+	if(mPlayerInventory->GetPotionItem() == nullptr)
+	{
+		UE_LOG(ProjectP, Warning, TEXT("no potion item"));
+		return;
+	}
+	
 	FPotion* potion = CItemManager::GetInstance()->GetPotionTable()->FindRow<FPotion>(mPlayerInventory->GetPotionItem()->ref_row_name, "");
 
 	if(potion != nullptr)

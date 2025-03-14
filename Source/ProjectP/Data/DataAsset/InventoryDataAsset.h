@@ -21,7 +21,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment") TArray<FName> mArmorItemRowNameArray;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment") TArray<FName> mPotionItemRowNameArray;
 
-	TObjectPtr<UDataTable> mDataTable = nullptr;
+	UPROPERTY() TObjectPtr<UDataTable> mDataTable = nullptr;
 
 public:
 	void SetDataTable(UDataTable* dataTable);

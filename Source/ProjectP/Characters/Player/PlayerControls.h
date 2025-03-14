@@ -30,46 +30,47 @@ protected:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UFocusComponent> mFocus;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<class UParticleSystemComponent> mParticleSystemComp;
 	
-	TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
+	UPROPERTY() TObjectPtr<class UPlayerAnimInstance> mAnimInstance;
 	
 	// for inventory
-	TObjectPtr<class UInventoryWidget> mInventoryWidget;
-	TSubclassOf<UInventoryWidget> mInventoryWidgetClass;
-	bool mInventoryOpen = false;								// ui 종료되고 바로 실행되는 현상 방지위한 플래그
+	UPROPERTY() TObjectPtr<class UInventoryWidget> mInventoryWidget;
+	UPROPERTY() TSubclassOf<UInventoryWidget> mInventoryWidgetClass;
+	UPROPERTY() bool mInventoryOpen = false;								// ui 종료되고 바로 실행되는 현상 방지위한 플래그
 	
 	ECharacterMovementType mCurrentMovementType = ECharacterMovementType::None;
 	
-	TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
-	TObjectPtr<class UInventoryData> mPlayerInventory = nullptr;
-	TObjectPtr<UParticleSystem> mHealParticle = nullptr;
+	UPROPERTY() TObjectPtr<class UPlayerStat> mPlayerStat = nullptr;
+	UPROPERTY() TObjectPtr<class UInventoryData> mPlayerInventory = nullptr;
+	UPROPERTY() TObjectPtr<UParticleSystem> mHealParticle = nullptr;
 	
-	uint8 mTeamID = 1;
+	UPROPERTY() uint8 mTeamID = 1;
 
 private:
-	FVector mInputVector;
-	FVector mLastInputVector;
-	FRotator mCamRotator;
+	UPROPERTY() FVector mInputVector;
+	UPROPERTY() FVector mLastInputVector;
+	UPROPERTY() FRotator mCamRotator;
 
 	// for trace channel
-	FVector mTraceStartPoint;
-	FVector mTraceEndPoint;
+	UPROPERTY() FVector mTraceStartPoint;
+	UPROPERTY() FVector mTraceEndPoint;
+	UPROPERTY() bool bEnableToInteract;
+	
 	FHitResult mHitResult;
 	FCollisionQueryParams mQueryParam;
-	bool bEnableToInteract;
 	
-	bool bIsFocusing = false;				// 락온 플래그
+	UPROPERTY() bool bIsFocusing = false;				// 락온 플래그
 
-	float mDamageDegree = 0.f;
+	UPROPERTY() float mDamageDegree = 0.f;
 	
 	FTimerHandle mHitStopTimeHandle;
 	FTimerHandle mAttackTimeHandle;
 
 	// for stamina
-	bool bIsStaminaRecovery = false;			// 스태미나 회복 플래그
-	bool bCalcStaminaRecovery = false;			// 스태미나 회복 계산 플래그
-	float mStaminaRecoveryTime = .2f;			// 스태미나 회복 시작 시간
-	float mExhaustRecoveryTime = .75f;			// 탈진 상태 회복 시작 시간
-	float mRecoveryElapsedTime = 0.f;			// 걸린 시간
+	UPROPERTY() bool bIsStaminaRecovery = false;			// 스태미나 회복 플래그
+	UPROPERTY() bool bCalcStaminaRecovery = false;			// 스태미나 회복 계산 플래그
+	UPROPERTY() float mStaminaRecoveryTime = .2f;			// 스태미나 회복 시작 시간
+	UPROPERTY() float mExhaustRecoveryTime = .75f;			// 탈진 상태 회복 시작 시간
+	UPROPERTY() float mRecoveryElapsedTime = 0.f;			// 걸린 시간
 
 public:
 	APlayerControls();

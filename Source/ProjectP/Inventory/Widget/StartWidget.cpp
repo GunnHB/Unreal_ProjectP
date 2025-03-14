@@ -20,4 +20,6 @@ void UStartWidget::OnClickStartButton()
 
 	if(IsValid(controller))
 		controller->SetGameOnly(this);
+	else
+		UE_LOG(ProjectP, Warning, TEXT("No Controller!!"));
 }

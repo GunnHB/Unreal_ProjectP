@@ -32,7 +32,7 @@ UMainWidget* CUIManager::GetMainWidget()
 			return nullptr;
 
 		mMainWidget = CreateWidget<UMainWidget>(mWorld, mMainWidgetClass);
-
+		
 		if(IsValid(mMainWidget))
 			mMainWidget->AddToViewport();
 	}

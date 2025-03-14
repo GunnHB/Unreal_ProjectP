@@ -52,11 +52,11 @@ void AInGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FInputModeUIOnly inputMode;
-	inputMode.SetWidgetToFocus(CUIManager::GetInstance()->GetMainWidget()->GetCachedWidget());
-
-	SetInputMode(inputMode);
-	bShowMouseCursor = true;
+	// FInputModeUIOnly inputMode;
+	// inputMode.SetWidgetToFocus(CUIManager::GetInstance()->GetMainWidget()->GetCachedWidget());
+	//
+	// SetInputMode(inputMode);
+	// bShowMouseCursor = true;
 }
 
 void AInGamePlayerController::StartHPTimer(const uint8 value, bool heal)

@@ -18,11 +18,14 @@ AAIPatrolPoint::AAIPatrolPoint()
 #if WITH_EDITORONLY_DATA
 	mArrow = CreateEditorOnlyDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 
-	mArrow->ArrowColor = FColor(150, 200, 255);
-	mArrow->bTreatAsASprite = true;
-	mArrow->SetupAttachment(mRoot);
-	mArrow->bIsScreenSizeScaled = true;
-	mArrow->SetSimulatePhysics(false);
+	if(mArrow != nullptr)
+	{	
+		mArrow->ArrowColor = FColor(150, 200, 255);
+		mArrow->bTreatAsASprite = true;
+		mArrow->SetupAttachment(mRoot);
+		mArrow->bIsScreenSizeScaled = true;
+		mArrow->SetSimulatePhysics(false);
+	}
 #endif
 
 #if ENABLE_DRAW_DEBUG

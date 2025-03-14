@@ -43,6 +43,8 @@ void UInventoryData::SetNextItem(EEquipmentType::Type type)
 			SetPotionItem(mPotionItemArray[mPotionItemIndex]);
 			mController->RefreshItemSlotWidget(GetPotionItem(), type, this);
 		}
+	default:
+		break;
 	}
 }
 
